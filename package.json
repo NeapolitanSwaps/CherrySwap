@@ -17,6 +17,7 @@
         "cryptocompare": "^1.0.0",
         "ethjs-abi": "^0.2.1",
         "moment": "^2.24.0",
+        "openzeppelin-test-helpers": "^0.4.2",
         "truffle-contract": "^4.0.11",
         "truffle-hdwallet-provider": "^1.0.6",
         "typeface-space-mono": "^0.0.71",
