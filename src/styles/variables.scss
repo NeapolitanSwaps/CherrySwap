@@ -1,0 +1,24 @@
+// Variables
+
+// Colours
+$white: #fff;
+$greylightest: #f3f4f5;
+$greylight: #ccc;
+$gray: #979797;
+$darkgray: #272727;
+$darkred: #ff9284;
+$lightred: #ffcdc6;
+
+$yellow: #ffff53;
+$blue: #4321ea;
+$primary: $darkgray;
+
+.c-blue {
+    color: $blue;
+}
+
+// Layout
+$maxWidth: 90%;
+
+//bootstrap overides
+$enable-rounded: false;
