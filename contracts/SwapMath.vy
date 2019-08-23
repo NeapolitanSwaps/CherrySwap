@@ -1,4 +1,4 @@
-num: public(uint256)
+num: uint256
 
 @public
 def __init__():
