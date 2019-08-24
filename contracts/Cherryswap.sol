@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "./interface/ICERC20.sol";
 
 contract Cherryswap {
 
@@ -9,7 +9,7 @@ contract Cherryswap {
   ******************/
   uint256 public swapsCounter;
 
-  IERC20 public cherryToken; // = DAI
+  ICERC20 public cherryToken; // = DAI
 
   enum Status {
     Open,
@@ -47,7 +47,7 @@ contract Cherryswap {
   ) public {
     require(_cherryToken != address(0), "Cherryswap::constructor - _cherryToken cannot be 0");
             
-    cherryToken = IERC20(_cherryToken);
+    cherryToken = ICERC20(_cherryToken);
     swapsCounter = 0;
   }
 
