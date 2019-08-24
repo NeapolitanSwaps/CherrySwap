@@ -1,5 +1,12 @@
 pragma solidity ^0.5.0;
 
 contract ISwapMath {
-    function getnum() public returns(uint256);
+    function computeRatios(
+        uint256 poolLong,
+        uint256 poolShort,
+        uint256 fixedRate,
+        uint256 t1,
+        uint256 t2,
+        uint256 poolEnd
+        ) public returns(int128, int128);
 }
