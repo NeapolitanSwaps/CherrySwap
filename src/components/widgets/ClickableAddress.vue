@@ -1,7 +1,7 @@
 <template>
-  <div v-if="ethAddress" class="md-layout">
+  <div v-if="ethAddress" class="md-layout eth-address">
     <jazzicon :address="ethAddress" :diameter="25"/>
-    <a class="eth-address md-subheading" :href="buildLink" target="_blank" style="color: white;">{{ dotDotDot }}</a>
+    <a class="md-subheading" :href="buildLink" target="_blank" style="color: black;"> {{ dotDotDot }}</a>
   </div>
 </template>
 
@@ -44,9 +44,12 @@ export default {
 
 // Eth Address
 .eth-address {
-  display: inline-block;
-  padding: 0.125rem 0.25rem;
+  // display: inline-block;
+  padding-top: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
   background: rgba($darkgray, 0.05);
+  border-radius: 25px;
 
   &:hover {
     background: rgba($darkgray, 0.1);

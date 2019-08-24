@@ -1,15 +1,19 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh">
     <md-app-toolbar md-elevation="0" id="toolbar">
-      <a href="/"><img :src="logo" class="logo-svg" alt="logo" /></a>
+      <a href="/"><img :src="logo" class="logo-svg" alt="logo" style="padding-left:20px"/></a>
       <div class="md-toolbar-section-end">
-        <p>0xac34hj234...</p>
+        {{currentNetwork}}
         <clickable-address :eth-address="account" />
       </div>
     </md-app-toolbar>
 
-    <md-app-content style="background-color: $vanilla; padding: 0; height: auto;">
+    <md-app-content id="content">
       <router-view />
+      <div id="foot">
+        🍒
+        <b>Cherry Swap - made with ❤️ by Neapolitan Swaps 🍨</b>
+      </div>
     </md-app-content>
   </md-app>
 </template>
@@ -26,7 +30,7 @@ import router from "@/router";
 
 // import logo from "@/assets/SnapLogo.svg";
 // import logo from "@/assets/SnapLogo.svg";
-import logo from '@/assets/logo.svg';
+import logo from "@/assets/logo.svg";
 
 export default {
   name: "app",
@@ -93,7 +97,7 @@ export default {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Space+Mono");
-@import url('https://fonts.googleapis.com/css?family=Coiny|Rubik');
+@import url("https://fonts.googleapis.com/css?family=Coiny|Rubik");
 @import "/styles/variables.scss";
 @import "~vue-material/dist/theme/engine"; // Import the theme engine
 
@@ -111,7 +115,7 @@ export default {
 html,
 body {
   font-family: "Rubik", sans-serif;
-  background-color: $vanilla;
+  background-color: $background;
 }
 
 #app {
@@ -125,7 +129,8 @@ body {
 }
 
 #toolbar {
-  width: 90vw; 
+  background-color: $vanilla;
+  width: 100%;
   align-self: center;
 }
 
@@ -137,5 +142,21 @@ nav li.router-link-active,
 nav li.router-link-exact-active {
   background-color: indianred;
   cursor: pointer;
+}
+
+#foot {
+  background-color: $vanilla;
+  margin-top: 25px;
+  padding: 25px;
+  text-align: center;
+}
+
+#content {
+  background-color: $background;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 25px;
+  padding-bottom: 0px;
+  height: auto;
 }
 </style>

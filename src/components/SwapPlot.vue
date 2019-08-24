@@ -35,7 +35,7 @@
             Choose Dai to commit
           </span>
           <md-field>
-            <md-input id="number-input" v-model="amount" type="number"></md-input>
+            <md-input id="number-input" min="0" v-model="amount" type="number"></md-input>
           </md-field>
         </div>
         <div class="md-layout-item" style="text-align:center" />
@@ -58,7 +58,7 @@
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
     </md-card>
-    <md-card style="background:white" v-if="mode=='market'">
+    <md-card style="background:white; margin-top:50px">
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
@@ -71,14 +71,21 @@
               <b>Current APR:</b>
               <span
                 style="color:#2DC4B6"
-              >{{(plotData[0].y[plotData[0].y.length-1]).toFixed(4)}}% APR</span>
+              >{{(interestPlotData[0].y[interestPlotData[0].y.length-1]).toFixed(4)}}% APR</span>
             </div>
           </div>
         </div>
 
         <hr />
       </md-card-header>
-      <vue-plotly :data="plotData" :layout="plotLayout" :options="plotOptions" />
+      <div class="md-layout">
+        <div class="md-layout-item md-size-30">
+          <vue-plotly :data="depthPlotData" :layout="depthPlotLayout" :options="plotOptions" />
+        </div>
+        <div class="md-layout-item md-size-70">
+          <vue-plotly :data="interestPlotData" :layout="interestPlotLayout" :options="plotOptions" />
+        </div>
+      </div>
     </md-card>
   </div>
 </template>
@@ -97,16 +104,34 @@ export default {
       position: "false",
       amount: 0,
       interestRate: [],
-      plotData: [
+      interestPlotData: [
         {
           x: [0],
           y: [20],
           mode: "line",
-          line: { shape: "spline" }
+          line: { shape: "spline", color: "rgb(128, 0, 128)" }
+        }
+      ],
+      depthPlotData: [
+        {
+          x: [0],
+          y: [0],
+          fill: "tozeroy",
+          mode: "line",
+          line: { shape: "linear", color: "#2DC4B6" },
+          name: "LONG Volume"
+        },
+        {
+          x: [0],
+          y: [0],
+          mode: "line",
+          fill: "tozeroy",
+          line: { shape: "linear", color: "#D81E5B" },
+          name: "SHORT Volume"
         }
       ],
       plotOptions: {
-        responsive: true,
+        responsive: false,
         showLink: false,
         displayModeBar: false
       }
@@ -114,22 +139,97 @@ export default {
   },
   methods: {},
   mounted() {
-    this.plotData[0].x = Array.from(Array(200).keys());
+    this.interestPlotData[0].x = Array.from(Array(200).keys());
+    this.depthPlotData[0].x = Array.from(Array(60).keys());
+    this.depthPlotData[1].x = Array.from(Array(60).keys());
     setInterval(() => {
-      if (this.plotData[0].y.length < 200) {
-        this.plotData[0].y.push(
-          Math.random() * 8 -
-            3.7 +
-            this.plotData[0].y[this.plotData[0].y.length - 1]
+      if (this.interestPlotData[0].y.length < 200) {
+        this.interestPlotData[0].y.push(
+          Math.random() * 4 -
+            1.9 +
+            this.interestPlotData[0].y[this.interestPlotData[0].y.length - 1]
         );
+        if (Math.random() > 0.7) {
+          this.depthPlotData[0].y.push(
+            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1] +
+              Math.random() * 25
+          );
+        } else {
+          this.depthPlotData[0].y.push(
+            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1]
+          );
+        }
+        if (Math.random() > 0.7) {
+          this.depthPlotData[1].y.push(
+            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1] -
+              Math.random() * 25
+          );
+        } else {
+          this.depthPlotData[1].y.push(
+            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1]
+          );
+        }
       }
     }, 100);
   },
 
   computed: {
     // ...mapState(["etherscanBase"]),
-    plotLayout() {
+    depthPlotLayout() {
       return {
+        xaxis: {
+          title: "Time",
+          gridcolor: "#bdbdbd",
+          dtick: 10
+        },
+        yaxis: {
+          title: "Volume Traded Dai",
+          showline: false
+        },
+        paper_bgcolor: "rgba(0,0,0,0)",
+        plot_bgcolor: "rgba(0,0,0,0)",
+        shapes: [
+          {
+            type: "line",
+            x0: 0,
+            y0: 0,
+            y1: 0,
+            x1: 60,
+            line: {
+              color: "#D6D6D6",
+              width: 2,
+              dash: "dot"
+            }
+          }
+        ],
+        legend: {
+          x: 0.5,
+          y: 0.5,
+          font: {
+            family: "sans-serif",
+            size: 12,
+            color: "#000"
+          },
+          bgcolor: "#E9E8E6",
+          bordercolor: "#E9E8E6",
+          borderwidth: 2
+        },
+        margin: {
+          l: 55,
+          r: 20,
+          b: 55,
+          t: 10,
+          pad: 5
+        }
+      };
+    },
+    interestPlotLayout() {
+      return {
+        xaxis: {
+          title: "Time",
+          gridcolor: "#bdbdbd",
+          dtick: 10
+        },
         yaxis: {
           title: "% APR",
           showline: false
@@ -140,12 +240,18 @@ export default {
           {
             type: "line",
             x0: 0,
-            y0: this.plotData[0].y.length >= 60 ? this.plotData[0].y[60] : 20,
+            y0:
+              this.interestPlotData[0].y.length >= 60
+                ? this.interestPlotData[0].y[60]
+                : 20,
             x1: 200,
-            y1: this.plotData[0].y.length >= 60 ? this.plotData[0].y[60] : 20,
+            y1:
+              this.interestPlotData[0].y.length >= 60
+                ? this.interestPlotData[0].y[60]
+                : 20,
             line: {
               color: "#D6D6D6",
-              width: this.plotData[0].y.length >= 60 ? 2 : 0,
+              width: this.interestPlotData[0].y.length >= 60 ? 2 : 0,
               dash: "dot"
             }
           },
@@ -153,13 +259,13 @@ export default {
             type: "line",
             x0: 60,
             y0:
-              Math.min(...this.plotData[0].y) < 10
-                ? Math.min(...this.plotData[0].y)
+              Math.min(...this.interestPlotData[0].y) < 10
+                ? Math.min(...this.interestPlotData[0].y)
                 : 10,
             x1: 60,
             y1:
-              Math.max(...this.plotData[0].y) > 30
-                ? Math.max(...this.plotData[0].y)
+              Math.max(...this.interestPlotData[0].y) > 30
+                ? Math.max(...this.interestPlotData[0].y)
                 : 30,
             line: {
               color: "#D6D6D6",
@@ -171,13 +277,13 @@ export default {
             type: "line",
             x0: 180,
             y0:
-              Math.min(...this.plotData[0].y) < 10
-                ? Math.min(...this.plotData[0].y)
+              Math.min(...this.interestPlotData[0].y) < 10
+                ? Math.min(...this.interestPlotData[0].y)
                 : 10,
             x1: 180,
             y1:
-              Math.max(...this.plotData[0].y) > 30
-                ? Math.max(...this.plotData[0].y)
+              Math.max(...this.interestPlotData[0].y) > 30
+                ? Math.max(...this.interestPlotData[0].y)
                 : 30,
             line: {
               color: "#D6D6D6",
@@ -204,18 +310,27 @@ export default {
             textangle: "-90"
           },
           {
-            x: 80,
+            x: 180,
             y:
-              this.plotData[0].y.length >= 60 ? this.plotData[0].y[60] + 3 : 20,
+              this.interestPlotData[0].y.length >= 60
+                ? this.interestPlotData[0].y[60] + 2
+                : 20,
             text:
-              this.plotData[0].y.length >= 60
+              this.interestPlotData[0].y.length >= 60
                 ? "Fixed Rate(long pays, short recives)"
                 : "",
             ax: 0,
             ay: -40,
             showarrow: false
           }
-        ]
+        ],
+        margin: {
+          l: 50,
+          r: 50,
+          b: 55,
+          t: 10,
+          pad: 5
+        }
       };
     }
   }
