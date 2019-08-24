@@ -1,4 +1,4 @@
-@public
+@internal
 @constant
 def blockCompound(fixed: uint256, t1: uint256, t2: uint256) -> decimal:
   blocks: uint256 = (t2 - t1) / 15
@@ -9,7 +9,7 @@ def blockCompound(fixed: uint256, t1: uint256, t2: uint256) -> decimal:
   compound: decimal = convert(upper, decimal) / convert(lower, decimal)
   return compound
 
-@public
+@internal
 @constant
 def interestDiffScaled(poolStart: uint256, poolEnd: uint256, fixed: uint256, t1: uint256, t2: uint256) -> int128:
   compound: decimal = self.blockCompound(fixed, t1, t2)
