@@ -56,4 +56,8 @@ export default {
     border-bottom: none;
   }
 }
+.md-subheading {
+  font-size: 14px;
+  padding-left: 10px;
+}
 </style>
