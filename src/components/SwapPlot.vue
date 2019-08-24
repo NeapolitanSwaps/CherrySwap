@@ -18,11 +18,11 @@
         <div class="md-layout-item" style="text-align:center">
           <toggle-button
             id="changed-font"
-            :width="140"
+            :width="112"
             :height="40"
             :speed="500"
             :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
-            :labels="{checked: 'SHORT', unchecked: 'LONG'}"
+            :labels="{checked: 'Short', unchecked: 'Long'}"
             @change="position = $event.value"
           />
         </div>
