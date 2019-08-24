@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <span class="item">{{ item.title }}:</span> {{ item.content }} 
+  <div class="item">
+    <span class="highlight">{{ item.title }}:</span> {{ item.content }} 
   </div>
 </template>
 
@@ -23,9 +23,14 @@ export default {
 
 <style lang="scss" scoped>
 @import "../styles/variables.scss";
-.item {
+.item span.highlight {
     color: #E4717A;
     font-style: normal;
-    font-weight: 500;
+    font-weight: bold;
+}
+.item span {
+    width: 50%;
+    display: inline-block;
+    padding: 5px 0;
 }
 </style>

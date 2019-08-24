@@ -1,12 +1,14 @@
 <template>
   <div class="page-container">
     <div class="inner-container">
-        <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/>
+        <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
         <market-box :data="boxMarketData"></market-box>    
         <market-box :data="boxStatusData"></market-box>   
     </div>
      
-    <div class="footer-container"></div>
+    <div class="footer-container">
+        <p>hello</p>
+    </div>
   </div>
 </template>
 
@@ -48,7 +50,8 @@ export default {
                 { title: 'Funds committed', content: '1,804 DAI' }
             ],
             null
-          ]
+          ],
+          short: 5
       }
     }
   },
@@ -79,7 +82,7 @@ export default {
 @import "../styles/variables.scss";
 
 .page-container {
-  background: rgba($vanilla, 1);
+  background: #fff;
 }
 .page-container img {
   width: 75vw;
@@ -89,9 +92,11 @@ export default {
   margin: 0 auto;
 }
 .inner-container {
-  margin: 0px auto;
+    display: flex;
 //   width: 50vw;
   text-align: 'center';
+  justify-content: center;
+  margin-top: 100px;
 }
 .inner-container h1 {
   color: $cherry;
@@ -122,7 +127,7 @@ export default {
   background: #fff;
   height: 100%;
   width: 100%;
-  flex-grow: 1;
+  flex: 1;
 }
 </style>
 

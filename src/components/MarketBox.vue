@@ -4,14 +4,11 @@
           <div class="md-title">{{data.title}}</div>
       </md-card-header>
       <md-card-content>
-        <div id="row-1">
+        <div id="row-1" class="row">
             <market-cell v-for="item in data.items[0]" :item="item" />
         </div>
-        <div id="row-2">
-            <div v-if="!data.items[1]" id="short-long-container">
-                <span class="short">Short</span>
-                <span class="long">Long</span>
-            </div>
+        <div id="row-2" class="row">
+            <market-progress v-if="!data.items[1]" :short="data.short"/>
             <market-cell v-for="item in data.items[1]" :item="item" />
         </div>
       </md-card-content>
@@ -20,6 +17,7 @@
 
 <script>
 import MarketCell from "./MarketCell";
+import MarketProgress from "./MarketProgress";
 export default {
   name: "MarketBox",
   props: {
@@ -28,7 +26,8 @@ export default {
     }
   },
   components: { 
-      MarketCell
+      MarketCell,
+      MarketProgress
   },
   data() {
       
@@ -44,28 +43,23 @@ export default {
     width: 30vw;
     display: inline-block;
     vertical-align: top;
-    height: 300px;
+    background: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    margin-top: -75px;
+}
+.md-card-content {
+    padding: 5%;
 }
 .md-card-header {
     border-bottom: 1px solid $greylight; 
+    height: 75px;
+}
+.row {
+    padding: 25px 0;
 }
 #row-1 {
     border-bottom: 1px solid $greylight;
-    margin-bottom: 20px;
 }
-#short-long-container {
-    display: flex;
-}
-#short-long-container span {
-    width: 50%;
-    font-weight: bolder;
-}
-#short-long-container span.short {
-    justify-self: flex-start;
-    text-align: left;
-}
-#short-long-container span.long {
-    justify-self: flex-end;
-    text-align: right;
-}
+
 </style>
