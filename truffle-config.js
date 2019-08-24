@@ -18,4 +18,10 @@ module.exports = {
       gasPrice: 10000000000 // default = 100 gwei = 100000000000
     },
   },
+
+  compilers: {
+    solc: {
+      version: "0.4.24"
+    }
+  }
 }
