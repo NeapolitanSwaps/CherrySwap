@@ -53,7 +53,7 @@ export default {
             ],
             null
           ],
-          short: 5
+          short: 25
       }
     }
   },
@@ -130,7 +130,6 @@ export default {
   background: #fff;
   height: 100%;
   width: 100%;
-//   flex: 1;
   display: flex;
   justify-content: center;
 }
