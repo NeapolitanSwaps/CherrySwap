@@ -1,13 +1,11 @@
 <template>
   <div class="page-container">
     <div class="inner-container">
-      <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/>
-      <h1>Interest rate swaps with a cherry on top</h1>
-      <h3>Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets</h3>
+        <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/>
+        <market-box :data="boxMarketData"></market-box>    
+        <market-box :data="boxStatusData"></market-box>   
     </div>
-    <div class="landing-container">
-      <div class="landing-back"></div>
-    </div>    
+     
     <div class="footer-container"></div>
   </div>
 </template>
@@ -16,16 +14,42 @@
 import router from "@/router";
 import Lottie from 'vue-lottie';
 import * as animationData from '../assets/icecream.json';
+import MarketBox from '../components/MarketBox';
 
 export default {
   name: "market",
   components: {
-      Lottie
+      Lottie,
+      MarketBox
   },
   data() {
     return {
       defaultOptions: {animationData: animationData.default},
-      animationSpeed: 1
+      animationSpeed: 1,
+      boxMarketData: {
+          title: "Market Overview",
+          items: [
+            [ 
+                { title: 'Market', content: 'DAI' },
+                { title: 'Current IR', content: '13.7% APR' }
+            ],
+            [
+                { title: 'Locks in', content: '00d 05h 12m 37s'},
+                { title: 'Unlocks in', content: '21d 01h 12m 37s' },
+                { title: 'Lock duration', content: '90 days' }
+            ]
+          ]
+      },
+      boxStatusData: {
+          title: "Current Status",
+          items: [
+            [ 
+                { title: 'Phase', content: 'Pre-Lock' },
+                { title: 'Funds committed', content: '1,804 DAI' }
+            ],
+            null
+          ]
+      }
     }
   },
   methods: {
@@ -66,7 +90,7 @@ export default {
 }
 .inner-container {
   margin: 0px auto;
-  width: 50vw;
+//   width: 50vw;
   text-align: 'center';
 }
 .inner-container h1 {
