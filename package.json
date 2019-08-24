@@ -8,6 +8,7 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
+        "@openzeppelin/contracts": "^2.3.0",
         "apexcharts": "^3.6.7",
         "axios": "^0.18.0",
         "chai": "^4.2.0",
@@ -17,6 +18,7 @@
         "cryptocompare": "^1.0.0",
         "ethjs-abi": "^0.2.1",
         "moment": "^2.24.0",
+        "openzeppelin-test-helpers": "^0.4.2",
         "truffle-contract": "^4.0.11",
         "truffle-hdwallet-provider": "^1.0.6",
         "typeface-space-mono": "^0.0.71",
@@ -30,7 +32,9 @@
         "vue-slider-component": "^3.0.27",
         "vuex": "^3.0.1",
         "vuex-persistedstate": "^2.5.4",
-        "web3": "1.0.0-beta.37"
+        "web3": "1.0.0-beta.37",
+        "chai-bn": "0.1.0-beta.0",
+        "pify": "^4.0.1"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^3.5.0",
