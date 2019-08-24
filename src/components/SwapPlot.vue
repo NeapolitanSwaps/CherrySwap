@@ -2,44 +2,37 @@
   <div>
     <md-card style="background:white" v-if="mode=='commit'">
       <md-card-header>
-        <div class="md-title" style="padding-left:15px">
-          <b>Commit Funds</b>
-        </div>
-        <hr />
+        <div class="md-title" style="padding-left:15px">Commit Funds</div>
       </md-card-header>
       <div class="md-layout">
         <div class="md-layout-item" style="text-align:center; padding: 20px">
-          <span class="md-display-1">
-            <b>Choose a position</b>
+          <span class="md-title ">
+            Choose a position
           </span>
         </div>
       </div>
       <div class="md-layout">
-        <div
-          class="md-layout-item"
-          style="text-align:right; padding-top:10px"
-        >Interest rate will increase</div>
-        <div class="md-layout-item md-size-15" style="text-align:center">
+        <div class="md-layout-item side-text left">
+          Interest rate will increase
+        </div>
+        <div class="md-layout-item" style="text-align:center">
           <toggle-button
             id="changed-font"
-            :width="140"
+            :width="112"
             :height="40"
             :speed="500"
             :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
-            :labels="{checked: 'SHORT', unchecked: 'LONG'}"
+            :labels="{checked: 'Short', unchecked: 'Long'}"
             @change="position = $event.value"
           />
         </div>
-        <div
-          class="md-layout-item"
-          style="text-align:left; padding-top:10px"
-        >Interest rate will decrease</div>
+        <div class="md-layout-item side-text right">Interest rate will decrease</div>
       </div>
       <div class="md-layout" style="padding-top:50px">
         <div class="md-layout-item" style="text-align:center" />
         <div class="md-layout-item" style="text-align:center">
-          <span class="md-display-1">
-            <b>Choose Dai to commit</b>
+          <span class="md-title">
+            Choose Dai to commit
           </span>
           <md-field>
             <md-input id="number-input" min="0" v-model="amount" type="number"></md-input>
@@ -50,7 +43,7 @@
       <div class="md-layout" style="text-align:center; padding:25px;">
         <div class="md-layout-item md-size-20" style="padding-top:40px;" />
         <div class="md-layout-item" style="padding-top:40px;padding-bottom:20px" id="endBox">
-          <span class="md-display-1">
+          <span>
             You will commit
             <span style="color:#E4717A">{{amount}} Dai</span> to the current
             <br />market under a
@@ -60,7 +53,7 @@
           </span>
           <br />
           <br />
-          <md-button class="md-raised md-primary" id="commitButton">Commit</md-button>
+          <md-button class="md-raised" id="commitButton">Commit</md-button>
         </div>
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
@@ -345,6 +338,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/variables.scss";
 .vue-js-switch#changed-font {
   font-size: 18px !important;
 }
@@ -353,7 +347,7 @@ export default {
   background-color: #e9e8e6;
   border-radius: 25px;
   padding: 10px;
-  border: 2px solid #de6286;
+  border: 1px solid $cherry;
 }
 
 #endBox {
@@ -362,11 +356,47 @@ export default {
 }
 
 #commitButton {
-  background-color: #e4717a;
+  background-color: $cherry;
   border-radius: 15px;
-  font-size: 25px;
+  font-size: 18px;
   padding: 0px 30px;
   display: inline-block;
   text-decoration: none;
+  text-transform: none;
+  font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+}
+//
+.md-card {
+    background: #fff;
+    width: 62vw;
+    display: inline-block;
+    vertical-align: top;
+    background: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    margin-top: -75px;
+}
+.md-card-content {
+    padding: 5%;
+}
+.md-card-header {
+    border-bottom: 1px solid $greylight; 
+    height: 75px;
+}
+.row {
+    padding: 25px 0;
+}
+#row-1 {
+    border-bottom: 1px solid $greylight;
+}
+.side-text {
+  padding-top: 10px;
+}
+.side-text.left {
+  text-align: right;
+}
+.side-text.right {
+  text-align: left;
 }
 </style>

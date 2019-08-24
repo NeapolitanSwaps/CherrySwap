@@ -1,12 +1,14 @@
 <template>
   <div class="page-container">
     <div class="inner-container">
-        <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/>
+        <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
         <market-box :data="boxMarketData"></market-box>    
         <market-box :data="boxStatusData"></market-box>   
     </div>
      
-    <div class="footer-container"></div>
+    <div class="footer-container">
+        <swap-plot id="plot-swap" />
+    </div>
   </div>
 </template>
 
@@ -14,13 +16,15 @@
 import router from "@/router";
 import Lottie from 'vue-lottie';
 import * as animationData from '../assets/icecream.json';
-import MarketBox from '../components/MarketBox';
+import MarketBox from '@/components/MarketBox';
+import SwapPlot from "@/components/SwapPlot";
 
 export default {
   name: "market",
   components: {
       Lottie,
-      MarketBox
+      MarketBox,
+      SwapPlot
   },
   data() {
     return {
@@ -48,7 +52,8 @@ export default {
                 { title: 'Funds committed', content: '1,804 DAI' }
             ],
             null
-          ]
+          ],
+          short: 25
       }
     }
   },
@@ -79,7 +84,7 @@ export default {
 @import "../styles/variables.scss";
 
 .page-container {
-  background: rgba($vanilla, 1);
+  background: #fff;
 }
 .page-container img {
   width: 75vw;
@@ -89,9 +94,11 @@ export default {
   margin: 0 auto;
 }
 .inner-container {
-  margin: 0px auto;
+    display: flex;
 //   width: 50vw;
   text-align: 'center';
+  justify-content: center;
+  margin-top: 100px;
 }
 .inner-container h1 {
   color: $cherry;
@@ -119,10 +126,15 @@ export default {
   margin-top: -30%;
 }
 .footer-container {
+    margin-top: 100px;
   background: #fff;
   height: 100%;
   width: 100%;
-  flex-grow: 1;
+  display: flex;
+  justify-content: center;
 }
+
+
+
 </style>
 
