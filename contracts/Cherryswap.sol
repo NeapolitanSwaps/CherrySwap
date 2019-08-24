@@ -88,10 +88,7 @@ contract Cherryswap {
   function createSwap(
     uint256 _startingTime,
     uint256 _endingTime
-  ) public hasEnded(swapsCounter) {
-    // increment swaps counter
-    swapsCounter++;
-
+  ) public {
     // create new swap
     Swap memory swap = Swap({
       swapId: swapsCounter,
@@ -104,6 +101,9 @@ contract Cherryswap {
       status: Status.Open
     });
     swaps.push(swap);
+
+    // increment swaps counter
+    swapsCounter++;
   }
 
   function startSwap() public isOpen(swapsCounter) {

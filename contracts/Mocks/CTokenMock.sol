@@ -1,14 +1,12 @@
 pragma solidity ^0.4.24;
 
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import "../token/ERC20.sol";
 //import "../interface/IERC20.sol";
 //import "./TokenMock.sol";
 
 contract CTokenMock is ERC20 {
   
-  mapping(address => uint256) public moneyMarket;
-
-  constructor(address _ERC20Token) public {
+  constructor() public {
   }
 
   function mint(uint mintAmount) public returns(uint256) {
