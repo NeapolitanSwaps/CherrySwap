@@ -1,7 +1,7 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh">
     <md-app-toolbar md-elevation="0" id="toolbar">
-      <img :src="logo" class="logo-svg" alt="logo" />
+      <a href="/"><img :src="logo" class="logo-svg" alt="logo" /></a>
       <div class="md-toolbar-section-end">
         <p>0xac34hj234...</p>
         <clickable-address :eth-address="account" />
