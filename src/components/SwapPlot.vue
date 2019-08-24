@@ -1,6 +1,71 @@
 <template>
   <div>
-    <md-card style="background:white">
+    <md-card style="background:white" v-if="mode=='commit'">
+      <md-card-header>
+        <div class="md-title" style="padding-left:15px">
+          <b>Commit Funds</b>
+        </div>
+        <hr />
+      </md-card-header>
+      <div class="md-layout">
+        <div class="md-layout-item" style="text-align:center; padding: 20px">
+          <span class="md-display-1">
+            <b>Choose a position</b>
+          </span>
+        </div>
+      </div>
+      <div class="md-layout">
+        <div
+          class="md-layout-item"
+          style="text-align:right; padding-top:10px"
+        >Interest rate will increase</div>
+        <div class="md-layout-item md-size-15" style="text-align:center">
+          <toggle-button
+            id="changed-font"
+            :width="140"
+            :height="40"
+            :speed="500"
+            :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
+            :labels="{checked: 'SHORT', unchecked: 'LONG'}"
+            @change="position = $event.value"
+          />
+        </div>
+        <div
+          class="md-layout-item"
+          style="text-align:left; padding-top:10px"
+        >Interest rate will decrease</div>
+      </div>
+      <div class="md-layout" style="padding-top:50px">
+        <div class="md-layout-item" style="text-align:center" />
+        <div class="md-layout-item" style="text-align:center">
+          <span class="md-display-1">
+            <b>Choose Dai to commit</b>
+          </span>
+          <md-field>
+            <md-input id="number-input" v-model="amount" type="number"></md-input>
+          </md-field>
+        </div>
+        <div class="md-layout-item" style="text-align:center" />
+      </div>
+      <div class="md-layout" style="text-align:center; padding:25px;">
+        <div class="md-layout-item md-size-20" style="padding-top:40px;" />
+        <div class="md-layout-item" style="padding-top:40px;padding-bottom:20px" id="endBox">
+          <span class="md-display-1">
+            You will commit
+            <span style="color:#E4717A">{{amount}} Dai</span> to the current
+            <br />market under a
+            <b
+              :style="position? 'color:#DA366D':'color:#60D0C5' "
+            >{{position ? "SHORT" : "LONG"}}</b> position
+          </span>
+          <br />
+          <br />
+          <md-button class="md-raised md-primary" id="commitButton">Commit</md-button>
+        </div>
+        <div class="md-layout-item md-size-20" style="padding:40px;" />
+      </div>
+    </md-card>
+    <md-card style="background:white" v-if="mode=='market'">
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
@@ -35,6 +100,9 @@ export default {
   components: { VuePlotly },
   data() {
     return {
+      mode: "commit",
+      position: "false",
+      amount: 0,
       interestRate: [],
       plotData: [
         {
@@ -162,4 +230,28 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.vue-js-switch#changed-font {
+  font-size: 18px !important;
+}
+
+#number-input {
+  background-color: #e9e8e6;
+  border-radius: 25px;
+  padding: 10px;
+  border: 2px solid #de6286;
+}
+
+#endBox {
+  border: 3px dotted #e9e8e6;
+  border-radius: 15px;
+}
+
+#commitButton {
+  background-color: #e4717a;
+  border-radius: 15px;
+  font-size: 25px;
+  padding: 0px 30px;
+  display: inline-block;
+  text-decoration: none;
+}
 </style>
