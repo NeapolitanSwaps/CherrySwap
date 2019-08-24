@@ -14,9 +14,17 @@
       <p class="box">Every market on <span style="text-decoration: underline">Compound</span> has an interest rate, which fluctuates according to supply and demand of credit and debt within that market.</p>
       <p class="box">With <img :src="logo" id="logo" alt="Demo logo"/>, you can hedge against these fluctuations - or speculate on them - by participating in pooled interest rate swaps.</p>
     </div>
-    <div class="footer-container">
-      <h1>How it works</h1>
-      <p class="box">Every market on <span style="text-decoration: underline">Compound</span> has an interest rate, which fluctuates according to supply and demand of credit and debt within that market.</p>
+    <div class="md-layout" id="how-it-works">
+      <div class="md-layout-item">
+        <h1>How it works</h1>
+      </div>
+    </div>
+    <div class="footer-container md-layout">
+
+        <home-info-box :data='homeInfoData[0]'/>
+        <home-info-box :data='homeInfoData[1]'/>
+        <home-info-box :data='homeInfoData[2]'/>
+
     </div>
   </div>
 </template>
@@ -27,18 +35,31 @@ import Lottie from 'vue-lottie';
 import demoLarge from '@/assets/demo-large.svg';
 import logo from "@/assets/logo.svg";
 import * as animationData from '../assets/demo-logo.json';
+import HomeInfoBox from "../components/HomeInfoBox";
 
 export default {
   name: "home",
   components: {
-    Lottie
+    Lottie,
+    HomeInfoBox
   },
   data() {
     return {
       demoLarge: demoLarge,
       defaultOptions: {animationData: animationData.default},
       animationSpeed: 1,
-      logo
+      logo,
+      homeInfoData: [
+        {
+          icon: 0
+        },
+        {
+          icon: 1
+        },
+        {
+          icon: 2
+        },
+      ]
     }
   },
   methods: {
@@ -125,6 +146,13 @@ export default {
   height: 24px;
   width: auto;
   display: inline;
+}
+#how-it-works {
+  text-align: center;
+  background: $lightcherry;
+}
+#how-it-works h1 {
+  color: $brown;
 }
 </style>
 
