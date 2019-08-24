@@ -64,11 +64,11 @@ export default new Vuex.Store({
     }) {
       console.log("generating data")
 
-      state.interestRateOverTime.x = Array.from(Array(200).keys());
+      state.interestRateOverTime.x = Array.from(Array(180).keys());
       state.volumeOverTime.x = Array.from(Array(60).keys());
 
       setInterval(() => {
-        if (state.interestRateOverTime.y.length < 200) {
+        if (state.interestRateOverTime.y.length < 180) {
           state.interestRateOverTime.y.push(
             Math.random() * 4 -
             1.9 +

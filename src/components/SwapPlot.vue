@@ -43,7 +43,7 @@
             <br />market under a
             <b
               :style="position? 'color:#DA366D':'color:#60D0C5' "
-            >{{position ? "SHORT" : "LONG"}}</b> position
+            >{{position ? "Short" : "Long"}}</b> position
           </span>
           <br />
           <br />
@@ -52,7 +52,7 @@
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
     </md-card>
-    <md-card style="background:white; margin-top:50px">
+    <md-card style="background:white; margin-top:50px" v-if="beginSimulation==true">
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
@@ -80,10 +80,47 @@
         <div class="md-layout-item md-size-30">
           <vue-plotly :data="depthPlotData" :layout="depthPlotLayout" :options="plotOptions" />
         </div>
-        <div class="md-layout-item md-size-70">
+        <div class="md-layout-item">
           <vue-plotly :data="interestPlotData" :layout="interestPlotLayout" :options="plotOptions" />
         </div>
       </div>
+      <div class="md-layout" style="padding:20px">
+        <div class="md-layout-item md-size-20" />
+        <div class="md-layout-item md-size-60" style="padding:20px" id="endBox">
+          <div class="md-layout">
+            <div class="md-layout-item">
+              <span>
+                <b>
+                  Your Position:
+                  <md-chip
+                    :style="position ? 'background: #2DC4B6': 'background: #DA366D'"
+                  >{{position ? 'Short' : 'Long'}}</md-chip>
+                </b>
+              </span>
+            </div>
+            <div class="md-layout-item" style="padding-top:7px">
+              <span>
+                <b>Dai Committed: {{amount}}</b>
+              </span>
+            </div>
+            <div class="md-layout-item" style="padding-top:7px">Profit/Loss: {{profitLoss}}</div>
+          </div>
+        </div>
+      </div>
+    </md-card>
+
+    <md-card style="margin-top:25px" v-if="!beginSimulation">
+      <md-empty-state
+        md-label="Begin Market Simulation"
+        md-description="Similate the running time of a swap market running over a period of 1 month."
+      >
+        <md-button
+          class="md-primary md-raised"
+          id="commitButton"
+          style="color"
+          @click="startSimulation"
+        >Start simulation</md-button>
+      </md-empty-state>
     </md-card>
   </div>
 </template>
@@ -91,15 +128,16 @@
 <script>
 import VuePlotly from "@statnett/vue-plotly";
 
-import { mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "SwapPlot",
   components: { VuePlotly },
   data() {
     return {
+      beginSimulation: false,
       mode: "commit",
-      position: "false",
+      position: false,
       amount: 0,
       interestRate: [],
 
@@ -111,7 +149,13 @@ export default {
       cumaltiveSum: 0
     };
   },
-  methods: {},
+  methods: {
+    ...mapActions(["GENERATE_RANDOM_DATA"]),
+    startSimulation() {
+      this.beginSimulation = true;
+      this.GENERATE_RANDOM_DATA();
+    }
+  },
 
   computed: {
     ...mapState(["interestRateOverTime", "volumeOverTime"]),
@@ -133,7 +177,7 @@ export default {
           fill: "tozeroy",
           mode: "line",
           line: { shape: "linear", color: "#2DC4B6" },
-          name: "LONG Volume"
+          name: "Long Volume"
         },
         {
           x: this.volumeOverTime.x,
@@ -141,7 +185,7 @@ export default {
           mode: "line",
           fill: "tozeroy",
           line: { shape: "linear", color: "#D81E5B" },
-          name: "SHORT Volume"
+          name: "Short Volume"
         }
       ];
     },
@@ -312,6 +356,44 @@ export default {
           pad: 5
         }
       };
+    },
+    profitLoss() {
+      if (this.interestRateOverTime.y.length > 60) {
+        let a = this.position ? -1 : 1;
+        console.log("a", a);
+        let longDai = this.volumeOverTime.yLong.reduce((a, b) => a + b, 0);
+        console.log("longDai", longDai);
+        let shortDai =
+          -1 * this.volumeOverTime.yShort.reduce((a, b) => a + b, 0);
+        console.log("shortDai", shortDai);
+        let pt = longDai + shortDai;
+        console.log("pt", pt);
+        let pr = a == 1 ? (longDai / pt) : (shortDai / pt);
+        console.log("pr", pr);
+        let pt1 =
+          pt *
+          Math.exp(
+            this.interestRateOverTime.y[60] *
+              ((this.interestRateOverTime.y.length - 1 - 60) / 4 / 365)
+          );
+        console.log("pt1", pt1);
+        let pt2 =
+          pt *
+          Math.exp(
+            this.interestRateOverTime.y[
+              this.interestRateOverTime.y.length - 1
+            ] *
+              ((this.interestRateOverTime.y.length - 1 - 60) / 4 / 365)
+          );
+        console.log("pt2", pt2);
+        let plRatio = (a * pr * (pt2 - pt1)) / pt1;
+        console.log("plRatio", plRatio);
+        let individualPl = plRatio * this.amount;
+        console.log("individualPl", individualPl);
+        return individualPl;
+      } else {
+        return 0;
+      }
     }
   }
 };

@@ -1,49 +1,47 @@
 <template>
-    <div class="info-box-container">
-        <div class="md-layout-item">
-            <img v-if="icon === 0" :src="cone1" class="svg-image" alt="Demo logo"/> 
-            <img v-if="icon === 1" :src="cone2" class="svg-image" alt="Demo logo"/> 
-            <img v-if="icon === 2" :src="cone3" class="svg-image" alt="Demo logo"/> 
-        </div>
-        <div class="md-layout-item">
-            <md-card>
-                <md-card-header>
-                <div class="md-title">{{title}}</div>
-                </md-card-header>
-                <md-card-content>
-                    {{description}}
-                </md-card-content>
-            </md-card>
-        </div>
+  <div class="info-box-container">
+    <div class="md-layout-item">
+      <img v-if="icon === 0" :src="cone1" class="svg-image" alt="Demo logo" />
+      <img v-if="icon === 1" :src="cone2" class="svg-image" alt="Demo logo" />
+      <img v-if="icon === 2" :src="cone3" class="svg-image" alt="Demo logo" />
     </div>
-  
+    <div class="md-layout-item">
+      <md-card>
+        <md-card-header>
+          <div class="md-title" style="text-align:center">
+            <b>{{title}}</b>
+          </div>
+        </md-card-header>
+        <md-card-content>{{description}}</md-card-content>
+      </md-card>
+    </div>
+  </div>
 </template>
 
 <script>
-import cone1 from '@/assets/cone-1.svg';
-import cone2 from '@/assets/cone-2.svg';
-import cone3 from '@/assets/cone-3.svg';
+import cone1 from "@/assets/cone-1.svg";
+import cone2 from "@/assets/cone-2.svg";
+import cone3 from "@/assets/cone-3.svg";
 export default {
   name: "MarketBox",
   props: {
-      icon: {
-          type: String
-      },
-      title: {
-          type: String
-      },
-      description: {
-          type: String
-      }
+    icon: {
+      type: String
+    },
+    title: {
+      type: String
+    },
+    description: {
+      type: String
+    }
   },
-  components: {
-  },
+  components: {},
   data() {
-      return {
-          cone1,
-          cone2,
-          cone3
-      }
+    return {
+      cone1,
+      cone2,
+      cone3
+    };
   },
   methods: {}
 };
@@ -52,11 +50,11 @@ export default {
 <style lang="scss" scoped>
 @import "../styles/variables.scss";
 .md-card {
-  background: #fff;
+  background: #fff1c4;
   width: 90%;
+  max-width: 450px;
   display: inline-block;
   vertical-align: top;
-  background: #fff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
 }
@@ -68,7 +66,7 @@ export default {
   height: 75px;
 }
 .md-title {
-    color: $cherry;
+  color: $cherry;
 }
 .row {
   padding: 25px 0;
@@ -81,18 +79,19 @@ export default {
   margin-right: 1vw;
 }
 .svg-image {
-    height: 150px;
-    margin-bottom: 20px;
+  height: 150px;
+  margin-bottom: 20px;
 }
 .md-layout-item {
-    display: flex;
-    justify-content: center
+//   display: flex;
+text-align: center;
+  justify-content: center;
 }
-.md-card-header+.md-card-content {
-    padding: 20px !important;
+.md-card-header + .md-card-content {
+  padding: 20px !important;
 }
 .info-box-container {
-    background: $lightcherry;
-    padding-bottom: 30px;
+  background: $lightcherry;
+  padding-bottom: 30px;
 }
 </style>
