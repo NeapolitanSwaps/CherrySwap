@@ -6,8 +6,8 @@
     </div>
     <div class="container" id="progress-bar" v-bind:class="{ active: short == 0 }">
       <span class="short">{{short}}%</span>
-      <span class="long">{{100-short}}%</span>
-      <div class="bullet" id="red" v-bind:style="{ width: (short/100)*90 + '%' }"></div>
+      <span class="long">{{+(100-short).toFixed(2)}}%</span>
+      <div class="bullet" id="red" v-bind:style="{ width: +((short/100)*90).toFixed(2) + '%' }"></div>
       <!-- <div class="bullet" id="green"></div> -->
     </div>
     <div class="container" id="dai-count">

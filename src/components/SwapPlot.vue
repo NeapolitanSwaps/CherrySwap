@@ -62,13 +62,19 @@
             <div class="md-title">
               Current APR:
               <span
-                style="color:#2DC4B6"
+                :style="cumlativeNetRate==0 ? 'color: black': (cumlativeNetRate>0?'color: #2DC4B6':'color: #DA366D')"
               >{{(interestPlotData[0].y[interestPlotData[0].y.length-1]).toFixed(4)}}% APR</span>
             </div>
+            <span>
+              <b>Leading Position:</b>
+              <md-chip
+                :style="cumlativeNetRate>0 ? 'background: #2DC4B6': 'background: #DA366D'"
+                v-if="cumlativeNetRate!=0"
+              >{{cumlativeNetRate>0 ? 'Long': 'Short'}}</md-chip>
+              <span v-if="cumlativeNetRate==0" style="margin-bottom:30px">Not locked yet</span>
+            </span>
           </div>
         </div>
-
-        <hr />
       </md-card-header>
       <div class="md-layout">
         <div class="md-layout-item md-size-30">
@@ -98,17 +104,27 @@ export default {
       interestRate: [],
 
       plotOptions: {
-        responsive: false,
+        responsive: true,
         showLink: false,
         displayModeBar: false
-      }
+      },
+      cumaltiveSum: 0
     };
   },
   methods: {},
-  
 
   computed: {
     ...mapState(["interestRateOverTime", "volumeOverTime"]),
+    cumlativeNetRate() {
+      if (this.interestPlotData[0].y.length >= 60) {
+        this.cumaltiveSum +=
+          this.interestPlotData[0].y[this.interestPlotData[0].y.length - 1] -
+          this.interestPlotData[0].y[59];
+      } else {
+        return 0;
+      }
+      return this.cumaltiveSum;
+    },
     depthPlotData() {
       return [
         {
@@ -274,7 +290,7 @@ export default {
             textangle: "-90"
           },
           {
-            x: 180,
+            x: 155,
             y:
               this.interestPlotData[0].y.length >= 60
                 ? this.interestPlotData[0].y[60] + 2

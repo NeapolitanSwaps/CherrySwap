@@ -102,7 +102,7 @@ export default {
           : "Locked";
       let unlocksInString =
         this.interestRateOverTime.y.length > 60
-          ? Math.floor(35 - this.interestRateOverTime.y.length / 4) +
+          ? Math.floor(45 - this.interestRateOverTime.y.length / 4) +
             " days " +
             (
               180 -
@@ -112,6 +112,9 @@ export default {
             ).toFixed(0) +
             " hours"
           : "Not Started";
+          if(this.interestRateOverTime.y.length > 180){
+            unlocksInString = "Unlocked and paid"
+          }
       return {
         title: "Market Overview",
         items: [
@@ -140,14 +143,15 @@ export default {
       let longDai = this.volumeOverTime.yLong.reduce((a, b) => a + b, 0);
       let shortDai = -1 * this.volumeOverTime.yShort.reduce((a, b) => a + b, 0);
       let totalDai = longDai + shortDai;
-      let shortRatio = (shortDai / totalDai) * 100;
+      let shortRatio = ((shortDai / totalDai) * 100);
       return {
         title: "Current Status",
         items: [
           [
             { title: "Phase", content: this.interestRateOverTime.y.length < 60
-          ? "Pre-Lock" : "Locked" },
-            { title: "Funds committed", content: totalDai.toFixed(2) + " DAI" }
+          ? "Pre-Lock" : this.interestRateOverTime.y.length < 180 ? "Locked" : "Unlocked and paid"  },
+            { title: "Funds committed", content: totalDai.toFixed(2) + " DAI" },
+            {title: "Locked fixed APR", content: this.interestRateOverTime.y.length < 60 ? "Not set yet" : +(this.interestRateOverTime.y[59]).toFixed(2) + "% "}
           ],
           null
         ],
