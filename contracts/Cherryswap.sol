@@ -37,6 +37,8 @@ contract Cherryswap {
   struct SwapInfo {
     address[] participants;
     uint256[] depositedValues;
+    uint256 longPoolSupply;
+    uint256 shortPoolSupply;
     uint256 participantsCounter;
     Bet[] bets;
   }
@@ -99,10 +101,11 @@ contract Cherryswap {
 
   function startSwap() public isOpen(swapsCounter) {
     require(now == swaps[swapsCounter].startingTime, "Cherryswap::startSwap - mmmmmm it is not starting time yet!");
-    
+
     swaps[swapsCounter].status = Status.Running;
-    //todo: need to talk with compound about some business
-    //get starting rate
+
+    // get starting rate
+    swaps[swapsCounter].startingRate = cherryToken.supplyRatePerBlock();
   }
 
   function closeSwap() public hasEnded(swapsCounter) {
@@ -110,6 +113,7 @@ contract Cherryswap {
 
     //todo: talk with compound about some business
     //get contract DAI supply & convergent rate
+
     
     
     //check if long or short won and send token 
@@ -125,15 +129,21 @@ contract Cherryswap {
     // collect proposal deposit from proposer and store it in the Moloch until the proposal is processed
     require(token.transferFrom(_participant, address(this), _depositedValue), "Cherryswap::deposit - deposit token transfer failed");
 
+    token.approve(address(cherryToken), _depositedValue); // approve the transfer
+    assert(cherryToken.mint(_depositedValue) == 0);  // mint the cTokens and assert there is no error
+
     SwapInfo memory swapInfo;
     swapInfo.participants[swapsCounter] = _participant;
     swapInfo.depositedValues[swapsCounter] = _depositedValue;
     swapInfo.bets[swapsCounter] = Bet(_uintBet);
+    if(_uintBet == 1) {
+      swapInfo.longPoolSupply += _depositedValue;
+    }
+    else {
+      swapInfo.shortPoolSupply += _depositedValue;
+    }
 
     swapById[swapsCounter] = swapInfo;
-
-    token.approve(address(cherryToken), _depositedValue); // approve the transfer
-    assert(cherryToken.mint(_depositedValue) == 0);  // mint the cTokens and assert there is no error
   }
 
 }
