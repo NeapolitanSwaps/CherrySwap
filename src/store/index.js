@@ -36,6 +36,7 @@ export default new Vuex.Store({
       yLong: [0],
       yShort: [0]
     },
+    swapPeriod: 'Open'
   },
   mutations: {
     //WEB3 Stuff
@@ -73,6 +74,8 @@ export default new Vuex.Store({
             1.9 +
             state.interestRateOverTime.y[state.interestRateOverTime.y.length - 1]
           );
+        }
+        if (state.interestRateOverTime.y.length < 60) {
           if (Math.random() > 0.7) {
             state.volumeOverTime.yLong.push(
               state.volumeOverTime.yLong[state.volumeOverTime.yLong.length - 1] +
@@ -94,7 +97,7 @@ export default new Vuex.Store({
             );
           }
         }
-      }, 100);
+      }, 500);
 
       // commit(mutations.SET_INTERSTRATE_OVER_TIME, interestRateOverTime)
       // commit(mutations.SET_VOLUME_OVER_TIME, state.interestRateOverTime)

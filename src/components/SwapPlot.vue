@@ -96,6 +96,7 @@ export default {
       position: "false",
       amount: 0,
       interestRate: [],
+
       plotOptions: {
         responsive: false,
         showLink: false,
@@ -104,6 +105,7 @@ export default {
     };
   },
   methods: {},
+  
 
   computed: {
     ...mapState(["interestRateOverTime", "volumeOverTime"]),

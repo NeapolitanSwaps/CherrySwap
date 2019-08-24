@@ -31,32 +31,34 @@ export default {
   data() {
     return {
       defaultOptions: { animationData: animationData.default },
-      animationSpeed: 1,
-      boxMarketData: {
-        title: "Market Overview",
-        items: [
-          [
-            { title: "Market", content: "DAI" },
-            { title: "Current IR", content: "13.7% APR" }
-          ],
-          [
-            { title: "Locks in", content: "00d 05h 12m 37s" },
-            { title: "Unlocks in", content: "21d 01h 12m 37s" },
-            { title: "Lock duration", content: "90 days" }
-          ]
-        ]
-      },
-      boxStatusData: {
-        title: "Current Status",
-        items: [
-          [
-            { title: "Phase", content: "Pre-Lock" },
-            { title: "Funds committed", content: "1,804 DAI" }
-          ],
-          null
-        ],
-        short: 25
-      }
+      animationSpeed: 1
+      // boxMarketData: {
+      //   title: "Market Overview",
+      //   items: [
+      //     [
+      //       { title: "Market", content: "DAI" },
+      //       { title: "Current IR", content: "13.7% APR" }
+      //     ],
+      //     [
+      //       { title: "Locks in", content: "00d 05h 12m 37s" },
+      //       { title: "Unlocks in", content: "21d 01h 12m 37s" },
+      //       { title: "Lock duration", content: "90 days" }
+      //     ]
+      //   ]
+      // },
+      // boxStatusData: {
+      //   title: "Current Status",
+      //   items: [
+      //     [
+      //       { title: "Phase", content: "Pre-Lock" },
+      //       { title: "Funds committed", content: "1,804 DAI" }
+      //     ],
+      //     null
+      //   ],
+      //   short: 25,
+      //   shortDai: 450,
+      //   longDai: 1200
+      // }
     };
   },
   mounted() {
@@ -84,7 +86,76 @@ export default {
     }
   },
   computed: {
-    ...mapState(["interestRateOverTime", "volumeOverTime"])
+    ...mapState(["interestRateOverTime", "volumeOverTime"]),
+    boxMarketData() {
+      let locksInString =
+        this.interestRateOverTime.y.length < 60
+          ? Math.floor(15 - this.interestRateOverTime.y.length / 4) +
+            " days " +
+            (
+              24 -
+              ((this.interestRateOverTime.y.length / 4).toFixed(4) -
+                Math.floor(this.interestRateOverTime.y.length / 4)) *
+                24
+            ).toFixed(0) +
+            " hours"
+          : "LOCKED";
+      let unlocksInString =
+        this.interestRateOverTime.y.length > 60
+          ? Math.floor(35 - this.interestRateOverTime.y.length / 4) +
+            " days " +
+            (
+              180 -
+              ((this.interestRateOverTime.y.length / 4).toFixed(4) -
+                Math.floor(this.interestRateOverTime.y.length / 4)) *
+                24
+            ).toFixed(0) +
+            " hours"
+          : "Not Started";
+      return {
+        title: "Market Overview",
+        items: [
+          [
+            { title: "Market", content: "DAI" },
+            {
+              title: "Current APR",
+              content:
+                this.interestRateOverTime.y[
+                  this.interestRateOverTime.y.length - 1
+                ].toFixed(2) + "%"
+            }
+          ],
+          [
+            {
+              title: "Locks in",
+              content: locksInString
+            },
+            { title: "Unlocks in", content: unlocksInString },
+            { title: "Lock duration", content: "30 days" }
+          ]
+        ]
+      };
+    },
+    boxStatusData() {
+      let longDai = this.volumeOverTime.yLong.reduce((a, b) => a + b, 0);
+      let shortDai = -1 * this.volumeOverTime.yShort.reduce((a, b) => a + b, 0);
+      let totalDai = longDai + shortDai;
+      let shortRatio = (shortDai / totalDai) * 100;
+      return {
+        title: "Current Status",
+        items: [
+          [
+            { title: "Phase", content: this.interestRateOverTime.y.length < 60
+          ? "Pre-Lock" : "Locked" },
+            { title: "Funds committed", content: totalDai.toFixed(2) + " DAI" }
+          ],
+          null
+        ],
+        short: +shortRatio.toFixed(2),
+        shortDai: +shortDai.toFixed(2),
+        longDai: +longDai.toFixed(2)
+      };
+    }
   }
 };
 </script>
