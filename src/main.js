@@ -13,14 +13,15 @@ import VueSlider from 'vue-slider-component'
 import 'vue-slider-component/theme/default.css'
 import VueApexCharts from 'vue-apexcharts'
 import "typeface-space-mono";
+import ToggleButton from 'vue-js-toggle-button'
 
 Vue.component('apexchart', VueApexCharts)
 Vue.component('VueSlider', VueSlider)
 Vue.component('jazzicon', Jazzicon); 
 
-
 Cryptoicon.add(icon);
 
+Vue.use(ToggleButton)
 Vue.use(VModal)
 Vue.use(Cryptoicon);
 Vue.use(VueMaterial)
