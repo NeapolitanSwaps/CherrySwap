@@ -1,29 +1,23 @@
-ln2: decimal
-
 @public
-def __init__():
-  self.ln2 = 0.6931471806
-
-@public 
-def getnum() -> uint256:
-  return convert(self.ln2 * 10000000000.0, uint256)
-
-@public
+@constant
 def blockCompound(fixed: uint256, t1: uint256, t2: uint256) -> decimal:
   blocks: uint256 = (t2 - t1) / 15
-  precisionLoss: uint256 = 5
-  scaling: uint256 = 10 ** (9 - precisionLoss)
-  bracket: uint256 = convert((1.0 + (convert(fixed, decimal)/10000.0)/convert(blocks, decimal)) * convert(scaling, decimal), uint256)
-  compound: decimal = convert(bracket ** blocks, decimal) / convert(scaling ** blocks, decimal)
+  precisionLoss: uint256 = 1
+  bracket: uint256 = 10 ** 10 + fixed / (blocks * 10**8)
+  upper: uint256 = (bracket ** blocks) / 10**30
+  lower: uint256 = 10000000000 ** blocks / 10**30
+  compound: decimal = convert(upper, decimal) / convert(lower, decimal)
   return compound
 
 @public
+@constant
 def interestDiffScaled(poolStart: uint256, poolEnd: uint256, fixed: uint256, t1: uint256, t2: uint256) -> int128:
   compound: decimal = self.blockCompound(fixed, t1, t2)
   diff: int128 = convert(poolEnd * 10**10, int128) - convert(convert(poolStart * 10**10, decimal) * compound, int128)
   return diff
 
 @public
+@constant
 def computeRatios(poolLong: uint256, poolShort: uint256, fixed: uint256, t1: uint256, t2: uint256, poolEnd: uint256) -> (int128, int128):
   poolStart: uint256 = poolLong + poolShort
   poolStartSquared: uint256 = poolStart ** 2
