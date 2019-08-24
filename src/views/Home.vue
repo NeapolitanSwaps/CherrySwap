@@ -19,11 +19,11 @@
         <h1>How it works</h1>
       </div>
     </div>
-    <div class="footer-container md-layout">
-
-        <home-info-box :data='homeInfoData[0]'/>
-        <home-info-box :data='homeInfoData[1]'/>
-        <home-info-box :data='homeInfoData[2]'/>
+    <div class="footer-container ">
+      
+        <home-info-box :icon='0' :title="'1. Commit Phase'" :description="description0"/>
+        <home-info-box :icon='1' :title="'2. Lock Phase'" :description="description1" />
+        <home-info-box :icon='2' :title="'3. Payout Phase'" :description="description2" />
 
     </div>
   </div>
@@ -49,17 +49,9 @@ export default {
       defaultOptions: {animationData: animationData.default},
       animationSpeed: 1,
       logo,
-      homeInfoData: [
-        {
-          icon: 0
-        },
-        {
-          icon: 1
-        },
-        {
-          icon: 2
-        },
-      ]
+      description0: "During this phase, participants commit tokens to either a short or long position on the future interest rate of a given Compound market. Long positions gamble on the interest rate increasing, while short positions anticipate a decrease.",
+      description1: "At the beginning of the preset lock phase, the fixed (base) interest rate is set at the current market rate. Any interest accrued during this phase is pooled to be returned to participants at the end of the lock-up.",
+      description2: "The accrued interest is divided among participants in the pool. Participants who predicted the correct trend in interest rates will earn more than they would have if they had invested directly into the Compound market."
     }
   },
   methods: {
@@ -133,7 +125,6 @@ export default {
 }
 .footer-container {
   background: $cherry;
-  height: 100px;
   display: flex;
   justify-content: center;
 }
@@ -150,6 +141,7 @@ export default {
 #how-it-works {
   text-align: center;
   background: $lightcherry;
+  padding: 2.5% 0;
 }
 #how-it-works h1 {
   color: $brown;
