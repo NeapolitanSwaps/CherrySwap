@@ -6,22 +6,16 @@ module.exports = {
   networks: {
     development: {
       host: '127.0.0.1',
-      port: 7545,
+      port: 8545,
       network_id: '*', // Match any network id
     },
     rinkeby: {
       provider: function () {
-        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraApikey}`);
+          return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/v3/${infuraApikey}`);
       },
       network_id: 4,
       gas: 6500000, // default = 4712388
       gasPrice: 10000000000 // default = 100 gwei = 100000000000
-    },
-  },
-
-  compilers: {
-    solc: {
-      version: "0.4.24"
     }
-  }
+  },
 }
