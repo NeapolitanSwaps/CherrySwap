@@ -1,20 +1,16 @@
 <template>
-  <div>
+  <div style="background:#FFFBFB; text-align:center">
     <md-card style="background:white" v-if="mode=='commit'">
       <md-card-header>
-        <div class="md-title" style="padding-left:15px">Commit Funds</div>
+        <div class="md-title" style="text-align:left">Commit Funds</div>
       </md-card-header>
       <div class="md-layout">
         <div class="md-layout-item" style="text-align:center; padding: 20px">
-          <span class="md-title ">
-            Choose a position
-          </span>
+          <span class="md-title">Choose a position</span>
         </div>
       </div>
       <div class="md-layout">
-        <div class="md-layout-item side-text left">
-          Interest rate will increase
-        </div>
+        <div class="md-layout-item side-text left">Interest rate will increase</div>
         <div class="md-layout-item" style="text-align:center">
           <toggle-button
             id="changed-font"
@@ -31,9 +27,7 @@
       <div class="md-layout" style="padding-top:50px">
         <div class="md-layout-item" style="text-align:center" />
         <div class="md-layout-item" style="text-align:center">
-          <span class="md-title">
-            Choose Dai to commit
-          </span>
+          <span class="md-title">Choose Dai to commit</span>
           <md-field>
             <md-input id="number-input" min="0" v-model="amount" type="number"></md-input>
           </md-field>
@@ -62,13 +56,11 @@
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
-            <div class="md-title" style="padding-left:15px">
-              <b>Market View</b>
-            </div>
+            <div class="md-title" style="text-align:left">Market View</div>
           </div>
           <div class="md-layout-item text-right" style="text-align:right">
             <div class="md-title">
-              <b>Current APR:</b>
+              Current APR:
               <span
                 style="color:#2DC4B6"
               >{{(interestPlotData[0].y[interestPlotData[0].y.length-1]).toFixed(4)}}% APR</span>
@@ -104,32 +96,7 @@ export default {
       position: "false",
       amount: 0,
       interestRate: [],
-      interestPlotData: [
-        {
-          x: [0],
-          y: [20],
-          mode: "line",
-          line: { shape: "spline", color: "rgb(128, 0, 128)" }
-        }
-      ],
-      depthPlotData: [
-        {
-          x: [0],
-          y: [0],
-          fill: "tozeroy",
-          mode: "line",
-          line: { shape: "linear", color: "#2DC4B6" },
-          name: "LONG Volume"
-        },
-        {
-          x: [0],
-          y: [0],
-          mode: "line",
-          fill: "tozeroy",
-          line: { shape: "linear", color: "#D81E5B" },
-          name: "SHORT Volume"
-        }
-      ],
+
       plotOptions: {
         responsive: false,
         showLink: false,
@@ -138,43 +105,40 @@ export default {
     };
   },
   methods: {},
-  mounted() {
-    this.interestPlotData[0].x = Array.from(Array(200).keys());
-    this.depthPlotData[0].x = Array.from(Array(60).keys());
-    this.depthPlotData[1].x = Array.from(Array(60).keys());
-    setInterval(() => {
-      if (this.interestPlotData[0].y.length < 200) {
-        this.interestPlotData[0].y.push(
-          Math.random() * 4 -
-            1.9 +
-            this.interestPlotData[0].y[this.interestPlotData[0].y.length - 1]
-        );
-        if (Math.random() > 0.7) {
-          this.depthPlotData[0].y.push(
-            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1] +
-              Math.random() * 25
-          );
-        } else {
-          this.depthPlotData[0].y.push(
-            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1]
-          );
-        }
-        if (Math.random() > 0.7) {
-          this.depthPlotData[1].y.push(
-            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1] -
-              Math.random() * 25
-          );
-        } else {
-          this.depthPlotData[1].y.push(
-            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1]
-          );
-        }
-      }
-    }, 100);
-  },
+  
 
   computed: {
-    // ...mapState(["etherscanBase"]),
+    ...mapState(["interestRateOverTime", "volumeOverTime"]),
+    depthPlotData() {
+      return [
+        {
+          x: this.volumeOverTime.x,
+          y: this.volumeOverTime.yLong,
+          fill: "tozeroy",
+          mode: "line",
+          line: { shape: "linear", color: "#2DC4B6" },
+          name: "LONG Volume"
+        },
+        {
+          x: this.volumeOverTime.x,
+          y: this.volumeOverTime.yShort,
+          mode: "line",
+          fill: "tozeroy",
+          line: { shape: "linear", color: "#D81E5B" },
+          name: "SHORT Volume"
+        }
+      ];
+    },
+    interestPlotData() {
+      return [
+        {
+          x: this.interestRateOverTime.x,
+          y: this.interestRateOverTime.y,
+          mode: "line",
+          line: { shape: "spline", color: "rgb(128, 0, 128)" }
+        }
+      ];
+    },
     depthPlotLayout() {
       return {
         xaxis: {
@@ -197,7 +161,7 @@ export default {
             x1: 60,
             line: {
               color: "#D6D6D6",
-              width: 2,
+              width: 3,
               dash: "dot"
             }
           }
@@ -269,7 +233,7 @@ export default {
                 : 30,
             line: {
               color: "#D6D6D6",
-              width: 2,
+              width: 3,
               dash: "dot"
             }
           },
@@ -287,7 +251,7 @@ export default {
                 : 30,
             line: {
               color: "#D6D6D6",
-              width: 2,
+              width: 3,
               dash: "dot"
             }
           }
@@ -364,31 +328,34 @@ export default {
   text-decoration: none;
   text-transform: none;
   font-weight: normal;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 //
 .md-card {
-    background: #fff;
-    width: 62vw;
-    display: inline-block;
-    vertical-align: top;
-    background: #fff;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: 12px;
-    margin-top: -75px;
+  background: #fff;
+  width: 62vw;
+  display: inline-block;
+  vertical-align: top;
+  background: #fff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 12px;
+  margin-top: -75px;
 }
 .md-card-content {
-    padding: 5%;
+  padding: 5%;
 }
 .md-card-header {
-    border-bottom: 1px solid $greylight; 
-    height: 75px;
+  border-bottom: 1px solid $greylight;
+  border-bottom: 1px solid $greylight;
+  border-bottom: 1px solid $greylight;
+  height: 75px;
 }
 .row {
-    padding: 25px 0;
+  padding: 25px 0;
 }
 #row-1 {
-    border-bottom: 1px solid $greylight;
+  border-bottom: 1px solid $greylight;
 }
 .side-text {
   padding-top: 10px;
