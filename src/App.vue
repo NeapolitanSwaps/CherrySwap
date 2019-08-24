@@ -1,7 +1,9 @@
 <template>
   <md-app id="app" md-mode="reveal" style="min-height: 100vh">
     <md-app-toolbar md-elevation="0" id="toolbar">
-      <a href="/"><img :src="logo" class="logo-svg" alt="logo" style="padding-left:20px"/></a>
+      <a @click="router.push({ name: 'create' })">
+        <img :src="logo" class="logo-svg" alt="logo" style="padding-left:20px" />
+      </a>
       <div class="md-toolbar-section-end">
         {{currentNetwork}}
         <clickable-address :eth-address="account" />
