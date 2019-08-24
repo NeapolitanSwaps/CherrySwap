@@ -1,12 +1,11 @@
 <template>
   <div class="page-container">
     <div class="inner-container">
-      <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
+      <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/>
       <h1>Interest rate swaps with a cherry on top</h1>
       <h3>Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets</h3>
     </div>
     <div class="landing-container">
-      <img :src="demoLarge" alt="Demo logo"/>
       <div class="landing-back"></div>
     </div>    
     <div class="footer-container"></div>
@@ -16,17 +15,15 @@
 <script>
 import router from "@/router";
 import Lottie from 'vue-lottie';
-import demoLarge from '@/assets/demo-large.svg';
 import * as animationData from '../assets/icecream.json';
 
 export default {
-  name: "home",
+  name: "market",
   components: {
-    Lottie
+      Lottie
   },
   data() {
     return {
-      demoLarge: demoLarge,
       defaultOptions: {animationData: animationData.default},
       animationSpeed: 1
     }
