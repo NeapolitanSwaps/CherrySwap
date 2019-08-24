@@ -1,15 +1,31 @@
 <template>
   <div class="page-container">
     <div class="inner-container">
-      <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
+      
       <h1>Interest rate swaps with a cherry on top</h1>
       <h3>Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets</h3>
     </div>
     <div class="landing-container">
-      <img :src="demoLarge" alt="Demo logo"/>
+      <!-- <img :src="demoLarge" alt="Demo logo"/> -->
+      <lottie :options="defaultOptions" :height="'auto'" :width="'100%'" v-on:animCreated="handleAnimation"/>
       <div class="landing-back"></div>
     </div>    
-    <div class="footer-container"></div>
+    <div class="middle-container">
+      <p class="box">Every market on <span style="text-decoration: underline">Compound</span> has an interest rate, which fluctuates according to supply and demand of credit and debt within that market.</p>
+      <p class="box">With <img :src="logo" id="logo" alt="Demo logo"/>, you can hedge against these fluctuations - or speculate on them - by participating in pooled interest rate swaps.</p>
+    </div>
+    <div class="md-layout" id="how-it-works">
+      <div class="md-layout-item">
+        <h1>How it works</h1>
+      </div>
+    </div>
+    <div class="footer-container md-layout">
+
+        <home-info-box :data='homeInfoData[0]'/>
+        <home-info-box :data='homeInfoData[1]'/>
+        <home-info-box :data='homeInfoData[2]'/>
+
+    </div>
   </div>
 </template>
 
@@ -17,39 +33,44 @@
 import router from "@/router";
 import Lottie from 'vue-lottie';
 import demoLarge from '@/assets/demo-large.svg';
-import * as animationData from '../assets/icecream.json';
+import logo from "@/assets/logo.svg";
+import * as animationData from '../assets/demo-logo.json';
+import HomeInfoBox from "../components/HomeInfoBox";
 
 export default {
   name: "home",
   components: {
-    Lottie
+    Lottie,
+    HomeInfoBox
   },
   data() {
     return {
       demoLarge: demoLarge,
       defaultOptions: {animationData: animationData.default},
-      animationSpeed: 1
+      animationSpeed: 1,
+      logo,
+      homeInfoData: [
+        {
+          icon: 0
+        },
+        {
+          icon: 1
+        },
+        {
+          icon: 2
+        },
+      ]
     }
   },
   methods: {
     handleAnimation: function (anim) {
       this.anim = anim;
+      this.anim.stop();
     },
     goToCreate() {
       router.push({ name: "create" });
     },
-    stop: function () {
-      this.anim.stop();
-    },
-
-    play: function () {
-      console.log("Hello");
-      this.anim.play();
-    },
-
-    pause: function () {
-      this.anim.pause();
-    },
+   
   }
 };
 </script>
@@ -74,17 +95,18 @@ export default {
 }
 .inner-container h1 {
   color: $cherry;
-  line-height: 1.5em;
+  line-height: 1.25em;
   text-align: center;
+  font-size: 2.5em;
 }
 .inner-container h3 {
   line-height: 1.5em;
+  font-size: 1.3em;
   text-align: center;
 }
 .landing-container {
   width: 100%;
-  height: 300px;
-  
+  height: 250px;
 }
 .landing-image {
   background: url('../assets/demo-large.svg') no-repeat center;
@@ -95,13 +117,42 @@ export default {
   background: #fff;
   width: 100%;
   height: 50vh;
-  margin-top: -30%;
+  margin-top: -25%;
+}
+.middle-container {
+  background: #fff;
+  height: 300px;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+}
+.middle-container p.box {
+  width: 25vw;
+  font-size: 16px;
+  line-height: 1.5em;
 }
 .footer-container {
-  background: #fff;
-  height: 100%;
-  width: 100%;
-  flex-grow: 1;
+  background: $cherry;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+.footer-container h1{
+  // width: 100%;
+}
+
+#logo {
+  height: 24px;
+  width: auto;
+  display: inline;
+}
+#how-it-works {
+  text-align: center;
+  background: $lightcherry;
+}
+#how-it-works h1 {
+  color: $brown;
 }
 </style>
 

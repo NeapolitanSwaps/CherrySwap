@@ -1,16 +1,16 @@
 <template>
-  <md-app id="app" md-mode="reveal" style="min-height: 100vh">
+  <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
     <md-app-toolbar md-elevation="0" id="toolbar">
       <a @click="router.push({ name: 'create' })">
         <img :src="logo" class="logo-svg" alt="logo" style="padding-left:20px" />
       </a>
       <div class="md-toolbar-section-end">
-        {{currentNetwork}}
+        <!-- {{currentNetwork}} -->
         <clickable-address :eth-address="account" />
       </div>
     </md-app-toolbar>
 
-    <md-app-content id="content">
+    <md-app-content id="content" style="margin-top: 0px;">
       <router-view />
       <div id="foot">
         🍒
@@ -117,7 +117,7 @@ export default {
 html,
 body {
   font-family: "Rubik", sans-serif;
-  background-color: $background;
+  background-color: $vanilla;
 }
 
 #app {
@@ -148,13 +148,12 @@ nav li.router-link-exact-active {
 
 #foot {
   background-color: $vanilla;
-  margin-top: 25px;
   padding: 25px;
   text-align: center;
 }
 
 #content {
-  background-color: $background;
+  background-color: $vanilla;
   padding-left: 0;
   padding-right: 0;
   padding-top: 25px;
