@@ -8,6 +8,7 @@
         "lint": "vue-cli-service lint"
     },
     "dependencies": {
+        "@statnett/vue-plotly": "^0.3.2",
         "apexcharts": "^3.6.7",
         "axios": "^0.18.0",
         "chai": "^4.2.0",
@@ -17,6 +18,7 @@
         "cryptocompare": "^1.0.0",
         "ethjs-abi": "^0.2.1",
         "moment": "^2.24.0",
+        "plotly.js": "^1.49.4",
         "truffle-contract": "^4.0.11",
         "truffle-hdwallet-provider": "^1.0.6",
         "typeface-space-mono": "^0.0.71",
