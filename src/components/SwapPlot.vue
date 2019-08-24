@@ -152,19 +152,30 @@ export default {
     setInterval(() => {
       if (this.interestPlotData[0].y.length < 200) {
         this.interestPlotData[0].y.push(
-          Math.random() * 8 -
-            3.7 +
+          Math.random() * 4 -
+            1.9 +
             this.interestPlotData[0].y[this.interestPlotData[0].y.length - 1]
         );
-
-        this.depthPlotData[0].y.push(
-          this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1] +
-            Math.random() * 10
-        );
-        this.depthPlotData[1].y.push(
-          this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1] -
-            Math.random() * 10
-        );
+        if (Math.random() > 0.7) {
+          this.depthPlotData[0].y.push(
+            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1] +
+              Math.random() * 25
+          );
+        } else {
+          this.depthPlotData[0].y.push(
+            this.depthPlotData[0].y[this.depthPlotData[0].y.length - 1]
+          );
+        }
+        if (Math.random() > 0.7) {
+          this.depthPlotData[1].y.push(
+            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1] -
+              Math.random() * 25
+          );
+        } else {
+          this.depthPlotData[1].y.push(
+            this.depthPlotData[1].y[this.depthPlotData[1].y.length - 1]
+          );
+        }
       }
     }, 100);
   },
@@ -211,8 +222,8 @@ export default {
           borderwidth: 2
         },
         margin: {
-          l: 40,
-          r: 0,
+          l: 55,
+          r: 20,
           b: 55,
           t: 10,
           pad: 5
@@ -306,10 +317,10 @@ export default {
             textangle: "-90"
           },
           {
-            x: 20,
+            x: 180,
             y:
               this.interestPlotData[0].y.length >= 60
-                ? this.interestPlotData[0].y[60] + 3
+                ? this.interestPlotData[0].y[60] + 2
                 : 20,
             text:
               this.interestPlotData[0].y.length >= 60

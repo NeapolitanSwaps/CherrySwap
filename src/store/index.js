@@ -5,6 +5,11 @@ import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import moment from "moment";
 
+import {
+  getEtherscanAddress,
+  getNetIdString,
+}
+from "@/utils/lookupTools";
 
 import * as actions from "./actions";
 import * as mutations from "./mutation-types";
@@ -26,6 +31,8 @@ export default new Vuex.Store({
   mutations: {
     //WEB3 Stuff
     [mutations.SET_ACCOUNT](state, account) {
+      console.log("Account set")
+      console.log(account)
       state.account = account;
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
@@ -47,11 +54,6 @@ export default new Vuex.Store({
       getEtherscanAddress().then(etherscanBase => {
         commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
       });
-      getTokenInfo().then(TokenInfo => {
-        console.log("TokenInfo")
-        console.log(TokenInfo)
-        commit(mutations.SET_TOKEN_ADDRESSES, TokenInfo)
-      })
     },
 
     [actions.INIT_APP]: async function ({
@@ -77,7 +79,7 @@ export default new Vuex.Store({
       }
       // let fundFactory = await FundFactory.at(state.factoryAddress)
       console.log("logging vyper from UI")
-      let numberOfFunds = await fundFactory.getAllFundUids()
+      // let numberOfFunds = await fundFactory.getAllFundUids()
     }
   }
 })
