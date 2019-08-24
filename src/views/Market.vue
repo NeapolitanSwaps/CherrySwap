@@ -7,7 +7,7 @@
     </div>
      
     <div class="footer-container">
-        <p>hello</p>
+        <swap-plot id="plot-swap" />
     </div>
   </div>
 </template>
@@ -16,13 +16,15 @@
 import router from "@/router";
 import Lottie from 'vue-lottie';
 import * as animationData from '../assets/icecream.json';
-import MarketBox from '../components/MarketBox';
+import MarketBox from '@/components/MarketBox';
+import SwapPlot from "@/components/SwapPlot";
 
 export default {
   name: "market",
   components: {
       Lottie,
-      MarketBox
+      MarketBox,
+      SwapPlot
   },
   data() {
     return {
@@ -124,10 +126,16 @@ export default {
   margin-top: -30%;
 }
 .footer-container {
+    margin-top: 100px;
   background: #fff;
   height: 100%;
   width: 100%;
-  flex: 1;
+//   flex: 1;
+  display: flex;
+  justify-content: center;
 }
+
+
+
 </style>
 

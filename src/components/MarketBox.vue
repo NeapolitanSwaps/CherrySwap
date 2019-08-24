@@ -40,7 +40,7 @@ export default {
 @import "../styles/variables.scss";
 .md-card {
     background: #fff;
-    width: 30vw;
+    width: 30%;
     display: inline-block;
     vertical-align: top;
     background: #fff;
@@ -60,6 +60,11 @@ export default {
 }
 #row-1 {
     border-bottom: 1px solid $greylight;
+}
+
+.md-app-content .md-card {
+    margin-left: 1vw;
+    margin-right: 1vw;
 }
 
 </style>

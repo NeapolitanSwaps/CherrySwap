@@ -2,10 +2,7 @@
   <div>
     <md-card style="background:white" v-if="mode=='commit'">
       <md-card-header>
-        <div class="md-title" style="padding-left:15px">
-          <b>Commit Funds</b>
-        </div>
-        <hr />
+        <div class="md-title" style="padding-left:15px">Commit Funds</div>
       </md-card-header>
       <div class="md-layout">
         <div class="md-layout-item" style="text-align:center; padding: 20px">
@@ -230,6 +227,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../styles/variables.scss";
 .vue-js-switch#changed-font {
   font-size: 18px !important;
 }
@@ -253,5 +251,29 @@ export default {
   padding: 0px 30px;
   display: inline-block;
   text-decoration: none;
+}
+//
+.md-card {
+    background: #fff;
+    width: 62vw;
+    display: inline-block;
+    vertical-align: top;
+    background: #fff;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 12px;
+    margin-top: -75px;
+}
+.md-card-content {
+    padding: 5%;
+}
+.md-card-header {
+    border-bottom: 1px solid $greylight; 
+    height: 75px;
+}
+.row {
+    padding: 25px 0;
+}
+#row-1 {
+    border-bottom: 1px solid $greylight;
 }
 </style>
