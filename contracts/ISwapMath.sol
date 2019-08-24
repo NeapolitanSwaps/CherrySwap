@@ -8,5 +8,5 @@ contract ISwapMath {
         uint256 t1,
         uint256 t2,
         uint256 poolEnd
-        ) public returns(int128, int128);
+        ) public pure returns(int128, int128);
 }
