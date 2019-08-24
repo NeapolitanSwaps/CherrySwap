@@ -99,7 +99,7 @@ export default {
                 24
             ).toFixed(0) +
             " hours"
-          : "LOCKED";
+          : "Locked";
       let unlocksInString =
         this.interestRateOverTime.y.length > 60
           ? Math.floor(35 - this.interestRateOverTime.y.length / 4) +
