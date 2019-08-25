@@ -2,6 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./interface/IERC20.sol";
 import "./interface/ICERC20.sol";
+import "./ISwapMath.sol";
 
 contract Cherryswap {
 
@@ -13,6 +14,7 @@ contract Cherryswap {
 
   IERC20 public token; // underlying asset = DAI
   ICERC20 public cherryToken; // cToken
+  ISwapMath public swapMath;
 
   /***************
   EVENTS
@@ -55,43 +57,34 @@ contract Cherryswap {
 
   constructor(
     address _token,
-    address _cherryToken
+    address _cherryToken,
+    address _swapMath
   ) public {
     require(_token != address(0), "Cherryswap::contructor - token cannot be 0");
     require(_cherryToken != address(0), "Cherryswap::constructor - cherryToken cannot be 0");
 
     token = IERC20(_token);
     cherryToken = ICERC20(_cherryToken);
+    swapMath = ISwapMath(_swapMath);
+
     swapsCounter = 0;
-  }
-
-  modifier hasEnded(uint256 swapId) {
-    if(swapId > 0) {
-      Swap memory swap = swaps[swapId];
-      require(now >= swap.endingTime, "Cherryswap::hasEnded - swap not ended yet");
-    }
-    _;
-  }
-
-  modifier isOpen(uint256 swapId) {
-    Swap memory swap = swaps[swapId];
-    require(now < swap.startingTime, "Cherryswap::isOpen - swap is running or closed");
-    _;
-  }
-
-  modifier isRunning(uint256 swapId) {
-    Swap memory swap = swaps[swapId];
-    require((now > swap.startingTime) && (now < swap.endingTime), "Cherryswap::isOpen - swap is open or closed");
-    _;
   }
 
   function createSwap(
     uint256 _startingTime,
     uint256 _endingTime
   ) public {
+    if(swapsCounter > 0) {
+      Swap memory previousSwap = swaps[swapsCounter-1];
+      require(now > previousSwap.endingTime, "Cherryswap::hasEnded - swap not ended yet");
+    }
+
+    // increment swaps counter
+    swapsCounter += 1;
+
     // create new swap
     Swap memory swap = Swap({
-      swapId: swapsCounter,
+      swapId: swapsCounter-1,
       openingTime: now,
       startingTime: _startingTime,
       endingTime: _endingTime,
@@ -102,30 +95,46 @@ contract Cherryswap {
     });
     swaps.push(swap);
 
-    // increment swaps counter
-    swapsCounter++;
+    // create swap info
+    address[] memory _participants;
+    uint256[] memory _depositedValues;
+    Bet[] memory _bets;
+    SwapInfo memory swapInfo = SwapInfo(
+      _participants,
+      _depositedValues,
+      0,
+      0,
+      0,
+      _bets
+    );
+    swapById[swapsCounter-1] = swapInfo;
   }
 
-  function startSwap() public isOpen(swapsCounter) {
-    require(now == swaps[swapsCounter].startingTime, "Cherryswap::startSwap - mmmmmm it is not starting time yet!");
+  function startSwap() public {
+    require(swapsCounter > 0, "Cherryswap::startSwap - no swap");
+    Swap memory previousSwap = swaps[swapsCounter-1];
+    require(now <= previousSwap.startingTime, "Cherryswap::startSwap - swap is running or closed");
 
     // approve the transfer
-    token.approve(address(cherryToken), swaps[swapsCounter].depositedValue);
+    token.approve(address(cherryToken), swaps[swapsCounter-1].depositedValue);
     // mint the cTokens and assert there is no error
     assert(cherryToken.mint(swaps[swapsCounter].depositedValue) == 0);
 
-    swaps[swapsCounter].status = Status.Running;
-
+    swaps[swapsCounter-1].status = Status.Running;
 
     // get starting rate
-    swaps[swapsCounter].startingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
+    swaps[swapsCounter-1].startingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
   }
 
-  function closeSwap() public hasEnded(swapsCounter) {
-    swaps[swapsCounter].status = Status.Closed;
+  function closeSwap() public {
+    require(swapsCounter > 0, "Cherryswap::closeSwap - no swap");
+    Swap memory previousSwap = swaps[swapsCounter-1];
+    require(now >= previousSwap.endingTime, "Cherryswap::closeSwap - swap not ended yet");
+
+    swaps[swapsCounter-1].status = Status.Closed;
 
     // get starting rate
-    swaps[swapsCounter].endingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
+    swaps[swapsCounter-1].endingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
 
     // get exchange rate
     //uint256 exchangeRate = cherryToken.exchangeRateCurrent();
@@ -135,42 +144,61 @@ contract Cherryswap {
     // Redeem cDai to Dai
     require(cherryToken.redeem(cBalance) == 0, "Cherryswap::redeem - something went wrong");
 
+    SwapInfo memory closedSwap = swapById[swapsCounter-1];
+    (int128 rLong, int128 rShort) = swapMath.computeRatios(
+      closedSwap.longPoolSupply,
+      closedSwap.shortPoolSupply,
+      cherryToken.supplyRatePerBlock(),
+      swaps[swapsCounter-1].startingTime,
+      swaps[swapsCounter-1].endingTime,
+      swaps[swapsCounter-1].depositedValue
+    );
+
     // send funds to participants
-    transfer(0, 0);
+    transfer(rLong, rShort);
   }
 
   function deposit(
     address _participant,
     uint256 _depositedValue,
     uint8 _uintBet
-  ) public isOpen(swapsCounter) {
+  ) public {
+    require(swapsCounter > 0, "Cherryswap::deposit - no swap");
+    Swap storage currentSwap = swaps[swapsCounter-1];
+    require(now < currentSwap.startingTime, "Cherryswap::deposit - swap is running or closed");
     require(_participant != address(0), "Invalid participant address");
 
     // collect proposal deposit from proposer and store it in the Moloch until the proposal is processed
     require(token.transferFrom(_participant, address(this), _depositedValue), "Cherryswap::deposit - deposit token transfer failed");
-
-    SwapInfo memory swapInfo;
-    swapInfo.participants[swapsCounter] = _participant;
-    swapInfo.depositedValues[swapsCounter] = _depositedValue;
-    swapInfo.bets[swapsCounter] = Bet(_uintBet);
+    
+    SwapInfo storage swapInfo = swapById[swapsCounter-1];
+    swapInfo.participants.push(_participant);
+    swapInfo.depositedValues.push(_depositedValue);
+    swapInfo.bets.push(Bet(_uintBet));
     if(_uintBet == 1) {
       swapInfo.longPoolSupply += _depositedValue;
     }
     else {
       swapInfo.shortPoolSupply += _depositedValue;
     }
+    swapInfo.participantsCounter++;
+    //swapById[swapsCounter] = swapInfo;
 
-    swapById[swapsCounter] = swapInfo;
+    currentSwap.depositedValue += _depositedValue;
   }
 
-  function transfer(int256 rLong, int256 rShort) internal hasEnded(swapsCounter) {
+  function transfer(int256 rLong, int256 rShort) internal {
+    require(swapsCounter > 0, "Cherryswap::transfer - no swap");
+    Swap memory previousSwap = swaps[swapsCounter-1];
+    require(now >= previousSwap.endingTime, "Cherryswap::transfer - swap not ended yet");
+    
     int256 pl;
     int256 payout;
 
     // contract DAI balance
     uint256 pt = token.balanceOf(address(this));
 
-    SwapInfo memory endedSwap = swapById[swapsCounter];
+    SwapInfo memory endedSwap = swapById[swapsCounter-1];
     for(uint256 i = 0; i < endedSwap.participantsCounter; i++) {
       if(endedSwap.bets[i] == Bet.Long) {
         pl = int256(endedSwap.depositedValues[i]) * rLong;
