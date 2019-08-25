@@ -13,6 +13,7 @@
     </md-app-toolbar>
 
     <md-app-content id="content" style="margin-top: 0px;">
+      <mining-transaction />
       <router-view />
       <div id="foot">
         🍒
@@ -23,7 +24,7 @@
 </template>
 
 <script>
-/* global web3:true */
+import MiningTransaction from "@/components/widgets/MiningTransaction";
 
 import Web3 from "web3";
 import * as actions from "@/store/actions";
@@ -38,7 +39,7 @@ import logo from "@/assets/logo.svg";
 
 export default {
   name: "app",
-  components: { ClickableAddress },
+  components: { ClickableAddress, MiningTransaction },
   data() {
     return {
       logo: logo,

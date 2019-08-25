@@ -38,7 +38,11 @@ export default new Vuex.Store({
       yShort: [0]
     },
     swapPeriod: 'Open',
-    cherryswap: null
+    cherryswap: null,
+    miningTransactionObject: {
+      status: null,
+      txHash: ''
+    }
   },
   mutations: {
     //WEB3 Stuff
@@ -58,6 +62,9 @@ export default new Vuex.Store({
     },
     [mutations.SET_CHERRYSWAPP]: async function (state, cherryswap) {
       state.cherryswap = cherryswap;
+    },
+    [mutations.SET_MINING_TRANSACTION_OBJECT](state, miningTransactionObject) {
+      state.miningTransactionObject = miningTransactionObject;
     },
   },
   actions: {
@@ -164,10 +171,33 @@ export default new Vuex.Store({
 
       console.log("commited")
       console.log(params)
-      await state.cherryswap.deposit(state.account, params.value, params.position, {
+
+      commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+        status: 'pending',
+        txHash: ""
+      })
+
+      let txHash = await state.cherryswap.deposit(state.account, web3.utils.toWei(params.value + "", 'ether'), params.position, {
         from: state.account
       })
 
+      if (txHash) {
+        commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+          status: 'done',
+          txHash: txHash.tx
+        })
+      }
+
+    },
+    [actions.CLOSE_MINING_DIALOG]: async function ({
+      commit,
+      dispatch,
+      state
+    }) {
+      commit(mutations.SET_MINING_TRANSACTION_OBJECT, {
+        status: null,
+        txHash: ""
+      })
     },
 
   }

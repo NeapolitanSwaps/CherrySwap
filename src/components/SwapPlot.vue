@@ -151,6 +151,7 @@
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
     </md-card>
+    <modal name="hello-world">hello, world!</modal>
   </div>
 </template>
 
@@ -190,6 +191,7 @@ export default {
       console.log("commig button");
       let position = this.position ? "0" : "1";
       this.COMMIT({ position: position, value: this.amount });
+      // this.$modal.show("hello-world");
     }
   },
 
