@@ -2,8 +2,8 @@
   <div class="page-container">
     <div class="inner-container">
       <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
-      <market-box :data="boxMarketData"></market-box>
-      <market-box :data="boxStatusData"></market-box>
+      <market-box :dataObj="boxMarketData"></market-box>
+      <market-box :dataObj="boxStatusData"></market-box>
     </div>
 
     <div class="footer-container">
@@ -32,33 +32,6 @@ export default {
     return {
       defaultOptions: { animationData: animationData.default },
       animationSpeed: 1
-      // boxMarketData: {
-      //   title: "Market Overview",
-      //   items: [
-      //     [
-      //       { title: "Market", content: "DAI" },
-      //       { title: "Current IR", content: "13.7% APR" }
-      //     ],
-      //     [
-      //       { title: "Locks in", content: "00d 05h 12m 37s" },
-      //       { title: "Unlocks in", content: "21d 01h 12m 37s" },
-      //       { title: "Lock duration", content: "90 days" }
-      //     ]
-      //   ]
-      // },
-      // boxStatusData: {
-      //   title: "Current Status",
-      //   items: [
-      //     [
-      //       { title: "Phase", content: "Pre-Lock" },
-      //       { title: "Funds committed", content: "1,804 DAI" }
-      //     ],
-      //     null
-      //   ],
-      //   short: 25,
-      //   shortDai: 450,
-      //   longDai: 1200
-      // }
     };
   },
   mounted() {},

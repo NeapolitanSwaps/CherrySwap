@@ -1,21 +1,35 @@
 <template>
   <md-card>
     <md-card-header>
-      <div class="md-title">{{data.title}}</div>
+      <div class="md-title">{{dataObj.title}}</div>
     </md-card-header>
-    <md-card-content>
+    <md-card-content v-if="interestRateOverTime.y.length>1">
       <div id="row-1" class="row">
-        <market-cell v-for="item in data.items[0]" :item="item" />
+        <market-cell v-for="item in dataObj.items[0]" :item="item" />
       </div>
       <div id="row-2" class="row">
         <market-progress
-          v-if="!data.items[1]"
-          :short="data.short"
-          :shortDai="data.shortDai"
-          :longDai="data.longDai"
+          v-if="!dataObj.items[1]"
+          :short="dataObj.short"
+          :shortDai="dataObj.shortDai"
+          :longDai="dataObj.longDai"
         />
-        <market-cell v-for="item in data.items[1]" :item="item" />
+        <market-cell v-for="item in dataObj.items[1]" :item="item" />
       </div>
+    </md-card-content>
+    <md-card-content
+      v-if="interestRateOverTime.y.length==1 && dataObj.items[1] !=null"
+      style="text-align:center"
+    >
+      <img :src="cone1" class="svg-image" alt="Demo logo" style="width:85px; padding:15px" />
+      <p class="md-subheading">No market is running yet! Market overview data will apear here when you start one.</p>
+    </md-card-content>
+    <md-card-content
+      v-if="interestRateOverTime.y.length==1 && dataObj.items[1] ==null"
+      style="text-align:center"
+    >
+      <img :src="cone2" class="svg-image" alt="Demo logo" style="width:85px; padding:15px" />
+      <p class="md-subheading">No market is running yet! Market statistics and data will apear here when you start one.</p>
     </md-card-content>
   </md-card>
 </template>
@@ -23,10 +37,15 @@
 <script>
 import MarketCell from "./MarketCell";
 import MarketProgress from "./MarketProgress";
+
+import cone1 from "@/assets/cone-1.svg";
+import cone2 from "@/assets/cone-2.svg";
+
+import { mapActions, mapState } from "vuex";
 export default {
   name: "MarketBox",
   props: {
-    data: {
+    dataObj: {
       type: Object
     }
   },
@@ -34,8 +53,16 @@ export default {
     MarketCell,
     MarketProgress
   },
-  data() {},
-  methods: {}
+  data() {
+    return {
+      cone1,
+      cone2
+    };
+  },
+  methods: {},
+  computed: {
+    ...mapState(["interestRateOverTime", "volumeOverTime"])
+  }
 };
 </script>
 

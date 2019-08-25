@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="md-layout">
-        <div class="md-layout-item side-text left">Interest rate will increase</div>
+        <div class="md-layout-item side-text left md-subheading">Interest rate will increase</div>
         <div class="md-layout-item" style="text-align:center">
           <toggle-button
             id="changed-font"
@@ -22,7 +22,7 @@
             @change="position = $event.value"
           />
         </div>
-        <div class="md-layout-item side-text right">Interest rate will decrease</div>
+        <div class="md-layout-item side-text right md-subheading">Interest rate will decrease</div>
       </div>
       <div class="md-layout" style="padding-top:50px">
         <div class="md-layout-item" style="text-align:center" />
@@ -37,7 +37,7 @@
       <div class="md-layout" style="text-align:center; padding:25px;">
         <div class="md-layout-item md-size-20" style="padding-top:40px;" />
         <div class="md-layout-item" style="padding-top:40px;padding-bottom:20px" id="endBox">
-          <span>
+          <span class="md-subheading">
             You will commit
             <span style="color:#E4717A">{{amount}} Dai</span> to the current
             <br />market under a
@@ -109,24 +109,30 @@
       </div>
     </md-card>
 
-    <md-card style="margin-top:25px" v-if="!beginSimulation">
-      <md-empty-state
-        md-label="Begin Market Simulation"
-        md-description="Similate the running time of a swap market running over a period of 1 month."
-      >
-        <md-button
-          class="md-primary md-raised"
-          id="commitButton"
-          style="color"
-          @click="startSimulation"
-        >Start simulation</md-button>
-      </md-empty-state>
+    <md-card style="margin-top:25px;" v-if="!beginSimulation">
+      <md-card-header>
+        <div class="md-title" style="text-align:left">Begin Market Simulation</div>
+      </md-card-header>
+      <img :src="cone3" class="svg-image" alt="Demo logo" style="width:85px; padding-top:15px" />
+      <p
+        class="md-subheading"
+        style="padding-top:20px; padding-bottom: 15px"
+      >Similate the running time of a swap market running over a period of 1 month.</p>
+
+      <md-button
+        class="md-primary md-raised"
+        id="commitButton"
+        @click="startSimulation"
+        :disabled="amount==0"
+        style="margin-bottom: 20px"
+      >Start simulation</md-button>
     </md-card>
   </div>
 </template>
 
 <script>
 import VuePlotly from "@statnett/vue-plotly";
+import cone3 from "@/assets/cone-3.svg";
 
 import { mapActions, mapGetters, mapState } from "vuex";
 
@@ -135,6 +141,7 @@ export default {
   components: { VuePlotly },
   data() {
     return {
+      cone3,
       beginSimulation: false,
       mode: "commit",
       position: false,
@@ -368,7 +375,7 @@ export default {
         console.log("shortDai", shortDai);
         let pt = longDai + shortDai;
         console.log("pt", pt);
-        let pr = a == 1 ? (longDai / pt) : (shortDai / pt);
+        let pr = a == 1 ? longDai / pt : shortDai / pt;
         console.log("pr", pr);
         let pt1 =
           pt *
