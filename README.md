@@ -75,3 +75,9 @@ Front end:
 ```
 yarn serve
 ```
+
+## Additional ressources
+
+* [Pitch Deck](./additionalRessources/CherrySwapPitchDeck-ETHBerlinZwei.pdf)
+* [Figma Mockups](https://www.figma.com/file/F5Ykz9BfmWO7YAwqLHUqJ2/Cherry-Swap-ETHBerlinZwei?node-id=0:1)
+* [Formula Validation](https://docs.google.com/spreadsheets/d/1m6Dt99teQvEwX9UYqx_ONWNUgVn40_nJV4qQc6qyoWE/edit?usp=sharing)
