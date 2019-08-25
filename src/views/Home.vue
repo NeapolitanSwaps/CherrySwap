@@ -1,6 +1,7 @@
 <template>
   <div class="page-container">
-    <div class="inner-container" style="text-align: center">
+     <!-- v-bind:style="'height: '+windowHeight*2+' !important'" -->
+    <div class="inner-container" v-bind:style="{height: (windowHeight*.5) + 'px'}">
       <h1 style="text-align: center">Interest rate swaps with a cherry on top</h1>
       <h3>Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets</h3>
     </div>
@@ -11,7 +12,7 @@
         :options="defaultOptions"
         :height="'auto'"
         :width="'100%'"
-        style="max-width:1000px; margin-top:-700px"
+        v-bind:style="{marginTop: 2*(-windowHeight/3) + 'px', maxWidth: '1000px'}"
         v-on:animCreated="handleAnimation"
       />
     </div>
@@ -74,6 +75,7 @@ export default {
   },
   data() {
     return {
+      windowHeight: window.innerHeight,
       demoLarge: demoLarge,
       defaultOptions: { animationData: animationData.default },
       animationSpeed: 1,
@@ -86,15 +88,28 @@ export default {
         "The accrued interest is divided among participants in the pool. Participants who predicted the correct trend in interest rates will earn more than they would have if they had invested directly into the Compound market."
     };
   },
+  watch: {
+    windowHeight(newHeight, oldHeight) {
+     this.txt = `it changed to ${newHeight} from ${oldHeight}`;
+     console.log("abc")
+    }
+  },
   methods: {
     handleAnimation: function(anim) {
       this.anim = anim;
-      // this.anim.stop();
+      this.anim.stop();
     },
     goToCreate() {
       router.push({ name: "market" });
     }
-  }
+  },
+  mounted() {
+    this.$nextTick(() => {
+      window.addEventListener('resize', () => {
+        this.windowHeight = window.innerHeight
+      });
+    })
+  },
 };
 </script>
 
@@ -122,7 +137,7 @@ export default {
   line-height: 1.25em;
   text-align: center;
   font-size: 4em;
-  // max-width: 600px;
+  max-width: 600px;
 }
 .inner-container h3 {
   line-height: 1.5em;
