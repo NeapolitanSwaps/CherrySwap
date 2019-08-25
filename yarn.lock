@@ -799,6 +799,11 @@
   resolved "https://registry.yarnpkg.com/@nodelib/fs.stat/-/fs.stat-1.1.3.tgz#2b5a3ab3f918cca48a8c754c08168e3f03eba61b"
   integrity sha512-shAmDyaQC4H92APFoIaVDHCx5bStIocgvbwQyxPRrbUY20V1EYTbSDchWbuwlMG3V17cprZhA6+78JfB+3DTPw==
 
+"@openzeppelin/contracts@^2.3.0":
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-2.3.0.tgz#043961a6e37b87e0eb80647c7528a7c62c41361f"
+  integrity sha512-lf8C3oULQAnsu3OTRP4tP5/ddfil6l65Lg3JQCwAIgc99vZ1jz5qeBoETGGGmczxt+bIyMI06WPP2apC74EZag==
+
 "@plotly/d3-sankey-circular@0.33.1":
   version "0.33.1"
   resolved "https://registry.yarnpkg.com/@plotly/d3-sankey-circular/-/d3-sankey-circular-0.33.1.tgz#15d1e0337e0e4b1135bdf0e2195c88adacace1a7"
@@ -2411,6 +2416,11 @@ chai-bignumber@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/chai-bignumber/-/chai-bignumber-3.0.0.tgz#e90cf1f468355bbb11a9acd051222586cd2648a9"
   integrity sha512-SubOtaSI2AILWTWe2j0c6i2yFT/f9J6UBjeVGDuwDiPLkF/U5+/eTWUE3sbCZ1KgcPF6UJsDVYbIxaYA097MQA==
+
+chai-bn@0.1.0-beta.0:
+  version "0.1.0-beta.0"
+  resolved "https://registry.yarnpkg.com/chai-bn/-/chai-bn-0.1.0-beta.0.tgz#dc4341b6692c30fa9aa8ee939825d84681b672d4"
+  integrity sha512-H88f0+5eMTQLhP8CxwgDB0y6QM1Do3HmihvwhlGkYOXu9H+2TuOT2WAsbjV6e0Tf63CFmQBIG39xZ/j/g+4vKw==
 
 chai-bn@^0.1.1:
   version "0.1.1"
