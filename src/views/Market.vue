@@ -7,8 +7,13 @@
     </div>
 
     <div class="footer-container">
-      <swap-plot id="plot-swap" />
-    </div>
+        <swap-plot id="plot-swap" />
+      </div>
+    <button v-on:click="$modal.show('hello-world')">Add 1</button>
+
+    <modal name="hello-world" height="auto" width="1000px" >
+        <earnings-modal :data="earningsData"/>
+    </modal>
   </div>
 </template>
 
@@ -18,7 +23,8 @@ import Lottie from "vue-lottie";
 import * as animationData from "../assets/icecream.json";
 import MarketBox from "@/components/MarketBox";
 import SwapPlot from "@/components/SwapPlot";
-
+import EarningsModal from "@/components/EarningsModal";
+ 
 import { mapActions, mapState } from "vuex";
 
 export default {
@@ -26,12 +32,22 @@ export default {
   components: {
     Lottie,
     MarketBox,
-    SwapPlot
+    SwapPlot,
+    EarningsModal
   },
   data() {
     return {
       defaultOptions: { animationData: animationData.default },
-      animationSpeed: 1
+      animationSpeed: 1,
+      earningsData: {
+        position: 'short',
+        leadingPosition: 'long',
+        averageIR: 14.2,
+        investment: 130,
+        investProfit: 4.2,
+        hodlProfit: 12.3,
+        reversePositionProfit: -23 
+      }
     };
   },
   mounted() {},
