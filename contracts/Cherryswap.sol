@@ -118,7 +118,7 @@ contract Cherryswap {
     // approve the transfer
     token.approve(address(cherryToken), swaps[swapsCounter-1].depositedValue);
     // mint the cTokens and assert there is no error
-    assert(cherryToken.mint(swaps[swapsCounter].depositedValue) == 0);
+    assert(cherryToken.mint(swaps[swapsCounter-1].depositedValue) == 0);
 
     swaps[swapsCounter-1].status = Status.Running;
 
@@ -202,11 +202,11 @@ contract Cherryswap {
     for(uint256 i = 0; i < endedSwap.participantsCounter; i++) {
       if(endedSwap.bets[i] == Bet.Long) {
         pl = int256(endedSwap.depositedValues[i]) * rLong;
-        payout = int256(pt) * int256(endedSwap.depositedValues[i] / endedSwap.longPoolSupply) + (rLong * int256(endedSwap.depositedValues[i]));
+        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / endedSwap.longPoolSupply) + (rLong * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
       }
       else {
         pl = int256(endedSwap.depositedValues[i]) * rShort;
-        payout = int256(pt) * int256(endedSwap.depositedValues[i] / endedSwap.shortPoolSupply) + (rShort * int256(endedSwap.depositedValues[i]));
+        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / endedSwap.shortPoolSupply) + (rShort * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
       }
       // transfer DAI to participant
       token.transfer(endedSwap.participants[i], uint256(payout));
