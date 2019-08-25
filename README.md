@@ -1,13 +1,17 @@
 # Cherry Swap
 
-Cherry swap is is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
+Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
+
+![](./additionalRessources/ScreenImage2.png)
 
 Demo: https://cherryswap.now.sh
 
 ## How it works
 
 Every market on Compound has an interest rate, which fluctuates according to supply and demand of credit and debt within that market. With Cherry Swap, users can hedge against these fluctuations - or speculate on them - by participating in pooled interest rate swaps.
+
 With Cherry Swap, users predict interest rate trends and then commit funds into a fixed-term deposit into a Compound market, taking a position on future interest rates. Long positions gamble on the interest rate increasing, while short positions anticipate a decrease.
+
 Any interest accrued while funds are locked up in Compound is pooled to be returned to participants at the end of the lock-up. Participants who predicted the correct trend in interest rates will earn more than they would have if they had invested directly into the Compound market.
 
 ## Our Team
