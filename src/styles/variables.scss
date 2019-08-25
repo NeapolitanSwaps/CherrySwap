@@ -1,9 +1,15 @@
 // Variables
 
 // Colours
+$vanilla: #ffefbc;
+$green: #2EC4B6;
+$brown: #473144;
+$cherry: #D81E5B;
+$lightcherry: #E8868E;
+$background: #FFFBFB;
 $white: #fff;
 $greylightest: #f3f4f5;
-$greylight: #ccc;
+$greylight: #E9E8E6;
 $gray: #979797;
 $darkgray: #272727;
 $darkred: #ff9284;
@@ -14,7 +20,7 @@ $blue: #4321ea;
 $primary: $darkgray;
 
 .c-blue {
-    color: $blue;
+  color: $blue;
 }
 
 // Layout

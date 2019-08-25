@@ -5,6 +5,11 @@ import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import moment from "moment";
 
+import {
+  getEtherscanAddress,
+  getNetIdString,
+}
+from "@/utils/lookupTools";
 
 import * as actions from "./actions";
 import * as mutations from "./mutation-types";
@@ -22,10 +27,22 @@ export default new Vuex.Store({
     account: null,
     currentNetwork: null,
     etherscanBase: null,
+    interestRateOverTime: {
+      x: [0],
+      y: [20]
+    },
+    volumeOverTime: {
+      x: [0],
+      yLong: [0],
+      yShort: [0]
+    },
+    swapPeriod: 'Open'
   },
   mutations: {
     //WEB3 Stuff
     [mutations.SET_ACCOUNT](state, account) {
+      console.log("Account set")
+      console.log(account)
       state.account = account;
     },
     [mutations.SET_CURRENT_NETWORK](state, currentNetwork) {
@@ -34,8 +51,59 @@ export default new Vuex.Store({
     [mutations.SET_ETHERSCAN_NETWORK](state, etherscanBase) {
       state.etherscanBase = etherscanBase;
     },
+    [mutations.SET_WEB3]: async function (state, web3) {
+      state.web3 = web3;
+    },
   },
   actions: {
+
+    [actions.GENERATE_RANDOM_DATA]: function ({
+      commit,
+      dispatch,
+      state
+    }) {
+      console.log("generating data")
+
+      state.interestRateOverTime.x = Array.from(Array(180).keys());
+      state.volumeOverTime.x = Array.from(Array(60).keys());
+
+      setInterval(() => {
+        if (state.interestRateOverTime.y.length < 180) {
+          state.interestRateOverTime.y.push(
+            Math.random() * 4 -
+            1.9 +
+            state.interestRateOverTime.y[state.interestRateOverTime.y.length - 1]
+          );
+        }
+        if (state.interestRateOverTime.y.length < 60) {
+          if (Math.random() > 0.7) {
+            state.volumeOverTime.yLong.push(
+              state.volumeOverTime.yLong[state.volumeOverTime.yLong.length - 1] +
+              Math.random() * 25
+            );
+          } else {
+            state.volumeOverTime.yLong.push(
+              state.volumeOverTime.yLong[state.volumeOverTime.yLong.length - 1]
+            );
+          }
+          if (Math.random() > 0.9) {
+            state.volumeOverTime.yShort.push(
+              state.volumeOverTime.yShort[state.volumeOverTime.yShort.length - 1] -
+              Math.random() * 25
+            );
+          } else {
+            state.volumeOverTime.yShort.push(
+              state.volumeOverTime.yShort[state.volumeOverTime.yShort.length - 1]
+            );
+          }
+        }
+      }, 100);
+
+      // commit(mutations.SET_INTERSTRATE_OVER_TIME, interestRateOverTime)
+      // commit(mutations.SET_VOLUME_OVER_TIME, state.interestRateOverTime)
+
+
+    },
     [actions.GET_CURRENT_NETWORK]: function ({
       commit,
       dispatch,
@@ -47,11 +115,6 @@ export default new Vuex.Store({
       getEtherscanAddress().then(etherscanBase => {
         commit(mutations.SET_ETHERSCAN_NETWORK, etherscanBase);
       });
-      getTokenInfo().then(TokenInfo => {
-        console.log("TokenInfo")
-        console.log(TokenInfo)
-        commit(mutations.SET_TOKEN_ADDRESSES, TokenInfo)
-      })
     },
 
     [actions.INIT_APP]: async function ({
@@ -77,7 +140,7 @@ export default new Vuex.Store({
       }
       // let fundFactory = await FundFactory.at(state.factoryAddress)
       console.log("logging vyper from UI")
-      let numberOfFunds = await fundFactory.getAllFundUids()
+      // let numberOfFunds = await fundFactory.getAllFundUids()
     }
   }
 })
