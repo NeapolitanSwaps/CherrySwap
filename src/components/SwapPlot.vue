@@ -20,6 +20,7 @@
             :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
             :labels="{checked: 'Short', unchecked: 'Long'}"
             @change="position = $event.value"
+            :disabled="interestRateOverTime.y.length > 60"
           />
         </div>
         <div class="md-layout-item side-text right md-subheading">Interest rate will decrease</div>
@@ -29,7 +30,7 @@
         <div class="md-layout-item" style="text-align:center">
           <span class="md-title">Choose Dai to commit</span>
           <md-field>
-            <md-input id="number-input" min="0" v-model="amount" type="number"></md-input>
+            <md-input :step="25" id="number-input" min="0" v-model="amount" type="number"></md-input>
           </md-field>
         </div>
         <div class="md-layout-item" style="text-align:center" />
@@ -47,7 +48,11 @@
           </span>
           <br />
           <br />
-          <md-button class="md-raised" id="commitButton">Commit</md-button>
+          <md-button
+            class="md-raised"
+            id="commitButton"
+            :disabled="interestRateOverTime.y.length > 60"
+          >Commit</md-button>
         </div>
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
@@ -88,22 +93,29 @@
         <div class="md-layout-item md-size-20" />
         <div class="md-layout-item md-size-60" style="padding:20px" id="endBox">
           <div class="md-layout">
-            <div class="md-layout-item">
+            <div class="md-layout-item" style="padding-top:7px">
               <span>
                 <b>
                   Your Position:
                   <md-chip
-                    :style="position ? 'background: #2DC4B6': 'background: #DA366D'"
+                    :style="position ? 'background: #DA366D': 'background: #2DC4B6'"
                   >{{position ? 'Short' : 'Long'}}</md-chip>
                 </b>
               </span>
             </div>
             <div class="md-layout-item" style="padding-top:7px">
               <span>
-                <b>Dai Committed: {{amount}}</b>
+                <b>Dai Committed:</b> {{amount}}
               </span>
             </div>
-            <div class="md-layout-item" style="padding-top:7px">Profit/Loss: {{profitLoss}}</div>
+            <div class="md-layout-item" style="padding-top:7px">
+              <b>Profit/Loss:</b>
+              {{profitLoss.cherryPl.toFixed(4)}} Dai
+            </div>
+            <div class="md-layout-item" style="padding-top:7px">
+              <b>Hodl cDai profit:</b>
+              {{profitLoss.cDaiPl.toFixed(4)}} Dai
+            </div>
           </div>
         </div>
       </div>
@@ -375,31 +387,40 @@ export default {
         console.log("shortDai", shortDai);
         let pt = longDai + shortDai;
         console.log("pt", pt);
-        let pr = a == 1 ? longDai / pt : shortDai / pt;
+        let pr = a == 1 ? shortDai / pt : longDai / pt;
         console.log("pr", pr);
+
+        let t = (this.interestRateOverTime.y.length - 1 - 60) / 4 / 365;
+        console.log("t", t);
+
         let pt1 =
-          pt *
-          Math.exp(
-            this.interestRateOverTime.y[60] *
-              ((this.interestRateOverTime.y.length - 1 - 60) / 4 / 365)
-          );
+          pt * (Math.exp((this.interestRateOverTime.y[60] / 100) * t) - 1);
         console.log("pt1", pt1);
-        let pt2 =
-          pt *
-          Math.exp(
-            this.interestRateOverTime.y[
-              this.interestRateOverTime.y.length - 1
-            ] *
-              ((this.interestRateOverTime.y.length - 1 - 60) / 4 / 365)
-          );
+
+        let pt2_val = 0;
+        for (let i = 60; i < this.interestRateOverTime.y.length - 1; i++) {
+          pt2_val +=
+            Math.exp((this.interestRateOverTime.y[i] / 100) * (0.25 / 365)) - 1;
+        }
+
+        // let pt2_val = Math.exp(
+        //   (this.interestRateOverTime.y[this.interestRateOverTime.y.length - 1] /
+        //     100) *
+        //     t
+        // );
+        console.log("pt2_val", pt2_val);
+        let pt2 = pt2_val * pt;
         console.log("pt2", pt2);
         let plRatio = (a * pr * (pt2 - pt1)) / pt1;
         console.log("plRatio", plRatio);
         let individualPl = plRatio * this.amount;
         console.log("individualPl", individualPl);
-        return individualPl;
+
+        let cdaiPl = pt2_val * this.amount;
+        console.log("cdaiPl", cdaiPl);
+        return { cherryPl: individualPl, cDaiPl: cdaiPl };
       } else {
-        return 0;
+        return { cherryPl: 0, cDaiPl: 0 };
       }
     }
   }

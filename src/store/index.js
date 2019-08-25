@@ -86,7 +86,7 @@ export default new Vuex.Store({
               state.volumeOverTime.yLong[state.volumeOverTime.yLong.length - 1]
             );
           }
-          if (Math.random() > 0.7) {
+          if (Math.random() > 0.9) {
             state.volumeOverTime.yShort.push(
               state.volumeOverTime.yShort[state.volumeOverTime.yShort.length - 1] -
               Math.random() * 25
