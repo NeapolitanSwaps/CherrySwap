@@ -32,6 +32,9 @@ contract('Cherryswap contract', (accounts) => {
   let participant5;
   let _swapsCounter = 0;
 
+  let startingTime = 1567018293000; // 28 august
+  let endingTime = 1567018353;   // 28 august + 1 min
+
   before(async() => {
     owner = accounts[0];
     participant1 = accounts[1];
@@ -61,9 +64,6 @@ contract('Cherryswap contract', (accounts) => {
   });
 
   describe("Swap", async() => {
-    let startingTime = 1567018293000;
-    let endingTime = 1567104693000;
-
     it("create a swap", async() => {
       let swapsCounterbefore = await cherryswap.swapsCounter();
       await cherryswap.createSwap(startingTime, endingTime, {from: owner});
@@ -98,6 +98,44 @@ contract('Cherryswap contract', (accounts) => {
       assert.equal(participant3Balance, 400);
       assert.equal(cherryswapContractBalance, 300);
     });
+
+    describe("Start swap lock period", async() => {
+
+      before(async() => {
+        await increaseTimeTo(startingTime - 1);
+        await cherryswap.startSwap();
+      });
+
+      it("check starting period", async() => {
+        let daiAllowance = await token.allowance(cherryswap.address, cToken.address);
+        assert.equal(daiAllowance, 300);
+        let cDaiBalance = await cToken.balanceOf(cherryswap.address);
+        assert.equal(cDaiBalance, 300);
+      });
+
+      it("should revert closing swap before ending time", async() => {
+        await cherryswap.closeSwap({from: owner}).should.be.rejectedWith(EVMRevert);
+      });  
+
+      it("should revert when depositing in locking period", async() => {
+        await token.approve(cherryswap.address, 50, {from: participant4});
+        await increaseTimeTo(startingTime + 1);
+        await cherryswap.deposit(participant4, 50, 1, {from: participant4}).should.be.rejectedWith(EVMRevert);
+      }); 
+      
+    });
+
+    describe("End swap period", async() => {
+
+      before(async() => {
+        await increaseTimeTo(endingTime + 1);
+        await cherryswap.closeSwap();
+      });
+
+      it("should revert re-starting swap after starting time", async() => {
+      });        
+    });
+
   });
 
 });
