@@ -145,6 +145,7 @@
             class="md-raised"
             id="commitButton"
             :disabled="interestRateOverTime.y.length > 60"
+            @click="commitFunction"
           >Commit</md-button>
         </div>
         <div class="md-layout-item md-size-20" style="padding:40px;" />
@@ -180,10 +181,15 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["GENERATE_RANDOM_DATA"]),
+    ...mapActions(["GENERATE_RANDOM_DATA", "COMMIT"]),
     startSimulation() {
       this.beginSimulation = true;
       this.GENERATE_RANDOM_DATA();
+    },
+    commitFunction() {
+      console.log("commig button");
+      let position = this.position ? "0" : "1";
+      this.COMMIT({ position: position, value: this.amount });
     }
   },
 

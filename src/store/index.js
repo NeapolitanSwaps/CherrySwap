@@ -17,8 +17,9 @@ import * as mutations from "./mutation-types";
 import truffleContract from "truffle-contract";
 
 // import FundFactoryABI from "../../build/contracts/FundFactory.json"
+import CherryswapABI from "../../build/contracts/Cherryswap.json"
 
-// const FundFactory = truffleContract(FundFactoryABI);
+const Cherryswap = truffleContract(CherryswapABI);
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -36,7 +37,8 @@ export default new Vuex.Store({
       yLong: [0],
       yShort: [0]
     },
-    swapPeriod: 'Open'
+    swapPeriod: 'Open',
+    cherryswap: null
   },
   mutations: {
     //WEB3 Stuff
@@ -53,6 +55,9 @@ export default new Vuex.Store({
     },
     [mutations.SET_WEB3]: async function (state, web3) {
       state.web3 = web3;
+    },
+    [mutations.SET_CHERRYSWAPP]: async function (state, cherryswap) {
+      state.cherryswap = cherryswap;
     },
   },
   actions: {
@@ -124,6 +129,7 @@ export default new Vuex.Store({
     }, web3) {
       // FundFactory.setProvider(web3.currentProvider)
       // Set the web3 instance
+      Cherryswap.setProvider(web3.currentProvider)
       console.log("IN STORE")
       console.log(web3)
       commit(mutations.SET_WEB3, {
@@ -138,9 +144,31 @@ export default new Vuex.Store({
       if (account) {
         commit(mutations.SET_ACCOUNT, account);
       }
+
+      let cherryswap = await Cherryswap.deployed()
+      console.log("contract")
+      console.log(cherryswap)
+
+      commit(mutations.SET_CHERRYSWAPP, cherryswap)
+
       // let fundFactory = await FundFactory.at(state.factoryAddress)
       console.log("logging vyper from UI")
       // let numberOfFunds = await fundFactory.getAllFundUids()
-    }
+
+    },
+    [actions.COMMIT]: async function ({
+      commit,
+      dispatch,
+      state
+    }, params) {
+
+      console.log("commited")
+      console.log(params)
+      await state.cherryswap.deposit(state.account, params.value, params.position, {
+        from: state.account
+      })
+
+    },
+
   }
 })
