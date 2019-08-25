@@ -1,63 +1,25 @@
 <template>
   <div style="background:#FFFBFB; text-align:center">
-    <md-card style="background:white" v-if="mode=='commit'">
+    <md-card style="margin-bottom:25px;" v-if="!beginSimulation">
       <md-card-header>
-        <div class="md-title" style="text-align:left">Commit Funds</div>
+        <div class="md-title" style="text-align:left">Begin Market Simulation</div>
       </md-card-header>
-      <div class="md-layout">
-        <div class="md-layout-item" style="text-align:center; padding: 20px">
-          <span class="md-title">Choose a position</span>
-        </div>
-      </div>
-      <div class="md-layout">
-        <div class="md-layout-item side-text left md-subheading">Interest rate will increase</div>
-        <div class="md-layout-item" style="text-align:center">
-          <toggle-button
-            id="changed-font"
-            :width="112"
-            :height="40"
-            :speed="500"
-            :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
-            :labels="{checked: 'Short', unchecked: 'Long'}"
-            @change="position = $event.value"
-            :disabled="interestRateOverTime.y.length > 60"
-          />
-        </div>
-        <div class="md-layout-item side-text right md-subheading">Interest rate will decrease</div>
-      </div>
-      <div class="md-layout" style="padding-top:50px">
-        <div class="md-layout-item" style="text-align:center" />
-        <div class="md-layout-item" style="text-align:center">
-          <span class="md-title">Choose Dai to commit</span>
-          <md-field>
-            <md-input :step="25" id="number-input" min="0" v-model="amount" type="number"></md-input>
-          </md-field>
-        </div>
-        <div class="md-layout-item" style="text-align:center" />
-      </div>
-      <div class="md-layout" style="text-align:center; padding:25px;">
-        <div class="md-layout-item md-size-20" style="padding-top:40px;" />
-        <div class="md-layout-item" style="padding-top:40px;padding-bottom:20px" id="endBox">
-          <span class="md-subheading">
-            You will commit
-            <span style="color:#E4717A">{{amount}} Dai</span> to the current
-            <br />market under a
-            <b
-              :style="position? 'color:#DA366D':'color:#60D0C5' "
-            >{{position ? "Short" : "Long"}}</b> position
-          </span>
-          <br />
-          <br />
-          <md-button
-            class="md-raised"
-            id="commitButton"
-            :disabled="interestRateOverTime.y.length > 60"
-          >Commit</md-button>
-        </div>
-        <div class="md-layout-item md-size-20" style="padding:40px;" />
-      </div>
+      <img :src="cone3" class="svg-image" alt="Demo logo" style="width:85px; padding-top:15px" />
+      <p
+        class="md-subheading"
+        style="padding-top:20px; padding-bottom: 15px"
+      >Similate the running time of a swap market running over a period of 1 month.</p>
+
+      <md-button
+        class="md-primary md-raised"
+        id="commitButton"
+        @click="startSimulation"
+        :disabled="amount==0"
+        style="margin-bottom: 20px"
+      >Start simulation</md-button>
     </md-card>
-    <md-card style="background:white; margin-top:50px" v-if="beginSimulation==true">
+
+    <md-card style="background:white;" v-if="beginSimulation==true">
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
@@ -90,13 +52,14 @@
         </div>
       </div>
       <div class="md-layout" style="padding:20px">
-        <div class="md-layout-item md-size-20" />
-        <div class="md-layout-item md-size-60" style="padding:20px" id="endBox">
+        <div class="md-layout-item md-size-10" />
+        <div class="md-layout-item md-size-80" style="padding:20px" id="endBox">
           <div class="md-layout">
-            <div class="md-layout-item" style="padding-top:7px">
+            <div class="md-layout-item" style="margin-top:-2px">
               <span>
                 <b>
                   Your Position:
+                  <br />
                   <md-chip
                     :style="position ? 'background: #DA366D': 'background: #2DC4B6'"
                   >{{position ? 'Short' : 'Long'}}</md-chip>
@@ -105,15 +68,17 @@
             </div>
             <div class="md-layout-item" style="padding-top:7px">
               <span>
-                <b>Dai Committed:</b> {{amount}}
+                <b>Committed to swap:</b>
+                <br />
+                {{amount}} Dai
               </span>
             </div>
             <div class="md-layout-item" style="padding-top:7px">
-              <b>Profit/Loss:</b>
+              <b>CherrySwap Profit/Loss:</b>
               {{profitLoss.cherryPl.toFixed(4)}} Dai
             </div>
             <div class="md-layout-item" style="padding-top:7px">
-              <b>Hodl cDai profit:</b>
+              <b>Compound cDai hodl profit:</b>
               {{profitLoss.cDaiPl.toFixed(4)}} Dai
             </div>
           </div>
@@ -121,23 +86,69 @@
       </div>
     </md-card>
 
-    <md-card style="margin-top:25px;" v-if="!beginSimulation">
+    <md-card style="background:white; margin-top:25px; margin-bottom:25px" v-if="mode=='commit'">
       <md-card-header>
-        <div class="md-title" style="text-align:left">Begin Market Simulation</div>
+        <div class="md-title" style="text-align:left">Commit Funds</div>
       </md-card-header>
-      <img :src="cone3" class="svg-image" alt="Demo logo" style="width:85px; padding-top:15px" />
-      <p
-        class="md-subheading"
-        style="padding-top:20px; padding-bottom: 15px"
-      >Similate the running time of a swap market running over a period of 1 month.</p>
-
-      <md-button
-        class="md-primary md-raised"
-        id="commitButton"
-        @click="startSimulation"
-        :disabled="amount==0"
-        style="margin-bottom: 20px"
-      >Start simulation</md-button>
+      <div class="md-layout">
+        <div class="md-layout-item" style="text-align:center; padding: 20px">
+          <span class="md-title">Choose a position</span>
+        </div>
+      </div>
+      <div class="md-layout">
+        <div class="md-layout-item side-text left md-subheading">Interest rate will increase</div>
+        <div class="md-layout-item" style="text-align:center">
+          <toggle-button
+            id="changed-font"
+            :width="112"
+            :height="40"
+            :speed="500"
+            :color="{checked: '#D81E5B', unchecked: '#2DC4B6'}"
+            :labels="{checked: 'Short', unchecked: 'Long'}"
+            @change="position = $event.value"
+            :disabled="interestRateOverTime.y.length > 60"
+          />
+        </div>
+        <div class="md-layout-item side-text right md-subheading">Interest rate will decrease</div>
+      </div>
+      <div class="md-layout" style="padding-top:50px">
+        <div class="md-layout-item" style="text-align:center" />
+        <div class="md-layout-item" style="text-align:center">
+          <span class="md-title">Choose Dai to commit</span>
+          <md-field>
+            <md-input
+              :disabled="interestRateOverTime.y.length > 60"
+              :step="25"
+              id="number-input"
+              min="0"
+              v-model="amount"
+              type="number"
+            ></md-input>
+          </md-field>
+        </div>
+        <div class="md-layout-item" style="text-align:center" />
+      </div>
+      <div class="md-layout" style="text-align:center; padding:25px;">
+        <div class="md-layout-item md-size-20" style="padding-top:40px;" />
+        <div class="md-layout-item" style="padding-top:40px;padding-bottom:20px" id="endBox">
+          <span class="md-subheading">
+            You will commit
+            <span style="color:#E4717A">{{amount}} Dai</span> to the current
+            <br />market under a
+            <b
+              :style="position? 'color:#DA366D':'color:#60D0C5' "
+            >{{position ? "Short" : "Long"}}</b> position
+          </span>
+          <br />
+          <br />
+          <md-button
+            class="md-raised"
+            id="commitButton"
+            :disabled="interestRateOverTime.y.length > 60"
+          >Commit</md-button>
+        </div>
+        <div class="md-layout-item md-size-20" style="padding:40px;" />
+      </div>
     </md-card>
   </div>
 </template>
@@ -466,7 +477,7 @@ export default {
   background: #fff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 12px;
-  margin-top: -75px;
+  // margin-top: -75px;
 }
 .md-card-content {
   padding: 5%;

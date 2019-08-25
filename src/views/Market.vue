@@ -193,7 +193,7 @@ export default {
   margin-top: -30%;
 }
 .footer-container {
-  margin-top: 100px;
+  margin-top: 25px;
   background: #fff;
   height: 100%;
   width: 100%;
