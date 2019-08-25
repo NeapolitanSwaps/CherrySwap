@@ -1452,7 +1452,7 @@ amdefine@>=0.0.4:
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
   integrity sha1-SlKCrBZHKek2Gbz9OtFR+BfOkfU=
 
-ansi-colors@^3.0.0:
+ansi-colors@^3.0.0, ansi-colors@^3.2.3:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/ansi-colors/-/ansi-colors-3.2.4.tgz#e3a3da4bfbae6c86a9c285625de124a234026fbf"
   integrity sha512-hHUXGagefjN2iRrID63xckIvotOXOojhQKWIPUZ4mNUZ9nLZW+7FMNoE1lOkEhNWYsx/7ysGIuJYCiMAA9FnrA==
@@ -2411,6 +2411,11 @@ chai-bignumber@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/chai-bignumber/-/chai-bignumber-3.0.0.tgz#e90cf1f468355bbb11a9acd051222586cd2648a9"
   integrity sha512-SubOtaSI2AILWTWe2j0c6i2yFT/f9J6UBjeVGDuwDiPLkF/U5+/eTWUE3sbCZ1KgcPF6UJsDVYbIxaYA097MQA==
+
+chai-bn@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/chai-bn/-/chai-bn-0.1.1.tgz#a8904b2dc878e5c094881f327c0029579ff2062b"
+  integrity sha512-e1npVXt3cQfZ6oQET9oP38vNj/4HeJ4ojeUpuC8YzhVbTJpIDqANVt7TKi7Dq9yKlHySk2FqbmiMih35iT4DYg==
 
 chai@^4.2.0:
   version "4.2.0"
@@ -8416,6 +8421,18 @@ opener@^1.5.1:
   resolved "https://registry.yarnpkg.com/opener/-/opener-1.5.1.tgz#6d2f0e77f1a0af0032aca716c2c1fbb8e7e8abed"
   integrity sha512-goYSy5c2UXE4Ra1xixabeVh1guIX/ZV/YokJksb6q2lubWu6UbvPQ20p542/sFIll1nl8JnCyK9oBaOcCWXwvA==
 
+openzeppelin-test-helpers@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/openzeppelin-test-helpers/-/openzeppelin-test-helpers-0.4.2.tgz#5277bfd53c0cd3ee49a9468b4b0161828cbdc46c"
+  integrity sha512-caXWi1LMeIwgUozuxfbOd77m6MP26+YOH/Klvm65jXBgtAqzLXyUZPy1ucCu466qsNmgcqKer/z1ekIAPud6Yg==
+  dependencies:
+    ansi-colors "^3.2.3"
+    chai-bn "^0.1.1"
+    ethjs-abi "^0.2.1"
+    semver "^5.6.0"
+    truffle-contract "^4.0.26"
+    web3-utils "^1.2.0"
+
 opn@^5.5.0:
   version "5.5.0"
   resolved "https://registry.yarnpkg.com/opn/-/opn-5.5.0.tgz#fc7164fab56d235904c51c3b27da6758ca3b9bfc"
@@ -11786,7 +11803,7 @@ truffle-contract-schema@^3.0.13:
     crypto-js "^3.1.9-1"
     debug "^4.1.0"
 
-truffle-contract@^4.0.11:
+truffle-contract@^4.0.11, truffle-contract@^4.0.26:
   version "4.0.30"
   resolved "https://registry.yarnpkg.com/truffle-contract/-/truffle-contract-4.0.30.tgz#de0d7ac25c55dcafbe113f862f9a7fd5f83a1531"
   integrity sha512-kQDqqhT6IPu1Vj111PzQvQ3xQiXx//cwFgMDZjaqRpBGuXGa5i80RxW+Vxfdn5pTrYk4pP0P7ZPyka9PJ248vw==
@@ -12981,7 +12998,7 @@ web3-utils@1.0.0-beta.37:
     underscore "1.8.3"
     utf8 "2.1.1"
 
-web3-utils@1.2.1:
+web3-utils@1.2.1, web3-utils@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/web3-utils/-/web3-utils-1.2.1.tgz#21466e38291551de0ab34558de21512ac4274534"
   integrity sha512-Mrcn3l58L+yCKz3zBryM6JZpNruWuT0OCbag8w+reeNROSGVlXzUQkU+gtAwc9JCZ7tKUyg67+2YUGqUjVcyBA==

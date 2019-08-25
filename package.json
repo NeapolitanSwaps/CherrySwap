@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@statnett/vue-plotly": "^0.3.2",
+        "openzeppelin-test-helpers": "^0.4.2",
         "apexcharts": "^3.6.7",
         "axios": "^0.18.0",
         "chai": "^4.2.0",
@@ -34,7 +35,9 @@
         "vue-slider-component": "^3.0.27",
         "vuex": "^3.0.1",
         "vuex-persistedstate": "^2.5.4",
-        "web3": "1.0.0-beta.37"
+        "web3": "1.0.0-beta.37",
+        "chai-bn": "0.1.0-beta.0",
+        "pify": "^4.0.1"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "^3.5.0",
