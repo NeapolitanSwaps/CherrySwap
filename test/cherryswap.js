@@ -149,9 +149,9 @@ contract('Cherryswap contract', (accounts) => {
         let participant3Balance = await token.balanceOf(participant3);
         console.log("***************************************************");
         console.log("Returned values:");
-        console.log(`${participant1Balance}  ${participant2Balance} ${participant3Balance}`);
-        console.log("***************************************************");  
-
+        console.log(`${participant1Balance} ${participant2Balance} ${participant3Balance}`);
+        console.log("***************************************************");
+  
       });        
     });
 

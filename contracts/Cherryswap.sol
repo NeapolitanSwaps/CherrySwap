@@ -155,7 +155,7 @@ contract Cherryswap {
     );
 
     // send funds to participants
-    //transfer(rLong, rShort);
+    transfer(rLong, rShort);
   }
 
   function deposit(
