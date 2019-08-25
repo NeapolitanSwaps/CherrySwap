@@ -1,19 +1,17 @@
-@internal
+@private
 @constant
-def blockCompound(fixedRate: uint256, t1: uint256, t2: uint256) -> decimal:
+def blockCompound(fixedRate: uint256, t1: uint256, t2: uint256) -> uint256:
   blocks: uint256 = (t2 - t1) / 15
-  precisionLoss: uint256 = 1
-  bracket: uint256 = 10 ** 10 + fixedRate / (blocks * 10**8)
-  upper: uint256 = (bracket ** blocks) / 10**30
-  lower: uint256 = 10000000000 ** blocks / 10**30
-  compound: decimal = convert(upper, decimal) / convert(lower, decimal)
-  return compound
+  bracket: uint256 = 10 ** 18 + (fixedRate / blocks)
+  bracketScaled: uint256 = bracket / (10 ** 8)
+  bracketExp: uint256 = bracketScaled ** blocks
+  return bracketExp / (10 ** (10 * (blocks - 1) - 8))
 
-@internal
+@private
 @constant
 def interestDiffScaled(poolStart: uint256, poolEnd: uint256, fixedRate: uint256, t1: uint256, t2: uint256) -> int128:
-  compound: decimal = self.blockCompound(fixedRate, t1, t2)
-  diff: int128 = convert(poolEnd * 10**10, int128) - convert(convert(poolStart * 10**10, decimal) * compound, int128)
+  compound: uint256 = self.blockCompound(fixedRate, t1, t2)
+  diff: int128 = convert(poolEnd * 10**18, int128) - convert(poolStart * compound, int128)
   return diff
 
 @public
