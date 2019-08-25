@@ -86,7 +86,10 @@
       </div>
     </md-card>
 
-    <md-card style="background:white; margin-top:25px; margin-bottom:25px" v-if="mode=='commit'">
+    <md-card
+      style="background:white; margin-top:25px; margin-bottom:25px"
+      v-if="interestRateOverTime.y.length<=60"
+    >
       <md-card-header>
         <div class="md-title" style="text-align:left">Commit Funds</div>
       </md-card-header>
@@ -151,19 +154,23 @@
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
     </md-card>
-    <modal name="hello-world">hello, world!</modal>
+    <modal name="finished-modal" height="auto" width="1000px">
+      <earnings-modal :data="earningsData" />
+    </modal>
+    <md-buttom @click="finishedModal">cli</md-buttom>
   </div>
 </template>
 
 <script>
 import VuePlotly from "@statnett/vue-plotly";
 import cone3 from "@/assets/cone-3.svg";
+import EarningsModal from "@/components/EarningsModal";
 
 import { mapActions, mapGetters, mapState } from "vuex";
 
 export default {
   name: "SwapPlot",
-  components: { VuePlotly },
+  components: { VuePlotly, EarningsModal },
   data() {
     return {
       cone3,
@@ -192,11 +199,25 @@ export default {
       let position = this.position ? "0" : "1";
       this.COMMIT({ position: position, value: this.amount });
       // this.$modal.show("hello-world");
+    },
+    finishedModal() {
+      this.$modal.show("finished-modal");
     }
   },
 
   computed: {
     ...mapState(["interestRateOverTime", "volumeOverTime"]),
+    earningsData() {
+      return {
+        position: this.position ? "Short" : "Long",
+        leadingPosition: this.cumlativeNetRate > 0 ? "Long" : "Short",
+        averageIR: 14.2,
+        investment: this.amount,
+        investProfit: this.profitLoss.cherryPl.toFixed(4),
+        hodlProfit: this.profitLoss.cDaiPl.toFixed(4),
+        reversePositionProfit: -23
+      };
+    },
     cumlativeNetRate() {
       if (this.interestPlotData[0].y.length >= 60) {
         this.cumaltiveSum +=

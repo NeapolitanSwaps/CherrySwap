@@ -7,13 +7,8 @@
     </div>
 
     <div class="footer-container">
-        <swap-plot id="plot-swap" />
-      </div>
-    <button v-on:click="$modal.show('hello-world')">Add 1</button>
-
-    <modal name="hello-world" height="auto" width="1000px" >
-        <earnings-modal :data="earningsData"/>
-    </modal>
+      <swap-plot id="plot-swap" />
+    </div>
   </div>
 </template>
 
@@ -23,8 +18,7 @@ import Lottie from "vue-lottie";
 import * as animationData from "../assets/icecream.json";
 import MarketBox from "@/components/MarketBox";
 import SwapPlot from "@/components/SwapPlot";
-import EarningsModal from "@/components/EarningsModal";
- 
+
 import { mapActions, mapState } from "vuex";
 
 export default {
@@ -32,22 +26,12 @@ export default {
   components: {
     Lottie,
     MarketBox,
-    SwapPlot,
-    EarningsModal
+    SwapPlot
   },
   data() {
     return {
       defaultOptions: { animationData: animationData.default },
-      animationSpeed: 1,
-      earningsData: {
-        position: 'short',
-        leadingPosition: 'long',
-        averageIR: 14.2,
-        investment: 130,
-        investProfit: 4.2,
-        hodlProfit: 12.3,
-        reversePositionProfit: -23 
-      }
+      animationSpeed: 1
     };
   },
   mounted() {},
@@ -70,6 +54,9 @@ export default {
 
     pause: function() {
       this.anim.pause();
+    },
+    finishedModal() {
+      this.$modal.show("finished-modal");
     }
   },
   computed: {
@@ -99,8 +86,9 @@ export default {
             ).toFixed(0) +
             " hours"
           : "Not Started";
-      if (this.interestRateOverTime.y.length > 180) {
+      if (this.interestRateOverTime.y.length >= 180) {
         unlocksInString = "Unlocked and paid";
+        this.finishedModal();
       }
       return {
         title: "Market Overview",
