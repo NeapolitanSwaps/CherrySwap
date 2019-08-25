@@ -1,3 +1,4 @@
+/*eslint-disable */
 const { latestTime } = require('./latestTime');
 
 // Increases ganache time by the passed duration in seconds
