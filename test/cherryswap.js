@@ -32,7 +32,7 @@ contract('Cherryswap contract', (accounts) => {
   let participant5;
   let _swapsCounter = 0;
 
-  let startingTime = 1567018293000; // 28 august
+  let startingTime = 1567018293; // 28 august
   let endingTime = 1567018353;   // 28 august + 1 min
 
   before(async() => {
@@ -80,6 +80,12 @@ contract('Cherryswap contract', (accounts) => {
   describe("Market maker", async() => {
 
     it("Deposit into current opening swap", async() => {
+      console.log("***************************************************");
+      console.log("Deposited values:");
+      console.log("100  100 100");
+      console.log("Bets:");
+      console.log("L  L S");
+      console.log("***************************************************");
       //aprove the contract to get token
       await token.approve(cherryswap.address, 100, {from: participant1});
       await token.approve(cherryswap.address, 100, {from: participant2});
@@ -128,11 +134,24 @@ contract('Cherryswap contract', (accounts) => {
     describe("End swap period", async() => {
 
       before(async() => {
+        let cDaiContractBalance = await cToken.balanceOf(cherryswap.address);
+        //console.log(cDaiContractBalance.toNumber());
         await increaseTimeTo(endingTime + 1);
         await cherryswap.closeSwap();
       });
 
-      it("should revert re-starting swap after starting time", async() => {
+      it("Check redeemed DAI", async() => {
+        let daiContractBalance = await token.balanceOf(cherryswap.address);
+        //console.log(daiContractBalance.toNumber());
+
+        let participant1Balance = await token.balanceOf(participant1);
+        let participant2Balance = await token.balanceOf(participant2);
+        let participant3Balance = await token.balanceOf(participant3);
+        console.log("***************************************************");
+        console.log("Returned values:");
+        console.log(`${participant1Balance}  ${participant2Balance} ${participant3Balance}`);
+        console.log("***************************************************");  
+
       });        
     });
 
