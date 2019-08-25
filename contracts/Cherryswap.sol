@@ -202,11 +202,11 @@ contract Cherryswap {
     for(uint256 i = 0; i < endedSwap.participantsCounter; i++) {
       if(endedSwap.bets[i] == Bet.Long) {
         pl = int256(endedSwap.depositedValues[i]) * rLong;
-        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / endedSwap.longPoolSupply) + (rLong * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
+        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / previousSwap.depositedValue) + (rLong * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
       }
       else {
         pl = int256(endedSwap.depositedValues[i]) * rShort;
-        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / endedSwap.shortPoolSupply) + (rShort * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
+        payout = (int256(pt) * int256(endedSwap.depositedValues[i] * 10 ** 18 / previousSwap.depositedValue) + (rShort * int256(endedSwap.depositedValues[i]))) / 10 ** 18;
       }
       // transfer DAI to participant
       token.transfer(endedSwap.participants[i], uint256(payout));
