@@ -157,7 +157,6 @@
     <modal name="finished-modal" height="auto" width="1000px">
       <earnings-modal :data="earningsData" />
     </modal>
-    <md-buttom @click="finishedModal">cli</md-buttom>
   </div>
 </template>
 

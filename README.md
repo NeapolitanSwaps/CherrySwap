@@ -2,7 +2,7 @@
 
 Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
 
-![](./additionalRessources/ScreenImage2.png)
+![](./additionalResources/ScreenImage2.png)
 
 ## Links
 Demo: https://cherryswap.now.sh

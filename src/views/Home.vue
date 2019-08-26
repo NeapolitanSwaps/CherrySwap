@@ -97,7 +97,7 @@ export default {
   methods: {
     handleAnimation: function(anim) {
       this.anim = anim;
-      this.anim.stop();
+      // this.anim.stop();
     },
     goToCreate() {
       router.push({ name: "market" });

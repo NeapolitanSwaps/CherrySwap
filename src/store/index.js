@@ -109,7 +109,7 @@ export default new Vuex.Store({
             );
           }
         }
-      }, 50);
+      }, 200);
 
       // commit(mutations.SET_INTERSTRATE_OVER_TIME, interestRateOverTime)
       // commit(mutations.SET_VOLUME_OVER_TIME, state.interestRateOverTime)
