@@ -5,14 +5,8 @@ const tokenContract = artifacts.require("TokenMock");
 const cTokenContract = artifacts.require("CTokenMock");
 const BigNumber = require('bignumber.js');
 const EVMRevert = require('./helpers/EVMRevert').EVMRevert;
-const latestTime  = require('./helpers/latestTime').latestTime;
 const increaseTime = require('./helpers/increaseTime');
 const increaseTimeTo = increaseTime.increaseTimeTo;
-const duration = increaseTime.duration;
-const getBalance = require('./helpers/web3').ethGetBalance
-const assertRevert = require('./helpers/assertRevert').assertRevert
-
-const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 
 require('chai')
   .use(require('chai-as-promised'))
@@ -20,6 +14,12 @@ require('chai')
   .should();
 
 contract('Cherryswap contract', (accounts) => {
+  const dayTime = 24 * 3600;
+  const openingTime = Math.floor(Date.now() / 1000);
+  const startingTime = openingTime + dayTime;
+  const endingTime = startingTime + 90; // After 90seconds of starting time
+  const supplyToMint = 500;
+  
   let cherryswap;
   let swapmath;
   let token;
@@ -31,9 +31,6 @@ contract('Cherryswap contract', (accounts) => {
   let participant4;
   let participant5;
   let _swapsCounter = 0;
-
-  let startingTime = 1567018293; // 28 august
-  let endingTime = 1567018353;   // 28 august + 1 min
 
   before(async() => {
     owner = accounts[0];
@@ -49,11 +46,11 @@ contract('Cherryswap contract', (accounts) => {
     cherryswap = await cherryswapContract.new(token.address, cToken.address, swapmath.address, {from: owner});
   
     // Mint DAI for everyone
-    token.mint(participant1, 500);
-    token.mint(participant2, 500);
-    token.mint(participant3, 500);
-    token.mint(participant4, 500);
-    token.mint(participant5, 500);
+    token.mint(participant1, supplyToMint);
+    token.mint(participant2, supplyToMint);
+    token.mint(participant3, supplyToMint);
+    token.mint(participant4, supplyToMint);
+    token.mint(participant5, supplyToMint);
   });
 
   describe("Deployment", async() => {
@@ -78,6 +75,8 @@ contract('Cherryswap contract', (accounts) => {
   });
 
   describe("Market maker", async() => {
+    let totalDepositedAmount = 0;
+    let amountToDeposit = 100;
 
     it("Deposit into current opening swap", async() => {
       console.log("***************************************************");
@@ -87,22 +86,25 @@ contract('Cherryswap contract', (accounts) => {
       console.log("L  L S");
       console.log("***************************************************");
       //aprove the contract to get token
-      await token.approve(cherryswap.address, 100, {from: participant1});
-      await token.approve(cherryswap.address, 100, {from: participant2});
-      await token.approve(cherryswap.address, 100, {from: participant3});
+      await token.approve(cherryswap.address, amountToDeposit, {from: participant1});
+      await token.approve(cherryswap.address, amountToDeposit, {from: participant2});
+      await token.approve(cherryswap.address, amountToDeposit, {from: participant3});
 
-      await cherryswap.deposit(participant1, 100, 0, {from: participant1});
-      await cherryswap.deposit(participant2, 100, 0, {from: participant2});
-      await cherryswap.deposit(participant3, 100, 1, {from: participant3});
+      await cherryswap.deposit(participant1, amountToDeposit, 0, {from: participant1});
+      totalDepositedAmount += amountToDeposit;
+      await cherryswap.deposit(participant2, amountToDeposit, 0, {from: participant2});
+      totalDepositedAmount += amountToDeposit;
+      await cherryswap.deposit(participant3, amountToDeposit, 1, {from: participant3});
+      totalDepositedAmount += amountToDeposit;
 
       let participant1Balance = await token.balanceOf(participant1);
       let participant2Balance = await token.balanceOf(participant2);
       let participant3Balance = await token.balanceOf(participant3);
       let cherryswapContractBalance = await token.balanceOf(cherryswap.address);
-      assert.equal(participant1Balance, 400);
-      assert.equal(participant2Balance, 400);
-      assert.equal(participant3Balance, 400);
-      assert.equal(cherryswapContractBalance, 300);
+      assert.equal(participant1Balance, supplyToMint-amountToDeposit);
+      assert.equal(participant2Balance, supplyToMint-amountToDeposit);
+      assert.equal(participant3Balance, supplyToMint-amountToDeposit);
+      assert.equal(cherryswapContractBalance, totalDepositedAmount);
     });
 
     describe("Start swap lock period", async() => {
@@ -114,9 +116,9 @@ contract('Cherryswap contract', (accounts) => {
 
       it("check starting period", async() => {
         let daiAllowance = await token.allowance(cherryswap.address, cToken.address);
-        assert.equal(daiAllowance, 300);
+        assert.equal(daiAllowance, totalDepositedAmount);
         let cDaiBalance = await cToken.balanceOf(cherryswap.address);
-        assert.equal(cDaiBalance, 300);
+        assert.equal(cDaiBalance, totalDepositedAmount);
       });
 
       it("should revert closing swap before ending time", async() => {
@@ -124,9 +126,9 @@ contract('Cherryswap contract', (accounts) => {
       });  
 
       it("should revert when depositing in locking period", async() => {
-        await token.approve(cherryswap.address, 50, {from: participant4});
+        await token.approve(cherryswap.address, amountToDeposit, {from: participant4});
         await increaseTimeTo(startingTime + 1);
-        await cherryswap.deposit(participant4, 50, 1, {from: participant4}).should.be.rejectedWith(EVMRevert);
+        await cherryswap.deposit(participant4, amountToDeposit, 1, {from: participant4}).should.be.rejectedWith(EVMRevert);
       }); 
       
     });
@@ -134,16 +136,11 @@ contract('Cherryswap contract', (accounts) => {
     describe("End swap period", async() => {
 
       before(async() => {
-        let cDaiContractBalance = await cToken.balanceOf(cherryswap.address);
-        //console.log(cDaiContractBalance.toNumber());
-        await increaseTimeTo(endingTime + 1);
+        await increaseTimeTo(endingTime + 3600);
         await cherryswap.closeSwap();
       });
 
       it("Check redeemed DAI", async() => {
-        let daiContractBalance = await token.balanceOf(cherryswap.address);
-        //console.log(daiContractBalance.toNumber());
-
         let participant1Balance = await token.balanceOf(participant1);
         let participant2Balance = await token.balanceOf(participant2);
         let participant3Balance = await token.balanceOf(participant3);
@@ -151,7 +148,6 @@ contract('Cherryswap contract', (accounts) => {
         console.log("Returned values:");
         console.log(`${participant1Balance} ${participant2Balance} ${participant3Balance}`);
         console.log("***************************************************");
-  
       });        
     });
 
