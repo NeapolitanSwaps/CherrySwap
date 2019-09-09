@@ -1,7 +1,7 @@
 <template>
   <div class="page-container">
-     <!-- v-bind:style="'height: '+windowHeight*2+' !important'" -->
-    <div class="inner-container" v-bind:style="{height: (windowHeight*.5) + 'px'}">
+    <!-- v-bind:style="'height: '+windowHeight*2+' !important'" -->
+    <div class="inner-container">
       <h1 style="text-align: center">Interest rate swaps with a cherry on top</h1>
       <h3>Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets</h3>
     </div>
@@ -12,16 +12,16 @@
         :options="defaultOptions"
         :height="'auto'"
         :width="'100%'"
-        v-bind:style="{marginTop: 2*(-windowHeight/3) + 'px', maxWidth: '1000px'}"
         v-on:animCreated="handleAnimation"
+        id="lottie-svg"
       />
     </div>
-    <div class="middle-container">
-      <p class="box">
+    <div class="middle-container md-layout">
+      <p class="box md-layout-item md-xsmall-size-100 md-small-50">
         Every market on
         <span style="text-decoration: underline">Compound</span> has an interest rate, which fluctuates according to supply and demand of credit and debt within that market.
       </p>
-      <p class="box">
+      <p class="box md-layout-item md-xsmall-size-100 md-small-50">
         With
         <img :src="logo" id="logo" alt="Demo logo" />, you can hedge against these fluctuations - or speculate on them - by participating in pooled interest rate swaps.
       </p>
@@ -34,19 +34,19 @@
     <div class="footer-container md-layout">
       <div class="md-layout-item md-size-10" style="background: #E8868E" />
       <home-info-box
-        class="md-layout-item"
+        class="md-layout-item md-xsmall-size-100"
         :icon="0"
         :title="'1. Commit Phase'"
         :description="description0"
       />
       <home-info-box
-        class="md-layout-item"
+        class="md-layout-item md-xsmall-size-100"
         :icon="1"
         :title="'2. Lock Phase'"
         :description="description1"
       />
       <home-info-box
-        class="md-layout-item"
+        class="md-layout-item md-xsmall-size-100"
         :icon="2"
         :title="'3. Payout Phase'"
         :description="description2"
@@ -90,8 +90,8 @@ export default {
   },
   watch: {
     windowHeight(newHeight, oldHeight) {
-     this.txt = `it changed to ${newHeight} from ${oldHeight}`;
-     console.log("abc")
+      this.txt = `it changed to ${newHeight} from ${oldHeight}`;
+      console.log("abc");
     }
   },
   methods: {
@@ -105,11 +105,11 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      window.addEventListener('resize', () => {
-        this.windowHeight = window.innerHeight
+      window.addEventListener("resize", () => {
+        this.windowHeight = window.innerHeight;
       });
-    })
-  },
+    });
+  }
 };
 </script>
 
@@ -128,25 +128,19 @@ export default {
 }
 .inner-container {
   margin: 0px auto;
-  width: 600px;
-  text-align: "center";
-  height: 400px;
+  padding: 0 5%;
+  text-align: center;
 }
 .inner-container h1 {
   color: $cherry;
   line-height: 1.25em;
-  text-align: center;
   font-size: 4em;
-  max-width: 600px;
 }
 .inner-container h3 {
   line-height: 1.5em;
   font-size: 1.3em;
-  text-align: center;
 }
 .landing-container {
-  width: 100%;
-  height: 100px;
 }
 .landing-image {
   background: url("../assets/demo-large.svg") no-repeat center;
@@ -156,36 +150,27 @@ export default {
 .landing-back {
   background: #fff;
   width: 100%;
-  height: 50vh;
-  // margin-top: -200px;
 }
 .middle-container {
-  background: #fff;
-  height: 250px;
   width: 100%;
+  padding: 2vw 0;
   display: flex;
   justify-content: space-around;
 }
 .middle-container p.box {
-  width: 25vw;
   font-size: 16px;
   line-height: 1.5em;
+  padding: 0 5%;
 }
 .footer-container {
   justify-content: center;
 }
-
-.footer-container h1 {
-  // width: 100%;
-}
-
 .call-to-action {
   height: 200px;
   background: $lightcherry;
   display: flex;
   justify-content: center;
 }
-
 .call-Button {
   background-color: #d81e5b; /* Green */
   border-radius: 15px;
@@ -195,14 +180,12 @@ export default {
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 28px;
+  font-size: 20px;
   height: 70px;
   font-weight: 500;
-
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
-
 #logo {
   height: 24px;
   width: auto;
@@ -215,6 +198,17 @@ export default {
 }
 #how-it-works h1 {
   color: $brown;
+}
+#md-toolbar {
+  padding: 10px;
+}
+@media only screen and (min-width: 768px) {
+  .inner-container {
+    width: 60vw;
+  }
+  #lottie-svg {
+    max-width: 900px;
+  }
 }
 </style>
 

@@ -2,8 +2,7 @@
   <md-app id="app" md-mode="reveal" style="min-height: 100vh;">
     <md-app-toolbar md-elevation="0" id="toolbar">
       <a href="/">
-        <img :src="logo" class="logo-svg" alt="logo" style="padding-left:20px;  cursor: pointer; 
-" />
+        <img :src="logo" class="logo-svg" alt="logo" />
       </a>
 
       <div class="md-toolbar-section-end">
@@ -12,7 +11,7 @@
       </div>
     </md-app-toolbar>
 
-    <md-app-content id="content" style="margin-top: 0px;">
+    <md-app-content id="content">
       <mining-transaction />
       <router-view />
       <div id="foot">
@@ -122,23 +121,24 @@ body {
   font-family: "Rubik", sans-serif;
   background-color: $vanilla;
 }
-
 #app {
-  /* text-align: center; */
   color: #2c3e50;
-  // margin-top: 10px;
 }
-
 .logo-svg {
   width: 10vw;
+  min-width: 200px;
+  padding: 0 20px;
+  cursor: pointer;
 }
-
 #toolbar {
   background-color: $vanilla;
   width: 100%;
   align-self: center;
 }
-
+#toolbar a {
+  text-align: center;
+  width: 100%;
+}
 #app {
   font-family: "Rubik", sans-serif;
 }
@@ -148,19 +148,22 @@ nav li.router-link-exact-active {
   background-color: indianred;
   cursor: pointer;
 }
-
 #foot {
   background-color: $vanilla;
   padding: 25px;
   text-align: center;
 }
-
 #content {
   background-color: $vanilla;
-  padding-left: 0;
-  padding-right: 0;
-  padding-top: 25px;
-  padding-bottom: 0px;
+  padding: 0;
   height: auto;
+}
+.md-toolbar {
+  min-height: 76px !important;
+}
+@media only screen and (min-width: 768px) {
+  #toolbar a {
+    text-align: left;
+  }
 }
 </style>
