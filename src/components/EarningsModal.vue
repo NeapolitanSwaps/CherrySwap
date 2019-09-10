@@ -8,7 +8,7 @@
     <div class="md-layout row">
       <div class="md-layout-item">
         <div class="md-title" style="text-align:center">
-          <b>Leading Position: </b>
+          <b>Leading Position:</b>
           <md-chip
             :style="data.leadingPosition=='Sort' ? 'background: #DA366D': 'background: #2DC4B6'"
           >{{data.leadingPosition}}</md-chip>
@@ -16,7 +16,7 @@
       </div>
       <div class="md-layout-item">
         <div class="md-title" style="text-align:center">
-          <b>Your Position: </b>
+          <b>Your Position:</b>
           <md-chip
             :style="data.position=='Sort' ? 'background: #DA366D': 'background: #2DC4B6'"
           >{{data.position}}</md-chip>
@@ -26,7 +26,7 @@
     <div class="md-layout row">
       <div class="md-layout-item">
         <div class="md-title" style="text-align:center">
-          <b>Your Investment: </b>
+          <b>Your Investment:</b>
           <span class="highlight">{{data.investment}} DAI</span>
         </div>
       </div>

@@ -1,12 +1,18 @@
 <template>
   <div class="page-container">
-    <div class="inner-container">
+    <div class="inner-container md-layout">
       <!-- <lottie :options="defaultOptions" :height="100" :width="100" v-on:animCreated="handleAnimation"/> -->
-      <market-box :dataObj="boxMarketData"></market-box>
-      <market-box :dataObj="boxStatusData"></market-box>
+      <market-box
+        class="md-layout-item md-xsmall-size-90 md-medium-size-30 md-large-size-30"
+        :dataObj="boxMarketData"
+      ></market-box>
+      <market-box
+        class="md-layout-item md-xsmall-size-90 second md-medium-size-30 md-large-size-30"
+        :dataObj="boxStatusData"
+      ></market-box>
     </div>
 
-    <div class="footer-container">
+    <div class="footer-container md-layout">
       <swap-plot id="plot-swap" />
     </div>
   </div>
@@ -172,6 +178,9 @@ export default {
   justify-content: center;
   margin-top: 100px;
 }
+.inner-container .second {
+  margin-top: 25px;
+}
 .inner-container h1 {
   color: $cherry;
   line-height: 1.5em;
@@ -203,6 +212,11 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+@media only screen and (min-width: 768px) {
+  .inner-container .second {
+    margin-top: -75px;
+  }
 }
 </style>
 
