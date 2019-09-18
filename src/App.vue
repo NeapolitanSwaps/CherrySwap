@@ -15,8 +15,12 @@
       <mining-transaction />
       <router-view />
       <div id="foot">
-        🍒
-        <b>Cherry Swap - made with ❤️ by Neapolitan Swaps 🍨</b>
+        <span>
+          🍒
+          <b>
+            <a href="https://github.com/NeapolitanSwaps/CherrySwap">Cherry Swap</a> - made with ❤️ by Neapolitan Swaps 🍨
+          </b>
+        </span>
       </div>
     </md-app-content>
   </md-app>
@@ -137,7 +141,6 @@ body {
 }
 #toolbar a {
   text-align: center;
-  width: 100%;
 }
 #app {
   font-family: "Rubik", sans-serif;
@@ -160,6 +163,10 @@ nav li.router-link-exact-active {
 }
 .md-toolbar {
   min-height: 76px !important;
+}
+#foot span a {
+  text-decoration: underline;
+  color: #000;
 }
 @media only screen and (min-width: 768px) {
   #toolbar a {
