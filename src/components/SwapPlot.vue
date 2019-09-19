@@ -1,6 +1,10 @@
 <template>
-  <div style="background:#FFFBFB; text-align:center">
-    <md-card style="margin-bottom:25px;" v-if="!beginSimulation">
+  <div style="background:#FFFBFB; text-align:center" class="md-layout-item">
+    <md-card
+      style="margin-bottom:25px;"
+      v-if="!beginSimulation"
+      class="md-layout-item md-xsmall-size-90"
+    >
       <md-card-header>
         <div class="md-title" style="text-align:left">Begin Market Simulation</div>
       </md-card-header>
@@ -19,7 +23,11 @@
       >Start simulation</md-button>
     </md-card>
 
-    <md-card style="background:white;" v-if="beginSimulation==true">
+    <md-card
+      style="background:white;"
+      v-if="beginSimulation==true"
+      class="md-layout-item md-xsmall-size-90"
+    >
       <md-card-header>
         <div class="md-layout">
           <div class="md-layout-item">
@@ -88,6 +96,7 @@
 
     <md-card
       style="background:white; margin-top:25px; margin-bottom:25px"
+      class="md-layout-item md-xsmall-size-90"
       v-if="interestRateOverTime.y.length<=60"
     >
       <md-card-header>
@@ -154,7 +163,7 @@
         <div class="md-layout-item md-size-20" style="padding:40px;" />
       </div>
     </md-card>
-    <modal name="finished-modal" height="auto" width="1000px">
+    <modal name="finished-modal" id="modal" height="auto">
       <earnings-modal :data="earningsData" />
     </modal>
   </div>
@@ -530,5 +539,9 @@ export default {
 }
 .side-text.right {
   text-align: left;
+}
+#modal .v--modal-overlay .v--modal-box {
+  left: 0 !important;
+  width: 100% !important;
 }
 </style>

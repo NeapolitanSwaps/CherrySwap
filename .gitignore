@@ -2,3 +2,4 @@ node_modules
 venv
 dist
 mnemonic.js
+.DS_Store
