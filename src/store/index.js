@@ -152,7 +152,14 @@ export default new Vuex.Store({
         commit(mutations.SET_ACCOUNT, account);
       }
 
-      let cherryswap = await Cherryswap.deployed()
+      let cherryswap;
+      try {
+        cherryswap = await Cherryswap.deployed()
+      } catch (err) {
+        if(state.currentNetwork != "Kovan Ethereum Test Network") {
+          alert("Please change metamask network to Kovan testnet");
+        }
+      }
       console.log("contract")
       console.log(cherryswap)
 
