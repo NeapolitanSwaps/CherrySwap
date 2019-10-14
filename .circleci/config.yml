@@ -28,7 +28,7 @@ jobs:
             #- ~/.cache/yarn            
       - run:
           name: test solidity smart contracts
-          command: npm run test
+          command: npm run test-ci
       #- run:
       #    name: code-coverage
       #    command: './node_modules/.bin/nyc report --reporter=text-lcov'
