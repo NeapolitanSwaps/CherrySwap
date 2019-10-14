@@ -57,7 +57,12 @@
         "sass-loader": "^7.1.0",
         "vue-svg-loader": "^0.12.0",
         "vue-template-compiler": "^2.5.21",
-        "webpack": "^4.29.6"
+        "webpack": "^4.29.6",
+        "eth-gas-reporter": "^0.1.12",
+        "ganache-cli": "^6.4.2",
+        "solidity-coverage": "0.5.11",
+        "solium": "1.2.3",
+        "coveralls": "3.0.3"    
     },
     "eslintConfig": {
         "root": true,
