@@ -4,7 +4,7 @@ jobs:
     machine: true
     working_directory: ~/CherrySwap
     docker:
-      - circleci/python:3-node
+      - image: circleci/python:3-node
     steps: 
       - checkout 
       - restore_cache:
