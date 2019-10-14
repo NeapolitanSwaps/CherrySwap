@@ -9,6 +9,7 @@
         "test": "truffle test"
     },
     "dependencies": {
+        "truffle": "^5.0.37",
         "@statnett/vue-plotly": "^0.3.2",
         "apexcharts": "^3.6.7",
         "axios": "^0.18.0",
