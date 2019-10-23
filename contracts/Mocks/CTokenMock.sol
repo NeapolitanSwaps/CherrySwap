@@ -1,8 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "../token/ERC20.sol";
-//import "../interface/IERC20.sol";
-//import "./TokenMock.sol";
+
 
 contract CTokenMock is ERC20 {
   
@@ -20,7 +19,7 @@ contract CTokenMock is ERC20 {
     return 0;
   }
 
-  function supplyRatePerBlock() public returns (uint) {
+  function supplyRatePerBlock() public pure returns (uint) {
     return 56257237401;
   }
 

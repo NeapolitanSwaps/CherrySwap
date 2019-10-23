@@ -1,0 +1,284 @@
+{
+  "contracts": {
+    "Cherryswap": {
+      "address": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
+      "constructorCode": "6080604052600060335534801561001557600080fd5b50612a3f806100256000396000f300",
+      "bodyBytecodeHash": "73559031e6d603a2aecca1d35c66d32ddfcab2118f8289820e49dffec7529beb",
+      "localBytecodeHash": "851e1ca26b0895c99d19a31272b218e7c8c2a5685266c0156498f5297213bbc1",
+      "deployedBytecodeHash": "851e1ca26b0895c99d19a31272b218e7c8c2a5685266c0156498f5297213bbc1",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_struct<Cherryswap.Swap>": {
+          "id": "t_struct<Cherryswap.Swap>",
+          "kind": "struct",
+          "label": "Cherryswap.Swap",
+          "members": [
+            {
+              "label": "swapId",
+              "astId": 34,
+              "type": "t_uint256",
+              "src": "701:14:0"
+            },
+            {
+              "label": "openingTime",
+              "astId": 36,
+              "type": "t_uint256",
+              "src": "721:19:0"
+            },
+            {
+              "label": "startingTime",
+              "astId": 38,
+              "type": "t_uint256",
+              "src": "746:20:0"
+            },
+            {
+              "label": "endingTime",
+              "astId": 40,
+              "type": "t_uint256",
+              "src": "772:18:0"
+            },
+            {
+              "label": "startingRate",
+              "astId": 42,
+              "type": "t_uint256",
+              "src": "796:20:0"
+            },
+            {
+              "label": "endingRate",
+              "astId": 44,
+              "type": "t_uint256",
+              "src": "822:18:0"
+            },
+            {
+              "label": "depositedValue",
+              "astId": 46,
+              "type": "t_uint256",
+              "src": "846:22:0"
+            },
+            {
+              "label": "status",
+              "astId": 48,
+              "type": "t_enum<Cherryswap.Status>",
+              "src": "874:13:0"
+            }
+          ]
+        },
+        "t_enum<Cherryswap.Status>": {
+          "id": "t_enum<Cherryswap.Status>",
+          "kind": "enum",
+          "label": "Cherryswap.Status",
+          "members": [
+            "Open",
+            "Running",
+            "Closed"
+          ]
+        },
+        "t_array:dyn<t_struct<Cherryswap.Swap>>": {
+          "id": "t_array:dyn<t_struct<Cherryswap.Swap>>",
+          "valueType": "t_struct<Cherryswap.Swap>",
+          "length": "dyn",
+          "kind": "array",
+          "label": "Cherryswap.Swap[]"
+        },
+        "t_struct<Cherryswap.SwapInfo>": {
+          "id": "t_struct<Cherryswap.SwapInfo>",
+          "kind": "struct",
+          "label": "Cherryswap.SwapInfo",
+          "members": [
+            {
+              "label": "participants",
+              "astId": 52,
+              "type": "t_array:dyn<t_address>",
+              "src": "918:22:0"
+            },
+            {
+              "label": "depositedValues",
+              "astId": 55,
+              "type": "t_array:dyn<t_uint256>",
+              "src": "946:25:0"
+            },
+            {
+              "label": "longPoolSupply",
+              "astId": 57,
+              "type": "t_uint256",
+              "src": "977:22:0"
+            },
+            {
+              "label": "shortPoolSupply",
+              "astId": 59,
+              "type": "t_uint256",
+              "src": "1005:23:0"
+            },
+            {
+              "label": "participantsCounter",
+              "astId": 61,
+              "type": "t_uint256",
+              "src": "1034:27:0"
+            },
+            {
+              "label": "bets",
+              "astId": 64,
+              "type": "t_array:dyn<t_enum<Cherryswap.Bet>>",
+              "src": "1067:10:0"
+            }
+          ]
+        },
+        "t_array:dyn<t_address>": {
+          "id": "t_array:dyn<t_address>",
+          "valueType": "t_address",
+          "length": "dyn",
+          "kind": "array",
+          "label": "address[]"
+        },
+        "t_array:dyn<t_uint256>": {
+          "id": "t_array:dyn<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "dyn",
+          "kind": "array",
+          "label": "uint256[]"
+        },
+        "t_enum<Cherryswap.Bet>": {
+          "id": "t_enum<Cherryswap.Bet>",
+          "kind": "enum",
+          "label": "Cherryswap.Bet",
+          "members": [
+            "Long",
+            "Short"
+          ]
+        },
+        "t_array:dyn<t_enum<Cherryswap.Bet>>": {
+          "id": "t_array:dyn<t_enum<Cherryswap.Bet>>",
+          "valueType": "t_enum<Cherryswap.Bet>",
+          "length": "dyn",
+          "kind": "array",
+          "label": "Cherryswap.Bet[]"
+        },
+        "t_mapping<t_struct<Cherryswap.SwapInfo>>": {
+          "id": "t_mapping<t_struct<Cherryswap.SwapInfo>>",
+          "valueType": "t_struct<Cherryswap.SwapInfo>",
+          "label": "mapping(key => Cherryswap.SwapInfo)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 1618,
+          "type": "t_bool",
+          "src": "757:24:9"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 1620,
+          "type": "t_bool",
+          "src": "876:25:9"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 1676,
+          "type": "t_array:50<t_uint256>",
+          "src": "1951:29:9"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapsCounter",
+          "astId": 13,
+          "type": "t_uint256",
+          "src": "334:31:0"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "token",
+          "astId": 15,
+          "type": "t_address",
+          "src": "370:19:0"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "cherryToken",
+          "astId": 17,
+          "type": "t_address",
+          "src": "419:26:0"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapMath",
+          "astId": 19,
+          "type": "t_address",
+          "src": "459:25:0"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swaps",
+          "astId": 68,
+          "type": "t_array:dyn<t_struct<Cherryswap.Swap>>",
+          "src": "1086:19:0"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapById",
+          "astId": 72,
+          "type": "t_mapping<t_struct<Cherryswap.SwapInfo>>",
+          "src": "1109:45:0"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": true,
+        "uninitializedBaseContracts": []
+      }
+    }
+  },
+  "solidityLibs": {},
+  "proxies": {
+    "cherryswap/Cherryswap": [
+      {
+        "address": "0xCfEB869F69431e42cdB54A4F4f105C19C080A601",
+        "version": "0.1.0",
+        "implementation": "0xe78A0F7E598Cc8b0Bb87894B0F60dD2a88d6a8Ab",
+        "admin": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24",
+        "kind": "Upgradeable"
+      }
+    ]
+  },
+  "manifestVersion": "2.2",
+  "version": "0.1.0",
+  "proxyAdmin": {
+    "address": "0x5b1869D9A4C187F2EAa108f3062412ecf0526b24"
+  }
+}

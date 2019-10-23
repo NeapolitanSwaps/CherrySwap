@@ -1,16 +1,19 @@
 pragma solidity ^0.4.24;
 
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+
 import "./interface/IERC20.sol";
 import "./interface/ICERC20.sol";
 import "./ISwapMath.sol";
 
-contract Cherryswap {
+
+contract Cherryswap is Initializable {
 
   /******************
   INTERNAL ACCOUNTING
   ******************/
   uint256 constant blockPerYear = 2102400;
-  uint256 public swapsCounter;
+  uint256 public swapsCounter = 0;
 
   IERC20 public token; // underlying asset = DAI
   ICERC20 public cherryToken; // cToken
@@ -55,19 +58,17 @@ contract Cherryswap {
   Swap[] public swaps;
   mapping (uint256 => SwapInfo) public swapById;
 
-  constructor(
+  function initialize(
     address _token,
     address _cherryToken,
     address _swapMath
-  ) public {
+  ) public initializer {
     require(_token != address(0), "Cherryswap::contructor - token cannot be 0");
     require(_cherryToken != address(0), "Cherryswap::constructor - cherryToken cannot be 0");
 
     token = IERC20(_token);
     cherryToken = ICERC20(_cherryToken);
     swapMath = ISwapMath(_swapMath);
-
-    swapsCounter = 0;
   }
 
   function createSwap(
@@ -136,10 +137,7 @@ contract Cherryswap {
     // get starting rate
     swaps[swapsCounter-1].endingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
 
-    // get exchange rate
-    //uint256 exchangeRate = cherryToken.exchangeRateCurrent();
     uint256 cBalance = cherryToken.balanceOf(address(this));
-    //uint256 balance = cBalance * exchangeRate;
 
     // Redeem cDai to Dai
     require(cherryToken.redeem(cBalance) == 0, "Cherryswap::redeem - something went wrong");
@@ -182,7 +180,6 @@ contract Cherryswap {
       swapInfo.shortPoolSupply += _depositedValue;
     }
     swapInfo.participantsCounter++;
-    //swapById[swapsCounter] = swapInfo;
 
     currentSwap.depositedValue += _depositedValue;
   }

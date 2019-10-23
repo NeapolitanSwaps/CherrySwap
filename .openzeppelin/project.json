@@ -1,0 +1,15 @@
+{
+  "manifestVersion": "2.2",
+  "contracts": {
+    "Cherryswap": "Cherryswap"
+  },
+  "dependencies": {},
+  "name": "cherryswap",
+  "version": "0.1.0",
+  "compiler": {
+    "manager": "truffle",
+    "compilerSettings": {
+      "optimizer": {}
+    }
+  }
+}
