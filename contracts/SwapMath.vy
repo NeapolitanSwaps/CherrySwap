@@ -22,8 +22,8 @@ def computeRatios(poolLong: uint256, poolShort: uint256, fixedRate: uint256, t1:
   scaleLong: decimal = convert(poolShort, decimal) / convert(poolStartSquared, decimal)
   scaleShort: decimal = convert(poolLong, decimal) / convert(poolStartSquared, decimal)
   diffScaled: int128 = self.interestDiffScaled(poolStart, poolEnd, fixedRate, t1, t2)
-  ratioLong: int128
-  ratioShort: int128
+  ratioLong: int128 = 0
+  ratioShort: int128 = 0
   if diffScaled > 0:
     ratioLong = convert(scaleLong * convert(diffScaled, decimal), int128)
     ratioShort = -1 * convert(scaleShort * convert(diffScaled, decimal), int128)
