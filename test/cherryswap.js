@@ -79,12 +79,6 @@ contract('Cherryswap contract', (accounts) => {
     let amountToDeposit = 100;
 
     it("Deposit into current opening swap", async() => {
-      console.log("***************************************************");
-      console.log("Deposited values:");
-      console.log("100  100 100");
-      console.log("Bets:");
-      console.log("L  L S");
-      console.log("***************************************************");
       //aprove the contract to get token
       await token.approve(cherryswap.address, amountToDeposit, {from: participant1});
       await token.approve(cherryswap.address, amountToDeposit, {from: participant2});
@@ -144,10 +138,6 @@ contract('Cherryswap contract', (accounts) => {
         let participant1Balance = await token.balanceOf(participant1);
         let participant2Balance = await token.balanceOf(participant2);
         let participant3Balance = await token.balanceOf(participant3);
-        console.log("***************************************************");
-        console.log("Returned values:");
-        console.log(`${participant1Balance} ${participant2Balance} ${participant3Balance}`);
-        console.log("***************************************************");
       });        
     });
 
