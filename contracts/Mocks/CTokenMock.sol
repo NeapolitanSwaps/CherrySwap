@@ -1,13 +1,11 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
-import "../token/ERC20.sol";
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
 
-contract CTokenMock is ERC20 {
+contract CTokenMock is Initializable, ERC20 {
   
-  constructor() public {
-  }
-
   function mint(uint mintAmount) public returns(uint256) {
     _mint(msg.sender, mintAmount);
     return 0;
@@ -23,12 +21,12 @@ contract CTokenMock is ERC20 {
     return 56257237401;
   }
 
-  function incrementSupplyRatePerBlock() public returns (uint) {
+  function incrementSupplyRatePerBlock() public pure returns (uint) {
     uint current = supplyRatePerBlock();
     return current + 5760;
   }
 
-  function decrementSupplyRatePerBlock() public returns (uint) {
+  function decrementSupplyRatePerBlock() public pure returns (uint) {
     uint current = supplyRatePerBlock();
     return current - 5760;
   }

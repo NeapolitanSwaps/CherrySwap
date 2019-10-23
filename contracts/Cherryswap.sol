@@ -1,8 +1,7 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
-
-import "./interface/IERC20.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./interface/ICERC20.sol";
 import "./ISwapMath.sol";
 
@@ -13,7 +12,7 @@ contract Cherryswap is Initializable {
   INTERNAL ACCOUNTING
   ******************/
   uint256 constant blockPerYear = 2102400;
-  uint256 public swapsCounter = 0;
+  uint256 public swapsCounter;
 
   IERC20 public token; // underlying asset = DAI
   ICERC20 public cherryToken; // cToken
@@ -69,6 +68,8 @@ contract Cherryswap is Initializable {
     token = IERC20(_token);
     cherryToken = ICERC20(_cherryToken);
     swapMath = ISwapMath(_swapMath);
+
+    swapsCounter = 0;
   }
 
   function createSwap(
@@ -109,6 +110,7 @@ contract Cherryswap is Initializable {
       _bets
     );
     swapById[swapsCounter-1] = swapInfo;
+
   }
 
   function startSwap() public {
