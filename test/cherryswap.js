@@ -69,20 +69,22 @@ contract('Cherryswap contract', (accounts) => {
 
   describe("Swap", async() => {
     it("create a swap", async() => {
-      _swapsCounter++;
-
+      console.log(startingTime);
+      console.log(endingTime);
       await cherryswap.methods.createSwap(startingTime, endingTime).send({from: owner});
       
+      _swapsCounter++;
+
       let swapsCounter = await cherryswap.methods.swapsCounter().call();
       assert.equal(swapsCounter, _swapsCounter, "check swaps counter increased");
     });
-
-    /*it("should revert when creating a swap while the previous one not closed", async() => {
+/*
+    it("should revert when creating a swap while the previous one not closed", async() => {
       await cherryswap.methods.createSwap(startingTime, endingTime).should.be.rejectedWith(EVMRevert);
-    });*/
-
+    });
+*/
   });
-
+/*
   describe("Market maker", async() => {
     let totalDepositedAmount = 0;
     let amountToDeposit = 100;
@@ -123,7 +125,7 @@ contract('Cherryswap contract', (accounts) => {
         let cDaiBalance = await cToken.methods.balanceOf(cherryswap.address).call();
         assert.equal(cDaiBalance, totalDepositedAmount);
       });
-/*
+
       it("should revert closing swap before ending time", async() => {
         await cherryswap.methods.closeSwap().send({from: owner}).should.be.rejectedWith(EVMRevert);
       });  
@@ -133,9 +135,9 @@ contract('Cherryswap contract', (accounts) => {
         await increaseTimeTo(startingTime + 1);
         await cherryswap.methods.deposit(participant4, amountToDeposit, 1).send({from: participant4}).should.be.rejectedWith(EVMRevert);
       }); 
-*/
+
     });
-/*
+
     describe("End swap period", async() => {
 
       before(async() => {
@@ -149,7 +151,7 @@ contract('Cherryswap contract', (accounts) => {
         let participant3Balance = await token.balanceOf(participant3);
       });        
     });
-*/
-  });
 
+  });
+*/
 });

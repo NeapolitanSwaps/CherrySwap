@@ -8,7 +8,7 @@
         "lint": "vue-cli-service lint",
         "ganache": "ganache-cli --deterministic -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
         "stop": "sudo kill `sudo lsof -t -i:9545`",
-        "test": "npm run ganache sleep 5 && truffle test && npm run stop",
+        "test": "npm run ganache sleep 5 && truffle compile --all && truffle test && npm run stop",
         "test-ci": "npm run ganache sleep 5 && truffle test"
     },
     "dependencies": {

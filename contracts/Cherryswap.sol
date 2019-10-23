@@ -76,6 +76,8 @@ contract Cherryswap is Initializable {
     uint256 _startingTime,
     uint256 _endingTime
   ) public {
+    require((_startingTime >= now) && (_endingTime>_startingTime), "Cherryswap::error - invalid swap period");
+
     if(swapsCounter > 0) {
       Swap memory previousSwap = swaps[swapsCounter-1];
       require(now > previousSwap.endingTime, "Cherryswap::hasEnded - swap not ended yet");
@@ -85,7 +87,7 @@ contract Cherryswap is Initializable {
     swapsCounter += 1;
 
     // create new swap
-    Swap memory swap = Swap({
+    /*swaps.push(Swap({
       swapId: swapsCounter-1,
       openingTime: now,
       startingTime: _startingTime,
@@ -94,8 +96,7 @@ contract Cherryswap is Initializable {
       endingRate: 0,
       depositedValue: 0,
       status: Status.Open
-    });
-    swaps.push(swap);
+    }));*/
 
     // create swap info
     address[] memory _participants;
