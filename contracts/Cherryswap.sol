@@ -87,7 +87,7 @@ contract Cherryswap is Initializable {
     swapsCounter += 1;
 
     // create new swap
-    /*swaps.push(Swap({
+    swaps.push(Swap({
       swapId: swapsCounter-1,
       openingTime: now,
       startingTime: _startingTime,
@@ -96,7 +96,7 @@ contract Cherryswap is Initializable {
       endingRate: 0,
       depositedValue: 0,
       status: Status.Open
-    }));*/
+    }));
 
     // create swap info
     address[] memory _participants;
