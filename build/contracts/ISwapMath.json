@@ -56,14 +56,14 @@
     "absolutePath": "/home/haythem96/Projects/Blockchain/Projects/NeapolitanSwaps/CherrySwap/contracts/ISwapMath.sol",
     "exportedSymbols": {
       "ISwapMath": [
-        737
+        755
       ]
     },
-    "id": 738,
+    "id": 756,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 717,
+        "id": 735,
         "literals": [
           "solidity",
           "^",
@@ -79,9 +79,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 737,
+        "id": 755,
         "linearizedBaseContracts": [
-          737
+          755
         ],
         "name": "ISwapMath",
         "nodeType": "ContractDefinition",
@@ -89,22 +89,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 736,
+            "id": 754,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "computeRatios",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 730,
+              "id": 748,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 719,
+                  "id": 737,
                   "name": "poolLong",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "83:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -113,7 +113,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 718,
+                    "id": 736,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "83:7:1",
@@ -127,10 +127,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 721,
+                  "id": 739,
                   "name": "poolShort",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "109:17:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -139,7 +139,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 720,
+                    "id": 738,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "109:7:1",
@@ -153,10 +153,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 723,
+                  "id": 741,
                   "name": "fixedRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "136:17:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -165,7 +165,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 722,
+                    "id": 740,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "136:7:1",
@@ -179,10 +179,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 725,
+                  "id": 743,
                   "name": "t1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "163:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -191,7 +191,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 724,
+                    "id": 742,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "163:7:1",
@@ -205,10 +205,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 727,
+                  "id": 745,
                   "name": "t2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "183:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -217,7 +217,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 726,
+                    "id": 744,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "183:7:1",
@@ -231,10 +231,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 729,
+                  "id": 747,
                   "name": "poolEnd",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "203:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -243,7 +243,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 728,
+                    "id": 746,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "203:7:1",
@@ -259,15 +259,15 @@
               "src": "73:151:1"
             },
             "returnParameters": {
-              "id": 735,
+              "id": 753,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 732,
+                  "id": 750,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "247:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -276,7 +276,7 @@
                     "typeString": "int128"
                   },
                   "typeName": {
-                    "id": 731,
+                    "id": 749,
                     "name": "int128",
                     "nodeType": "ElementaryTypeName",
                     "src": "247:6:1",
@@ -290,10 +290,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 734,
+                  "id": 752,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "255:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -302,7 +302,7 @@
                     "typeString": "int128"
                   },
                   "typeName": {
-                    "id": 733,
+                    "id": 751,
                     "name": "int128",
                     "nodeType": "ElementaryTypeName",
                     "src": "255:6:1",
@@ -317,14 +317,14 @@
               ],
               "src": "246:16:1"
             },
-            "scope": 737,
+            "scope": 755,
             "src": "51:212:1",
             "stateMutability": "pure",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 738,
+        "scope": 756,
         "src": "25:240:1"
       }
     ],
@@ -334,14 +334,14 @@
     "absolutePath": "/home/haythem96/Projects/Blockchain/Projects/NeapolitanSwaps/CherrySwap/contracts/ISwapMath.sol",
     "exportedSymbols": {
       "ISwapMath": [
-        737
+        755
       ]
     },
-    "id": 738,
+    "id": 756,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 717,
+        "id": 735,
         "literals": [
           "solidity",
           "^",
@@ -357,9 +357,9 @@
         "contractKind": "interface",
         "documentation": null,
         "fullyImplemented": false,
-        "id": 737,
+        "id": 755,
         "linearizedBaseContracts": [
-          737
+          755
         ],
         "name": "ISwapMath",
         "nodeType": "ContractDefinition",
@@ -367,22 +367,22 @@
           {
             "body": null,
             "documentation": null,
-            "id": 736,
+            "id": 754,
             "implemented": false,
             "kind": "function",
             "modifiers": [],
             "name": "computeRatios",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 730,
+              "id": 748,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 719,
+                  "id": 737,
                   "name": "poolLong",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "83:16:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -391,7 +391,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 718,
+                    "id": 736,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "83:7:1",
@@ -405,10 +405,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 721,
+                  "id": 739,
                   "name": "poolShort",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "109:17:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -417,7 +417,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 720,
+                    "id": 738,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "109:7:1",
@@ -431,10 +431,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 723,
+                  "id": 741,
                   "name": "fixedRate",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "136:17:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -443,7 +443,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 722,
+                    "id": 740,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "136:7:1",
@@ -457,10 +457,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 725,
+                  "id": 743,
                   "name": "t1",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "163:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -469,7 +469,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 724,
+                    "id": 742,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "163:7:1",
@@ -483,10 +483,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 727,
+                  "id": 745,
                   "name": "t2",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "183:10:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -495,7 +495,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 726,
+                    "id": 744,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "183:7:1",
@@ -509,10 +509,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 729,
+                  "id": 747,
                   "name": "poolEnd",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "203:15:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -521,7 +521,7 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 728,
+                    "id": 746,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
                     "src": "203:7:1",
@@ -537,15 +537,15 @@
               "src": "73:151:1"
             },
             "returnParameters": {
-              "id": 735,
+              "id": 753,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 732,
+                  "id": 750,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "247:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -554,7 +554,7 @@
                     "typeString": "int128"
                   },
                   "typeName": {
-                    "id": 731,
+                    "id": 749,
                     "name": "int128",
                     "nodeType": "ElementaryTypeName",
                     "src": "247:6:1",
@@ -568,10 +568,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 734,
+                  "id": 752,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 736,
+                  "scope": 754,
                   "src": "255:6:1",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -580,7 +580,7 @@
                     "typeString": "int128"
                   },
                   "typeName": {
-                    "id": 733,
+                    "id": 751,
                     "name": "int128",
                     "nodeType": "ElementaryTypeName",
                     "src": "255:6:1",
@@ -595,14 +595,14 @@
               ],
               "src": "246:16:1"
             },
-            "scope": 737,
+            "scope": 755,
             "src": "51:212:1",
             "stateMutability": "pure",
             "superFunction": null,
             "visibility": "external"
           }
         ],
-        "scope": 738,
+        "scope": 756,
         "src": "25:240:1"
       }
     ],
@@ -614,7 +614,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.16",
-  "updatedAt": "2019-10-23T15:51:08.877Z",
+  "updatedAt": "2019-10-23T15:59:21.759Z",
   "devdoc": {
     "methods": {}
   },
