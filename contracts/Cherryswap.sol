@@ -1,10 +1,12 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
-import "./interface/IERC20.sol";
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./interface/ICERC20.sol";
 import "./ISwapMath.sol";
 
-contract Cherryswap {
+
+contract Cherryswap is Initializable {
 
   /******************
   INTERNAL ACCOUNTING
@@ -55,11 +57,11 @@ contract Cherryswap {
   Swap[] public swaps;
   mapping (uint256 => SwapInfo) public swapById;
 
-  constructor(
+  function initialize(
     address _token,
     address _cherryToken,
     address _swapMath
-  ) public {
+  ) public initializer {
     require(_token != address(0), "Cherryswap::contructor - token cannot be 0");
     require(_cherryToken != address(0), "Cherryswap::constructor - cherryToken cannot be 0");
 
@@ -74,6 +76,8 @@ contract Cherryswap {
     uint256 _startingTime,
     uint256 _endingTime
   ) public {
+    require((_startingTime >= now) && (_endingTime>_startingTime), "Cherryswap::error - invalid swap period");
+
     if(swapsCounter > 0) {
       Swap memory previousSwap = swaps[swapsCounter-1];
       require(now > previousSwap.endingTime, "Cherryswap::hasEnded - swap not ended yet");
@@ -83,7 +87,7 @@ contract Cherryswap {
     swapsCounter += 1;
 
     // create new swap
-    Swap memory swap = Swap({
+    swaps.push(Swap({
       swapId: swapsCounter-1,
       openingTime: now,
       startingTime: _startingTime,
@@ -92,8 +96,7 @@ contract Cherryswap {
       endingRate: 0,
       depositedValue: 0,
       status: Status.Open
-    });
-    swaps.push(swap);
+    }));
 
     // create swap info
     address[] memory _participants;
@@ -108,6 +111,7 @@ contract Cherryswap {
       _bets
     );
     swapById[swapsCounter-1] = swapInfo;
+
   }
 
   function startSwap() public {
@@ -136,10 +140,7 @@ contract Cherryswap {
     // get starting rate
     swaps[swapsCounter-1].endingRate = (cherryToken.supplyRatePerBlock() * blockPerYear) / 10**18;
 
-    // get exchange rate
-    //uint256 exchangeRate = cherryToken.exchangeRateCurrent();
     uint256 cBalance = cherryToken.balanceOf(address(this));
-    //uint256 balance = cBalance * exchangeRate;
 
     // Redeem cDai to Dai
     require(cherryToken.redeem(cBalance) == 0, "Cherryswap::redeem - something went wrong");
@@ -182,7 +183,6 @@ contract Cherryswap {
       swapInfo.shortPoolSupply += _depositedValue;
     }
     swapInfo.participantsCounter++;
-    //swapById[swapsCounter] = swapInfo;
 
     currentSwap.depositedValue += _depositedValue;
   }

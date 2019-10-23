@@ -3,3 +3,5 @@ venv
 dist
 mnemonic.js
 .DS_Store
+
+.openzeppelin/.session
