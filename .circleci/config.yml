@@ -11,12 +11,12 @@ jobs:
           name: Restore Yarn Package Cache
           keys:
             - yarn-packages-{{ checksum "yarn.lock" }}
-      - run:
-          name: Activate venv
-          command: python3 -m venv venv && . venv/bin/activate
-      - run:
-          name: Install requirements
-          command: pip install --user -r requirements.txt
+      #- run:
+          #name: Activate venv
+          #command: python3 -m venv venv && . venv/bin/activate
+      #- run:
+          #name: Install requirements
+          #command: pip install --user -r requirements.txt
       - run:
           name: Install Dependencies
           command: yarn install
