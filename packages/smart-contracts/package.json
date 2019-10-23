@@ -1,0 +1,93 @@
+{
+    "name": "cherryswap",
+    "version": "0.1.0",
+    "private": true,
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
+        "lint": "vue-cli-service lint",
+        "ganache": "ganache-cli --deterministic -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
+        "stop": "sudo kill `sudo lsof -t -i:9545`",
+        "test": "npm run ganache sleep 5 && truffle compile --all && truffle test && npm run stop",
+        "test-ci": "npm run ganache sleep 5 && truffle test"
+    },
+    "dependencies": {
+        "@openzeppelin/cli": "^2.5.3",
+        "@openzeppelin/contracts-ethereum-package": "^2.3.0",
+        "@openzeppelin/upgrades": "^2.5.3",
+        "@statnett/vue-plotly": "^0.3.2",
+        "apexcharts": "^3.6.7",
+        "axios": "^0.18.0",
+        "chai": "^4.2.0",
+        "chai-as-promised": "^7.1.1",
+        "chai-bignumber": "^3.0.0",
+        "chai-bn": "0.1.0-beta.0",
+        "core-js": "^2.6.5",
+        "cross-env": "^5.2.0",
+        "cryptocompare": "^1.0.0",
+        "ethjs-abi": "^0.2.1",
+        "moment": "^2.24.0",
+        "openzeppelin-test-helpers": "^0.4.2",
+        "pify": "^4.0.1",
+        "plotly.js": "^1.49.4",
+        "truffle": "^5.0.37",
+        "truffle-contract": "^4.0.11",
+        "truffle-hdwallet-provider": "^1.0.6",
+        "typeface-space-mono": "^0.0.71",
+        "vue": "^2.6.6",
+        "vue-apexcharts": "^1.3.4",
+        "vue-cryptoicon": "^0.1.5",
+        "vue-jazzicon": "^0.1.3",
+        "vue-js-modal": "^1.3.28",
+        "vue-js-toggle-button": "^1.3.2",
+        "vue-lottie": "^0.2.1",
+        "vue-material": "^1.0.0-beta-10.2",
+        "vue-router": "^3.0.1",
+        "vue-slider-component": "^3.0.27",
+        "vuex": "^3.0.1",
+        "vuex-persistedstate": "^2.5.4",
+        "web3": "1.0.0-beta.37"
+    },
+    "devDependencies": {
+        "@vue/cli-plugin-babel": "^3.5.0",
+        "@vue/cli-plugin-eslint": "^3.5.0",
+        "@vue/cli-service": "^3.5.0",
+        "babel-eslint": "^10.0.1",
+        "coveralls": "3.0.3",
+        "eslint": "^5.8.0",
+        "eslint-plugin-vue": "^5.0.0",
+        "eth-gas-reporter": "^0.1.12",
+        "ganache-cli": "^6.4.2",
+        "node-sass": "^4.11.0",
+        "sass-loader": "^7.1.0",
+        "solidity-coverage": "0.5.11",
+        "solium": "1.2.3",
+        "vue-svg-loader": "^0.12.0",
+        "vue-template-compiler": "^2.5.21",
+        "webpack": "^4.29.6"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/essential",
+            "eslint:recommended"
+        ],
+        "rules": {},
+        "parserOptions": {
+            "parser": "babel-eslint"
+        }
+    },
+    "postcss": {
+        "plugins": {
+            "autoprefixer": {}
+        }
+    },
+    "browserslist": [
+        "> 1%",
+        "last 2 versions",
+        "not ie <= 8"
+    ]
+}

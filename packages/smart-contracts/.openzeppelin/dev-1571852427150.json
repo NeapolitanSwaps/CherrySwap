@@ -1,0 +1,547 @@
+{
+  "contracts": {
+    "CTokenMock": {
+      "address": "0x5b9b42d6e4B2e4Bf8d42Eba32D46918e10899B66",
+      "constructorCode": "60806040525b5b61000b565b6111fc8061001a6000396000f3fe",
+      "bodyBytecodeHash": "8ef5baa4df60a90dd78a26b9f3b32f255aaf7d7c8be6cfbb96234beff79df978",
+      "localBytecodeHash": "f45bd7880f765f222490de5e1edf35f1e125e7d7349f08e2b8f4c848e2796b79",
+      "deployedBytecodeHash": "f45bd7880f765f222490de5e1edf35f1e125e7d7349f08e2b8f4c848e2796b79",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_mapping<t_uint256>": {
+          "id": "t_mapping<t_uint256>",
+          "valueType": "t_uint256",
+          "label": "mapping(key => uint256)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 639,
+          "type": "t_bool",
+          "src": "757:24:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 641,
+          "type": "t_bool",
+          "src": "876:25:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 697,
+          "type": "t_array:50<t_uint256>",
+          "src": "1951:29:4"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_balances",
+          "astId": 178,
+          "type": "t_mapping<t_uint256>",
+          "src": "1414:46:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_allowances",
+          "astId": 184,
+          "type": "t_mapping<t_uint256>",
+          "src": "1467:69:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_totalSupply",
+          "astId": 186,
+          "type": "t_uint256",
+          "src": "1543:28:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "______gap",
+          "astId": 565,
+          "type": "t_array:50<t_uint256>",
+          "src": "7911:29:2"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    },
+    "Cherryswap": {
+      "address": "0xaf5C4C6C7920B4883bC6252e9d9B8fE27187Cf68",
+      "constructorCode": "60806040523480156100115760006000fd5b50610017565b612ad4806100266000396000f3fe",
+      "bodyBytecodeHash": "60b45933a3a1228fea918a881795d3d5a31f328b95dfc8ea55a331d826ce2b35",
+      "localBytecodeHash": "5eec2806cf9268b2ac6a502b8ffc782c5229b9b09c2f5e629a7a5449422418f1",
+      "deployedBytecodeHash": "5eec2806cf9268b2ac6a502b8ffc782c5229b9b09c2f5e629a7a5449422418f1",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_struct<Cherryswap.Swap>": {
+          "id": "t_struct<Cherryswap.Swap>",
+          "kind": "struct",
+          "label": "Cherryswap.Swap",
+          "members": [
+            {
+              "label": "swapId",
+              "astId": 732,
+              "type": "t_uint256",
+              "src": "745:14:5"
+            },
+            {
+              "label": "openingTime",
+              "astId": 734,
+              "type": "t_uint256",
+              "src": "765:19:5"
+            },
+            {
+              "label": "startingTime",
+              "astId": 736,
+              "type": "t_uint256",
+              "src": "790:20:5"
+            },
+            {
+              "label": "endingTime",
+              "astId": 738,
+              "type": "t_uint256",
+              "src": "816:18:5"
+            },
+            {
+              "label": "startingRate",
+              "astId": 740,
+              "type": "t_uint256",
+              "src": "840:20:5"
+            },
+            {
+              "label": "endingRate",
+              "astId": 742,
+              "type": "t_uint256",
+              "src": "866:18:5"
+            },
+            {
+              "label": "depositedValue",
+              "astId": 744,
+              "type": "t_uint256",
+              "src": "890:22:5"
+            },
+            {
+              "label": "status",
+              "astId": 746,
+              "type": "t_enum<Cherryswap.Status>",
+              "src": "918:13:5"
+            }
+          ]
+        },
+        "t_enum<Cherryswap.Status>": {
+          "id": "t_enum<Cherryswap.Status>",
+          "kind": "enum",
+          "label": "Cherryswap.Status",
+          "members": [
+            "Open",
+            "Running",
+            "Closed"
+          ]
+        },
+        "t_array:dyn<t_struct<Cherryswap.Swap>>": {
+          "id": "t_array:dyn<t_struct<Cherryswap.Swap>>",
+          "valueType": "t_struct<Cherryswap.Swap>",
+          "length": "dyn",
+          "kind": "array",
+          "label": "Cherryswap.Swap[]"
+        },
+        "t_struct<Cherryswap.SwapInfo>": {
+          "id": "t_struct<Cherryswap.SwapInfo>",
+          "kind": "struct",
+          "label": "Cherryswap.SwapInfo",
+          "members": [
+            {
+              "label": "participants",
+              "astId": 750,
+              "type": "t_array:dyn<t_address>",
+              "src": "962:22:5"
+            },
+            {
+              "label": "depositedValues",
+              "astId": 753,
+              "type": "t_array:dyn<t_uint256>",
+              "src": "990:25:5"
+            },
+            {
+              "label": "longPoolSupply",
+              "astId": 755,
+              "type": "t_uint256",
+              "src": "1021:22:5"
+            },
+            {
+              "label": "shortPoolSupply",
+              "astId": 757,
+              "type": "t_uint256",
+              "src": "1049:23:5"
+            },
+            {
+              "label": "participantsCounter",
+              "astId": 759,
+              "type": "t_uint256",
+              "src": "1078:27:5"
+            },
+            {
+              "label": "bets",
+              "astId": 762,
+              "type": "t_array:dyn<t_enum<Cherryswap.Bet>>",
+              "src": "1111:10:5"
+            }
+          ]
+        },
+        "t_array:dyn<t_address>": {
+          "id": "t_array:dyn<t_address>",
+          "valueType": "t_address",
+          "length": "dyn",
+          "kind": "array",
+          "label": "address[]"
+        },
+        "t_array:dyn<t_uint256>": {
+          "id": "t_array:dyn<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "dyn",
+          "kind": "array",
+          "label": "uint256[]"
+        },
+        "t_enum<Cherryswap.Bet>": {
+          "id": "t_enum<Cherryswap.Bet>",
+          "kind": "enum",
+          "label": "Cherryswap.Bet",
+          "members": [
+            "Long",
+            "Short"
+          ]
+        },
+        "t_array:dyn<t_enum<Cherryswap.Bet>>": {
+          "id": "t_array:dyn<t_enum<Cherryswap.Bet>>",
+          "valueType": "t_enum<Cherryswap.Bet>",
+          "length": "dyn",
+          "kind": "array",
+          "label": "Cherryswap.Bet[]"
+        },
+        "t_mapping<t_struct<Cherryswap.SwapInfo>>": {
+          "id": "t_mapping<t_struct<Cherryswap.SwapInfo>>",
+          "valueType": "t_struct<Cherryswap.SwapInfo>",
+          "label": "mapping(key => Cherryswap.SwapInfo)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 639,
+          "type": "t_bool",
+          "src": "757:24:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 641,
+          "type": "t_bool",
+          "src": "876:25:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 697,
+          "type": "t_array:50<t_uint256>",
+          "src": "1951:29:4"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapsCounter",
+          "astId": 711,
+          "type": "t_uint256",
+          "src": "382:27:5"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "token",
+          "astId": 713,
+          "type": "t_address",
+          "src": "414:19:5"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "cherryToken",
+          "astId": 715,
+          "type": "t_address",
+          "src": "463:26:5"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapMath",
+          "astId": 717,
+          "type": "t_address",
+          "src": "503:25:5"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swaps",
+          "astId": 766,
+          "type": "t_array:dyn<t_struct<Cherryswap.Swap>>",
+          "src": "1130:19:5"
+        },
+        {
+          "contract": "Cherryswap",
+          "path": "contracts/Cherryswap.sol",
+          "label": "swapById",
+          "astId": 770,
+          "type": "t_mapping<t_struct<Cherryswap.SwapInfo>>",
+          "src": "1153:45:5"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    },
+    "Migrations": {
+      "address": "0xEC5d4F247aF81A843612eb1371CBCfa88b762119",
+      "constructorCode": "60806040523480156100115760006000fd5b505b33600060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505b61005a565b6102d3806100696000396000f3fe",
+      "bodyBytecodeHash": "e4ca7dd3402c0c522c2d48e27ae70fb6c50171a43221b4f4b54d2168089461be",
+      "localBytecodeHash": "9617d87db895aa5a056636434f461215e57474732797d3412a5d07637ade40e9",
+      "deployedBytecodeHash": "9617d87db895aa5a056636434f461215e57474732797d3412a5d07637ade40e9",
+      "types": {
+        "t_address": {
+          "id": "t_address",
+          "kind": "elementary",
+          "label": "address"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Migrations",
+          "path": "contracts/Migrations.sol",
+          "label": "owner",
+          "astId": 1458,
+          "type": "t_address",
+          "src": "58:20:7"
+        },
+        {
+          "contract": "Migrations",
+          "path": "contracts/Migrations.sol",
+          "label": "last_completed_migration",
+          "astId": 1460,
+          "type": "t_uint256",
+          "src": "82:36:7"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": true,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    },
+    "TokenMock": {
+      "address": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+      "constructorCode": "60806040525b5b61000b565b6110928061001a6000396000f3fe",
+      "bodyBytecodeHash": "6466f73890b27e82b0736c67382badc8ca09b4b49faad4098f89e67f4bfa00ef",
+      "localBytecodeHash": "de0723d315fab428f18fe4d8b3eebc0e8f33c147baff87b9d094711e8ea02e1e",
+      "deployedBytecodeHash": "de0723d315fab428f18fe4d8b3eebc0e8f33c147baff87b9d094711e8ea02e1e",
+      "types": {
+        "t_bool": {
+          "id": "t_bool",
+          "kind": "elementary",
+          "label": "bool"
+        },
+        "t_uint256": {
+          "id": "t_uint256",
+          "kind": "elementary",
+          "label": "uint256"
+        },
+        "t_array:50<t_uint256>": {
+          "id": "t_array:50<t_uint256>",
+          "valueType": "t_uint256",
+          "length": "50",
+          "kind": "array",
+          "label": "uint256[50]"
+        },
+        "t_mapping<t_uint256>": {
+          "id": "t_mapping<t_uint256>",
+          "valueType": "t_uint256",
+          "label": "mapping(key => uint256)",
+          "kind": "mapping"
+        }
+      },
+      "storage": [
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initialized",
+          "astId": 639,
+          "type": "t_bool",
+          "src": "757:24:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "initializing",
+          "astId": 641,
+          "type": "t_bool",
+          "src": "876:25:4"
+        },
+        {
+          "contract": "Initializable",
+          "path": "@openzeppelin/upgrades/contracts/Initializable.sol",
+          "label": "______gap",
+          "astId": 697,
+          "type": "t_array:50<t_uint256>",
+          "src": "1951:29:4"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_balances",
+          "astId": 178,
+          "type": "t_mapping<t_uint256>",
+          "src": "1414:46:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_allowances",
+          "astId": 184,
+          "type": "t_mapping<t_uint256>",
+          "src": "1467:69:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "_totalSupply",
+          "astId": 186,
+          "type": "t_uint256",
+          "src": "1543:28:2"
+        },
+        {
+          "contract": "ERC20",
+          "path": "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol",
+          "label": "______gap",
+          "astId": 565,
+          "type": "t_array:50<t_uint256>",
+          "src": "7911:29:2"
+        }
+      ],
+      "warnings": {
+        "hasConstructor": false,
+        "hasSelfDestruct": false,
+        "hasDelegateCall": false,
+        "hasInitialValuesInDeclarations": false,
+        "uninitializedBaseContracts": []
+      }
+    }
+  },
+  "solidityLibs": {},
+  "proxies": {
+    "cherryswap/TokenMock": [
+      {
+        "address": "0x22d5C8BdD4346b390014a07109a8F830094d4abf",
+        "version": "0.1.0",
+        "implementation": "0xDDb64fE46a91D46ee29420539FC25FD07c5FEa3E",
+        "admin": "0x1b88Bdb8269A1aB1372459F5a4eC3663D6f5cCc4",
+        "kind": "Upgradeable"
+      }
+    ],
+    "cherryswap/CTokenMock": [
+      {
+        "address": "0x7414e38377D6DAf6045626EC8a8ABB8a1BC4B97a",
+        "version": "0.1.0",
+        "implementation": "0x5b9b42d6e4B2e4Bf8d42Eba32D46918e10899B66",
+        "admin": "0x1b88Bdb8269A1aB1372459F5a4eC3663D6f5cCc4",
+        "kind": "Upgradeable"
+      }
+    ],
+    "cherryswap/Cherryswap": [
+      {
+        "address": "0xB9bdBAEc07751F6d54d19A6B9995708873F3DE18",
+        "version": "0.1.0",
+        "implementation": "0xaf5C4C6C7920B4883bC6252e9d9B8fE27187Cf68",
+        "admin": "0x1b88Bdb8269A1aB1372459F5a4eC3663D6f5cCc4",
+        "kind": "Upgradeable"
+      }
+    ]
+  },
+  "manifestVersion": "2.2",
+  "dependencies": {
+    "@openzeppelin/contracts-ethereum-package": {
+      "package": "0x21a59654176f2689d12E828B77a783072CD26680",
+      "version": "2.3.0",
+      "customDeploy": true
+    }
+  },
+  "version": "0.1.0",
+  "proxyAdmin": {
+    "address": "0x1b88Bdb8269A1aB1372459F5a4eC3663D6f5cCc4"
+  }
+}
