@@ -1,0 +1,14 @@
+{
+  "private": true,
+  "name": "@cherryswap/test-helpers",
+  "version": "1.0.0",
+  "description": "Helper scripts for Cherryswap Project",
+  "devDependencies": {
+    "eth-gas-reporter": "^0.2.12",
+    "ethereumjs-abi": "0.6.5",
+    "ganache-cli": "6.1.8",
+    "solidity-coverage": "0.5.11",
+    "solium": "1.1.8",
+    "truffle": "^5.0.37"
+  }
+}

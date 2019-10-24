@@ -1,10 +1,9 @@
 version: 2
 jobs:
   build:
-    #machine: true
     working_directory: ~/CherrySwap
     docker:
-      - image: circleci/node:10.16.3
+      - image: circleci/python:3-node
     steps: 
       - checkout 
       - restore_cache:
@@ -21,7 +20,7 @@ jobs:
             - ./node_modules
       - run:
           name: test solidity smart contracts
-          command: npm run test-ci
+          command: yarn run contracts:test
       #- run:
       #    name: code-coverage
       #    command: './node_modules/.bin/nyc report --reporter=text-lcov'

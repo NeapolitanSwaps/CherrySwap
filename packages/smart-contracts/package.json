@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "ganache": "ganache-cli --deterministic -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
-    "stop": "sudo kill `sudo lsof -t -i:9545`",
-    "test": "npm run ganache sleep 5 && truffle compile --all && truffle test && npm run stop",
-    "test-ci": "npm run ganache sleep 5 && truffle test"
+    "compile": "truffle compile --all",
+    "ganache-cli:test": "../shared/ganache-cli.sh",
+    "test": "TRUFFLE_TEST=true npm run ganache-cli:test",
+    "coverage": "SOLIDITY_COVERAGE=true npm run ganache-cli:test"
   },
   "dependencies": {
+    "@cherryswap/test-helpers": "1.0.0",
     "@openzeppelin/cli": "^2.5.3",
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
     "@openzeppelin/upgrades": "^2.5.3",

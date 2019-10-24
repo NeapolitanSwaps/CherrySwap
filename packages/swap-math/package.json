@@ -5,9 +5,9 @@
   "homepage": "https://github.com/NeapolitanSwaps/CherrySwap#readme",
   "license": "ISC",
   "dependencies": {
-    "chai": "^4.2.0",
+    "truffle": "^5.0.37",
     "openzeppelin-test-helpers": "^0.4.2",
-    "truffle": "^5.0.37"
+    "chai": "^4.2.0"
   },
   "repository": {
     "type": "git",
