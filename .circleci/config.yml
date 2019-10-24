@@ -21,7 +21,7 @@ jobs:
             - ./node_modules
       - run:
           name: test solidity smart contracts
-          command: npm run test-ci
+          command: contracts:test
       #- run:
       #    name: code-coverage
       #    command: './node_modules/.bin/nyc report --reporter=text-lcov'
