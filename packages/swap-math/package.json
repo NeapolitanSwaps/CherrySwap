@@ -1,0 +1,22 @@
+{
+  "name": "@cherryswap/swap-math",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "homepage": "https://github.com/NeapolitanSwaps/CherrySwap#readme",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.2.0",
+    "openzeppelin-test-helpers": "^0.4.2",
+    "truffle": "^5.0.37"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeapolitanSwaps/CherrySwap.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/NeapolitanSwaps/CherrySwap/issues"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "command": {
+    "run": {
+      "concurrency": 1,
+      "scope": "@cherryswap/*"
+    },
+    "bootstrap": {
+      "progress": true
+    }
+  },
+  "hoist": true,
+  "packages": [
+    "packages/*"
+  ],
+  "version": "independent"
+}

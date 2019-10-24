@@ -1,0 +1,17 @@
+{
+  "name": "@cherryswap/smart-contracts",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "ganache": "ganache-cli --deterministic -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
+    "stop": "sudo kill `sudo lsof -t -i:9545`",
+    "test": "npm run ganache sleep 5 && truffle compile --all && truffle test && npm run stop",
+    "test-ci": "npm run ganache sleep 5 && truffle test"
+  },
+  "dependencies": {
+    "@openzeppelin/cli": "^2.5.3",
+    "@openzeppelin/contracts-ethereum-package": "^2.3.0",
+    "@openzeppelin/upgrades": "^2.5.3",
+    "truffle": "^5.0.37"
+  }
+}
