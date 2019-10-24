@@ -7,7 +7,7 @@
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "TRUFFLE_TEST=true npm run ganache-cli:test",
     "coverage": "SOLIDITY_COVERAGE=true npm run ganache-cli:test",
-    "test-ci": "npm run ganache sleep 5 && truffle test",
+    "test-ci": "npm run ganache-ci sleep 5 && truffle test",
     "ganache-ci": "ganache-cli --deterministic -e 300 -p 9545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop-ganache": "sudo kill `sudo lsof -t -i:9545`"
   },
