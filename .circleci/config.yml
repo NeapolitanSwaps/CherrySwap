@@ -7,18 +7,18 @@ jobs:
       - image: circleci/node:10.16.3
     steps: 
       - checkout 
-      #- restore_cache:
-      #    name: Restore Yarn Package Cache
-      #    keys:
-      #      - yarn-packages-{{ checksum "yarn.lock" }}
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install
-      #- save_cache:
-      #    name: Save Yarn Package Cache
-      #    key: yarn-packages-{{ checksum "yarn.lock" }}
-      #    paths:
-      #      - ./node_modules
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
       - run:
           name: test solidity smart contracts
           command: yarn run contracts:test
