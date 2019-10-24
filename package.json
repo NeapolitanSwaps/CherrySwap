@@ -10,29 +10,12 @@
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
     },
     "dependencies": {
-        "@cherryswap/front-end": "file:packages/front-end",
-        "@cherryswap/smart-contracts": "file:packages/smart-contracts",
-        "@cherryswap/swap-math": "file:packages/swap-math"
-    },
-    "devDependencies": {
-        "@vue/cli-plugin-babel": "^3.5.0",
-        "@vue/cli-plugin-eslint": "^3.5.0",
-        "@vue/cli-service": "^3.5.0",
-        "babel-eslint": "^10.0.1",
-        "chai": "^4.2.0",
-        "coveralls": "3.0.3",
-        "eslint": "^5.8.0",
-        "eslint-plugin-vue": "^5.0.0",
-        "eth-gas-reporter": "^0.1.12",
-        "ganache-cli": "^6.4.2",
-        "node-sass": "^4.11.0",
-        "openzeppelin-test-helpers": "^0.4.2",
-        "sass-loader": "^7.1.0",
-        "solidity-coverage": "0.5.11",
-        "solium": "1.2.3",
-        "truffle-hdwallet-provider": "^1.0.6",
-        "vue-svg-loader": "^0.12.0",
-        "vue-template-compiler": "^2.5.21",
-        "webpack": "^4.29.6"
+        "@codechecks/client": "^0.1.10",
+        "eth-gas-reporter": "^0.2.12",
+        "eth-provider": "^0.2.2",
+        "homedir": "^0.6.0",
+        "truffle": "^5.0.37",
+        "truffle-hdwallet-provider": "^1.0.17",
+        "truffle-hdwallet-provider-privkey": "^0.3.0"
     }
 }
