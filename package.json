@@ -7,10 +7,12 @@
         "frontend:serve": "lerna run --scope=@cherryswap/front-end --stream serve",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
         "frontend:lint": "lerna run --scope=@cherryswap/front-end --stream lint",
-        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
+        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
+        "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci"
     },
     "dependencies": {
         "@codechecks/client": "^0.1.10",
+        "bignumber.js": "^9.0.0",
         "eth-gas-reporter": "^0.2.12",
         "eth-provider": "^0.2.2",
         "homedir": "^0.6.0",

@@ -1,6 +1,6 @@
 const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '9542ce9f96be4ae08225dcde36ff1638';
-let mnemonic = require('./mnemonic');
+const infuraApikey = '';
+let mnemonic = '';
 
 module.exports = {
   networks: {
@@ -20,7 +20,13 @@ module.exports = {
   },
   compilers: {
     solc: {
-      version: "0.5.0"
+      version: "0.5.0",
+      settings: { 
+        optimizer: {
+          enabled: false,
+          runs: 200
+        }
+      }
     }
   }
 }
