@@ -16,8 +16,7 @@ import * as mutations from "./mutation-types";
 
 import truffleContract from "truffle-contract";
 
-// import FundFactoryABI from "../../build/contracts/FundFactory.json"
-import CherryswapABI from "../../build/contracts/Cherryswap.json"
+import CherryswapABI from "@cherryswap/smart-contracts/build/contracts/Cherryswap.json"
 
 const Cherryswap = truffleContract(CherryswapABI);
 Vue.use(Vuex)
