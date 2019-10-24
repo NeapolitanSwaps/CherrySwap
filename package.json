@@ -2,7 +2,7 @@
     "name": "cherryswap-monorepo",
     "private": true,
     "scripts": {
-        "bootstrap": "lerna bootstrap",
+        "bootstrap": "lerna bootstrap --hoist",
         "postinstall": "npm run bootstrap",
         "frontend:serve": "lerna run --scope=@cherryswap/front-end --stream serve",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
