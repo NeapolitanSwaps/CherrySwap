@@ -1,0 +1,38 @@
+{
+  "name": "@cherryswap/swap-math",
+  "version": "1.0.0",
+  "description": "> TODO: description",
+  "homepage": "https://github.com/NeapolitanSwaps/CherrySwap#readme",
+  "license": "ISC",
+  "dependencies": {
+    "@openzeppelin/cli": "^2.5.3",
+    "@openzeppelin/contracts-ethereum-package": "^2.3.0",
+    "@openzeppelin/upgrades": "^2.5.3",
+    "openzeppelin-test-helpers": "^0.4.2",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^3.0.0",
+    "chai-bn": "0.1.0-beta.0",
+    "truffle": "^5.0.37",
+    "truffle-contract": "^4.0.11",
+    "truffle-hdwallet-provider": "^1.0.6",
+    "web3": "1.0.0-beta.37"
+  },
+  "devDependencies": {
+      "coveralls": "3.0.3",
+      "eth-gas-reporter": "^0.1.12",
+      "ganache-cli": "^6.4.2",
+      "solidity-coverage": "0.5.11",
+      "solium": "1.2.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NeapolitanSwaps/CherrySwap.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/NeapolitanSwaps/CherrySwap/issues"
+  }
+}
