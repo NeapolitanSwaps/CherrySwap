@@ -89,7 +89,9 @@ yarn run swapmath:deploy
 ```
 
 Copy the deployed address to the `@smart-contract` deployment config file 
-```packages/smart-contracts/migrations/config.json```
+```
+packages/smart-contracts/migrations/config.json
+```
 If you are deploying on testnet or mainnet, make sure to config the ERC20 token and the ctoken addresses.
 
 
