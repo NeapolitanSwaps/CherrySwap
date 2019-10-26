@@ -71,10 +71,9 @@ $ yarn run frontend:build
 # Run solidity contracts tests
 $ yarn run contracts:test
 
-#Run swap math contracts tests
+# Run swap math contracts tests
+# To run the python test, see packages/swap-math/README.md
 $ yarn run swapmath:test
-
-[To run the python test](packages/swap-math/README.md)
 
 # Run coverage
 $ yarn run packageName:coverage
