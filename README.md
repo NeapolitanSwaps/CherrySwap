@@ -1,4 +1,4 @@
-# Cherry Swap
+# Cherryswap-monorepo
 
 Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
 
