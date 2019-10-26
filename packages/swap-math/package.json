@@ -20,7 +20,10 @@
     "build-bytecode": "vyper -f bytecode contracts/SwapMath.vy",
     "compile": "truffle compile --all",
     "deploy": "truffle deploy",
-    "test": "python -m pytest --ignore node_modules"
+    "ganache-cli:test": "../shared/ganache-cli.sh",
+    "test": "TRUFFLE_TEST=true yarn run ganache-cli:test",
+    "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
+    "pytest": "python -m pytest --ignore node_modules"
   },
   "bugs": {
     "url": "https://github.com/NeapolitanSwaps/CherrySwap/issues"

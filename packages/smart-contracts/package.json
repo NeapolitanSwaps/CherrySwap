@@ -11,6 +11,7 @@
   },
   "scripts": {
     "compile": "truffle compile --all",
+    "deploy": "truffle deploy",
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "TRUFFLE_TEST=true yarn run ganache-cli:test",
     "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",

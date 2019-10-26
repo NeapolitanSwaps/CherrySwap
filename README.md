@@ -4,7 +4,15 @@ Cherry Swap is an autonomous, open-source platform for interest rate swaps on Co
 
 ![](./additionalResources/ScreenImage2.png)
 
+This repository contains the following apps:
+
+- **[front-end](packages/front-end)**: Cherryswap interface
+- **[smart-contracts](packages/smart-contracts)**: Cherryswap contracts
+- **[swap-math](packages/swap-math)**: Cherryswap contracts for the swap model
+- **[shared](packages/shared)**: Script package
+
 ## Links
+
 Demo: https://cherryswap.now.sh
 
 Devpost: https://devpost.com/software/cherry-swap
@@ -43,48 +51,58 @@ The `Cherryswap.sol` contract handles the different swap periods, which are fixe
 
 The `SwapMath.vy` contract serves as a library for the `CherrySwap.sol` contract and computes the payout ratios for long and short positions that are used to compute the payouts within the `Cherryswap.sol` contract.
 
-## Environment
+## Development Setup
 
-Since the contracts are written in solidity and vyper, we need [truffle](https://www.trufflesuite.com/docs/truffle/getting-started/installation) as well as [vyper](https://vyper.readthedocs.io/en/v0.1.0-beta.11/installing-vyper.html) installed and a python environment set up. 
+Node.js LTS or greater required.
 
-! Vyper requires at least Python 3.6 and the corresponding dev tools.
-We are assuming you navigated to this directory.
+```bash
+# Bootstrap project dependencies:
+$ yarn install
 
-```
-python3 -m venv venv
-. venv/bin/activate
-```
+# Compile @smart-contracts 
+$ yarn run contracts:compile
 
-Install the python and the node requirements:
-```
-pip install -r requirements.txt
-yarn install
-```
+# Compile @swap-math
+$ yarn run swapmath:compile
 
-## Testing
+# Build @front-end
+$ yarn run frontend:build
 
-Testing the solidity code: 
-```
-truffle test
-```
+# Run solidity contracts tests
+$ yarn run contracts:test
 
-Testing the vyper code:
-```
-python -m pytest --ignore node_modules
+#Run swap math contracts tests
+$ yarn run swapmath:test
+
+[To run the python test](packages/swap-math/README.md)
+
+# Run coverage
+$ yarn run packageName:coverage
+
+# current package name aliases: {frontend, contracts, swapmath}
 ```
 
 ## Deployment
 
-Migrate the contracts:
+Deploy the SwapMath contract:
 ```
-truffle migrate
+yarn run swapmath:deploy
+```
+
+Copy the deployed address to the @smart-contract deployment config file `packages/smart-contracts/migrations/config.json`
+If you are deploying on testnet or mainnet, make sure to config the ERC20 token and the ctoken addresses.
+
+
+Deploy the solidity contracts:
+```
+yarn run contracts:deploy
 ```
 
 Front end: 
 
 ! Needs to know the contract addresses
 ```
-yarn serve
+yarn run frontend:serve
 ```
 
 ## Additional Resources
