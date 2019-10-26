@@ -1,0 +1,1 @@
+//Write JS tests compatible with Truffle

@@ -2,20 +2,20 @@
   "name": "@cherryswap/smart-contracts",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "compile": "truffle compile --all",
-    "ganache-cli:test": "../shared/ganache-cli.sh",
-    "test": "TRUFFLE_TEST=true npm run ganache-cli:test",
-    "coverage": "SOLIDITY_COVERAGE=true npm run ganache-cli:test",
-    "test-ci": "npm run ganache-ci sleep 5 && truffle test",
-    "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
-    "stop-ganache": "sudo kill `sudo lsof -t -i:9545`"
-  },
   "dependencies": {
     "@cherryswap/test-helpers": "1.0.0",
     "@openzeppelin/cli": "^2.5.3",
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
     "@openzeppelin/upgrades": "^2.5.3",
     "truffle": "^5.0.37"
+  },
+  "scripts": {
+    "compile": "truffle compile --all",
+    "ganache-cli:test": "../shared/ganache-cli.sh",
+    "test": "TRUFFLE_TEST=true yarn run ganache-cli:test",
+    "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
+    "test-ci": "yarn run ganache-ci sleep 5 && truffle test",
+    "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
+    "stop-ganache": "sudo kill `sudo lsof -t -i:9545`"
   }
 }

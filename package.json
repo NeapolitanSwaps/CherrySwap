@@ -3,12 +3,14 @@
     "private": true,
     "scripts": {
         "bootstrap": "lerna bootstrap --hoist",
-        "postinstall": "npm run bootstrap",
+        "postinstall": "yarn run bootstrap",
         "frontend:serve": "lerna run --scope=@cherryswap/front-end --stream serve",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
         "frontend:lint": "lerna run --scope=@cherryswap/front-end --stream lint",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
-        "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci"
+        "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci",
+        "swapmath:install-requirements": "lerna run --scope=@cherryswap/swap-math --stream install",
+        "swapmath:test": "lerna run --scope=@cherryswap/swap-math -- stream test"
     },
     "dependencies": {
         "@codechecks/client": "^0.1.10",

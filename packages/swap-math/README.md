@@ -1,4 +1,4 @@
-# `@cherryswap/swap-math`
+# @cherryswap/swap-math
 
 The `SwapMath.vy` contract serves as a library for the `CherrySwap.sol` contract and computes the payout ratios for long and short positions that are used to compute the payouts within the `Cherryswap.sol` contract.
 
@@ -8,14 +8,13 @@ The `SwapMath.vy` contract serves as a library for the `CherrySwap.sol` contract
 We are assuming you navigated to this directory.
 
 ```
-python3 -m venv venv
-. venv/bin/activate
+virtualenv -p python3.6 --no-site-packages ~/vyper-venv && source ~/vyper-venv/bin/activate
 ```
 
 Install the python and the node requirements:
+
 ```
-pip install -r requirements.txt
-yarn install
+yarn run install:requirements
 ```
 
 ## Testing
