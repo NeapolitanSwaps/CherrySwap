@@ -8,18 +8,25 @@ The `SwapMath.vy` contract serves as a library for the `CherrySwap.sol` contract
 We are assuming you navigated to this directory.
 
 ```
-virtualenv -p python3.6 --no-site-packages ~/vyper-venv && source ~/vyper-venv/bin/activate
+$ virtualenv -p python3.6 --no-site-packages ~/vyper-venv && source ~/vyper-venv/bin/activate
 ```
 
 Install the python and the node requirements:
 
 ```
-yarn run install:requirements
+$ yarn run install-requirements
 ```
 
 ## Testing
 
 Testing the vyper code:
-```
-python -m pytest --ignore node_modules
+
+```bash
+#Python test
+$ yarn run pytest
+
+OR
+
+#JS test
+$ yarn run test
 ```

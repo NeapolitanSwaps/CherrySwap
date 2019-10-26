@@ -7,10 +7,17 @@
         "frontend:serve": "lerna run --scope=@cherryswap/front-end --stream serve",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
         "frontend:lint": "lerna run --scope=@cherryswap/front-end --stream lint",
+        "frontend:test": "lerna run --scope=@cherryswap/front-end --stream test",
+        "contracts:compile": "lerna run --scope=@cherryswap/smart-contracts --stream compile",
+        "contracts:deploy": "lerna run --scope=@cherryswap/smart-contracts --stream deploy",
+        "contracts:lint": "",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
         "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci",
-        "swapmath:install-requirements": "lerna run --scope=@cherryswap/swap-math --stream install",
-        "swapmath:test": "lerna run --scope=@cherryswap/swap-math -- stream test"
+        "swapmath:compile": "lerna run --scope=@cherryswap/swap-math --stream compile",
+        "swapmath:deploy": "lerna run --scope=@cherryswap/swap-math --stream deploy",
+        "swapmath:test": "lerna run --scope=@cherryswap/swap-math -- stream test",
+        "swapmath:pytest": "lerna run --scope=@cherryswap/swap-math -- stream pytest",
+        "swapmath:install-requirements": "lerna run --scope=@cherryswap/swap-math --stream install-requirements"
     },
     "dependencies": {
         "@codechecks/client": "^0.1.10",
