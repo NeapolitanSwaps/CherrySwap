@@ -4,7 +4,7 @@ Cherry Swap is an autonomous, open-source platform for interest rate swaps on Co
 
 ![](./additionalResources/ScreenImage2.png)
 
-This repository contains the following apps:
+This monorepo contains the following packages:
 
 - **[front-end](packages/front-end)**: Cherryswap interface
 - **[smart-contracts](packages/smart-contracts)**: Cherryswap contracts
