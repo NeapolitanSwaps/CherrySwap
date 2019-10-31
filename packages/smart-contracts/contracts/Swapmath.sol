@@ -112,16 +112,19 @@ contract SwapMath {
         return (capFunction(r, t1, t2) * N) / 10**18;
     }
 
+    function cDaitoDai(uint _cDai, uint256 _cDaiPrice) public pure returns (uint256){
+        return _cDai * _cDaiPrice / (10 ** 28);
+    }
     function computeRatios(
-        uint256 cDaiEnd,
-        uint256 shortPoolDai,
-        uint256 fixedNACB,
-        uint256 startingTime,
-        uint256 endingTime,
-        uint256 endcDaiEndPrice
+        uint256 _cDaiEnd,
+        uint256 _shortPoolDai,
+        uint256 _fixedNACB,
+        uint256 _startingTime,
+        uint256 _endingTime,
+        uint256 _endcDaiEndPrice
     ) public returns (uint256 longPayout, uint256 shortPayout) {
-        shortPayout = futureValue(shortPoolDai, fixedNACB, startingTime, endingTime);
-        uint256 totalPoolDaiValueEnd = cDaiEnd / endcDaiEndPrice;
+        shortPayout = futureValue(_shortPoolDai, _fixedNACB, _startingTime, _endingTime);
+        uint256 totalPoolDaiValueEnd = cDaitoDai(_cDaiEnd, _endcDaiEndPrice);
         longPayout = totalPoolDaiValueEnd - shortPayout;
     }
 
