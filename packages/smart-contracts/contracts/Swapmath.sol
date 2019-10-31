@@ -1,4 +1,4 @@
-pragma solidity ^0.5.12;
+pragma solidity ^0.5.0;
 
 contract SwapMath {
     uint256 private constant FIXED_1 = 0x080000000000000000000000000000000;
