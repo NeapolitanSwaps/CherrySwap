@@ -72,36 +72,6 @@ contract("SwapMath 🔬", ([contractOwner, random]) => {
             let ratio = new BigNumber(expectedValue).dividedBy(contractValue);
             assert(ratio.isGreaterThanOrEqualTo("0.999999999999999") && ratio.isLessThanOrEqualTo("1.000000000000001"), `Cap function incorrectly calculated`);
         })
-    })
-
-    context("Ratio Calculation", function () {
-        it(`Exponentual calculation loop`, async function () {
-            // loop over a range within the accessable range of the function from EXP_Min to EXP_MAX
-            for (let percent = 0; percent < 10; percent++) {
-                let x = (new BigNumber(percent)).dividedBy(100).times(EXP_MAX.minus(EXP_MIN)).plus(EXP_MIN);
-                let fixedPoint = await this.swapmath.optimalExp.call(FIXED_1.times(x).toFixed(0));
-                let floatPoint = new BigNumber(Decimal(x.toFixed()).exp().times(FIXED_1.toFixed()).toFixed());
-
-                let ratio = new BigNumber(fixedPoint).dividedBy(floatPoint);
-                assert(ratio.isGreaterThanOrEqualTo("0.999999999999999") && ratio.isLessThanOrEqualTo("1.000000000000001"), `ratio = ${ratio.toFixed()}`);
-            }
-        });
-
-        it("Correctly find capatalization function", async function () {
-            let expectedValue = new BigNumber(Math.exp((borrowRatePerBLock / 10 ** 18) * blocksPerYear) * 10 ** 18)
-            let contractValue = await this.swapmath.capFunction.call(borrowRatePerBLock, 0, secondsPerYear);
-
-            let ratio = new BigNumber(expectedValue).dividedBy(contractValue);
-            assert(ratio.isGreaterThanOrEqualTo("0.999999999999999") && ratio.isLessThanOrEqualTo("1.000000000000001"), `Cap function incorrectly calculated`);
-        })
-
-        it("Correctly calculate future value of NACC position", async function () {
-            let capFunction = new BigNumber(Math.exp((borrowRatePerBLock / 10 ** 18) * blocksPerYear))
-            let expectedValue = capFunction.multipliedBy(nominal)
-            let contractValue = await this.swapmath.futureValue.call(nominal.toString(), borrowRatePerBLock, 0, secondsPerYear);
-            let ratio = new BigNumber(expectedValue).dividedBy(contractValue);
-            assert(ratio.isGreaterThanOrEqualTo("0.999999999999999") && ratio.isLessThanOrEqualTo("1.000000000000001"), `Cap function incorrectly calculated`);
-        })
 
         it("Correctly convert from cDai to Dai", async function () {
             //note that here we use nominal as the input. this is irrelevant as to what the number is
@@ -110,5 +80,8 @@ contract("SwapMath 🔬", ([contractOwner, random]) => {
             let ratio = new BigNumber(expectedValue).dividedBy(contractValue);
             assert(ratio.isGreaterThanOrEqualTo("0.999999999999999") && ratio.isLessThanOrEqualTo("1.000000000000001"), `Cap function incorrectly calculated`);
         })
+    })
+
+    context("Ratio Calculation", function () {
     })
 })
