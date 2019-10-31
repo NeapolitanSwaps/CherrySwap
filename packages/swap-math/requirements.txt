@@ -1,4 +1,0 @@
-web3==4.8.2
-eth-tester[py-evm]==0.1.0b33
-pytest
-vyper
