@@ -5,7 +5,7 @@ const {
     expectEvent,
     expectRevert,
     ether
-} = require("openzeppelin-test-helpers");
+} = require("@openzeppelin/test-helpers");
 const {
     expect
 } = require("chai");
@@ -13,7 +13,7 @@ const {
 const BigNumber = require('bignumber.js');
 
 // Contracts
-const Swapmath = artifacts.require("SwapMath");
+const Swapmath = artifacts.require("Swapmath");
 
 //constants
 const secondsPerYear = 60 * 60 * 24 * 365

@@ -15,13 +15,15 @@
         "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci"
     },
     "dependencies": {
-        "@codechecks/client": "^0.1.10",
-        "eth-gas-reporter": "^0.2.12",
-        "eth-provider": "^0.2.2",
         "homedir": "^0.6.0",
         "lerna": "^3.18.3",
         "truffle": "^5.0.37",
         "truffle-hdwallet-provider": "^1.0.17",
         "truffle-hdwallet-provider-privkey": "^0.3.0"
+    },
+    "devDependencies": {
+        "eth-gas-reporter": "^0.2.12",
+        "eth-provider": "^0.2.2",
+        "@openzeppelin/test-helpers": "^0.5.3"
     }
 }
