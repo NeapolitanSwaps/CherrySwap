@@ -3,14 +3,15 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "truffle": "^5.0.37",
     "@openzeppelin/cli": "^2.5.3",
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
     "@openzeppelin/upgrades": "^2.5.3",
+    "@openzeppelin/test-helpers": "^0.5.3",
     "bignumber.js": "^9.0.0",
     "decimal.js": "^10.2.0",
     "prettier": "^1.18.2",
-    "prettier-plugin-solidity": "^1.0.0-alpha.34",
-    "truffle": "^5.0.37"
+    "prettier-plugin-solidity": "^1.0.0-alpha.34"
   },
   "scripts": {
     "compile": "truffle compile --all",

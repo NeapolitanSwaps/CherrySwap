@@ -4,7 +4,8 @@
     "CTokenMock": "CTokenMock",
     "Cherryswap": "Cherryswap",
     "Migrations": "Migrations",
-    "TokenMock": "TokenMock"
+    "TokenMock": "TokenMock",
+    "SwapMath": "SwapMath"
   },
   "dependencies": {
     "@openzeppelin/contracts-ethereum-package": "^2.3.0"
@@ -16,6 +17,6 @@
     "compilerSettings": {
       "optimizer": {}
     },
-    "solcVersion": "0.5.12"
+    "solcVersion": "0.5.0"
   }
 }
