@@ -4,6 +4,7 @@
     "CTokenMock": "CTokenMock",
     "Cherryswap": "Cherryswap",
     "Migrations": "Migrations",
+    "Swapmath": "Swapmath",
     "TokenMock": "TokenMock"
   },
   "dependencies": {
@@ -14,8 +15,11 @@
   "compiler": {
     "manager": "openzeppelin",
     "compilerSettings": {
-      "optimizer": {}
+      "optimizer": {
+        "enabled": false,
+        "runs": "200"
+      }
     },
-    "solcVersion": "0.5.12"
+    "solcVersion": "0.5.0"
   }
 }

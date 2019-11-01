@@ -3,20 +3,28 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@cherryswap/test-helpers": "1.0.0",
+    "truffle": "^5.0.37",
     "@openzeppelin/cli": "^2.5.3",
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
-    "@openzeppelin/upgrades": "^2.5.3",
-    "truffle": "^5.0.37"
+    "@openzeppelin/upgrades": "^2.5.3"
+  },
+  "devDependencies": {
+    "@openzeppelin/test-helpers": "^0.5.3",
+    "bignumber.js": "^9.0.0",
+    "decimal.js": "^10.2.0",
+    "prettier": "^1.18.2",
+    "prettier-plugin-solidity": "^1.0.0-alpha.34"
   },
   "scripts": {
-    "compile": "truffle compile --all",
+    "add-contract": "openzeppelin add",
+    "compile": "openzeppelin compile",
     "deploy": "truffle deploy",
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "TRUFFLE_TEST=true yarn run ganache-cli:test",
     "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
     "test-ci": "yarn run ganache-ci sleep 5 && truffle test",
     "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
-    "stop-ganache": "sudo kill `sudo lsof -t -i:9545`"
+    "stop-ganache": "sudo kill `sudo lsof -t -i:9545`",
+    "prettier": "prettier --write **/*.sol"
   }
 }

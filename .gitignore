@@ -1,8 +1,8 @@
+package-lock.json
 node_modules
 venv
 dist
 mnemonic.js
 .DS_Store
 
-.openzeppelin/.session
 .vscode

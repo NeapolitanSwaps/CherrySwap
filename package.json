@@ -12,22 +12,18 @@
         "contracts:deploy": "lerna run --scope=@cherryswap/smart-contracts --stream deploy",
         "contracts:lint": "",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
-        "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci",
-        "swapmath:compile": "lerna run --scope=@cherryswap/swap-math --stream compile",
-        "swapmath:deploy": "lerna run --scope=@cherryswap/swap-math --stream deploy",
-        "swapmath:test": "lerna run --scope=@cherryswap/swap-math -- stream test",
-        "swapmath:pytest": "lerna run --scope=@cherryswap/swap-math -- stream pytest",
-        "swapmath:install-requirements": "lerna run --scope=@cherryswap/swap-math --stream install-requirements"
+        "contracts:test-ci": "lerna run --scope=@cherryswap/smart-contracts --stream test-ci"
     },
     "dependencies": {
-        "@codechecks/client": "^0.1.10",
-        "bignumber.js": "^9.0.0",
-        "eth-gas-reporter": "^0.2.12",
-        "eth-provider": "^0.2.2",
         "homedir": "^0.6.0",
         "lerna": "^3.18.3",
         "truffle": "^5.0.37",
         "truffle-hdwallet-provider": "^1.0.17",
         "truffle-hdwallet-provider-privkey": "^0.3.0"
+    },
+    "devDependencies": {
+        "eth-gas-reporter": "^0.2.12",
+        "eth-provider": "^0.2.2",
+        "@openzeppelin/test-helpers": "^0.5.3"
     }
 }

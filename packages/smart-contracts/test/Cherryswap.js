@@ -1,4 +1,3 @@
-/*eslint-disable */
 const { TestHelper } = require('@openzeppelin/cli');
 const { Contracts, ZWeb3 } = require('@openzeppelin/upgrades');
 const BigNumber = require('bignumber.js');
@@ -9,6 +8,7 @@ const increaseTimeTo = increaseTime.increaseTimeTo;
 ZWeb3.initialize(web3.currentProvider);
 
 const cherryswapContract = Contracts.getFromLocal("Cherryswap");
+const swapmathContract = Contracts.getFromLocal("Swapmath");
 const tokenContract = Contracts.getFromLocal("TokenMock");
 const cTokenContract = Contracts.getFromLocal("CTokenMock");
 
@@ -25,6 +25,7 @@ contract('Cherryswap contract', (accounts) => {
   const supplyToMint = 500;
   
   let cherryswap;
+  let swapmath;
   let token;
   let cToken;
   let owner;
@@ -47,9 +48,10 @@ contract('Cherryswap contract', (accounts) => {
     
     token = await this.project.createProxy(tokenContract);
     cToken = await this.project.createProxy(cTokenContract);
+    swapmath = await this.project.createProxy(swapmathContract);
     cherryswap = await this.project.createProxy(cherryswapContract, {
       initMethod: 'initialize',
-      initArgs: [token.address, cToken.address, "0x0000000000000000000000000000000000000000"]
+      initArgs: [token.address, cToken.address, swapmath.address]
     });
   
     // Mint DAI for everyone
@@ -69,6 +71,8 @@ contract('Cherryswap contract', (accounts) => {
 
   describe("Swap", async() => {
     it("create a swap", async() => {
+      console.log(startingTime);
+      console.log(endingTime);
       await cherryswap.methods.createSwap(startingTime, endingTime).send({from: owner});
       
       _swapsCounter++;
@@ -82,7 +86,7 @@ contract('Cherryswap contract', (accounts) => {
     });
 */
   });
-
+/*
   describe("Market maker", async() => {
     let totalDepositedAmount = 0;
     let amountToDeposit = 100;
@@ -123,7 +127,7 @@ contract('Cherryswap contract', (accounts) => {
         let cDaiBalance = await cToken.methods.balanceOf(cherryswap.address).call();
         assert.equal(cDaiBalance, totalDepositedAmount);
       });
-/*
+
       it("should revert closing swap before ending time", async() => {
         await cherryswap.methods.closeSwap().send({from: owner}).should.be.rejectedWith(EVMRevert);
       });  
@@ -133,14 +137,14 @@ contract('Cherryswap contract', (accounts) => {
         await increaseTimeTo(startingTime + 1);
         await cherryswap.methods.deposit(participant4, amountToDeposit, 1).send({from: participant4}).should.be.rejectedWith(EVMRevert);
       }); 
-*/
+
     });
-/*
+
     describe("End swap period", async() => {
 
       before(async() => {
         await increaseTimeTo(endingTime + 3600);
-        await cherryswap.closeSwap();
+        await cherryswap.methods.closeSwap().send({ from: owner });
       });
 
       it("Check redeemed DAI", async() => {
@@ -149,7 +153,7 @@ contract('Cherryswap contract', (accounts) => {
         let participant3Balance = await token.balanceOf(participant3);
       });        
     });
-*/
-  });
 
+  });
+*/
 });

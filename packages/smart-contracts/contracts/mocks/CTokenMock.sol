@@ -18,7 +18,7 @@ contract CTokenMock is Initializable, ERC20 {
   }
 
   function supplyRatePerBlock() public pure returns (uint) {
-    return 56257237401;
+    return 29482138861;
   }
 
   function incrementSupplyRatePerBlock() public pure returns (uint) {
