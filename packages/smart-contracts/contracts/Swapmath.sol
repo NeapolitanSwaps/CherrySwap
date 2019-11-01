@@ -95,7 +95,7 @@ contract SwapMath {
 
   function capFunction(uint256 r, uint256 t1, uint256 t2)
     public
-    view
+    pure
     returns (uint256)
   {
     uint256 t = t2 - t1;
@@ -126,7 +126,7 @@ contract SwapMath {
     uint256 _startingTime,
     uint256 _endingTime,
     uint256 _endcDaiEndPrice
-  ) public returns (uint256 longPayout, uint256 shortPayout) {
+  ) public view returns (uint256 longPayout, uint256 shortPayout) {
     shortPayout = futureValue(
       _startShortPoolDai,
       _fixedNACB,
