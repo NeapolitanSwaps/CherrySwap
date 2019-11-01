@@ -6,3 +6,4 @@ node_modules
 build/
 dist/
 .openzeppelin/dev-*.json
+package-lock.json
