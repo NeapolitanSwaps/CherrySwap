@@ -116,15 +116,15 @@ contract SwapMath {
         return _cDai * _cDaiPrice / (10 ** 28);
     }
     function computeRatios(
-        uint256 _cDaiEnd,
-        uint256 _shortPoolDai,
+        uint256 _startcDaiPool,
+        uint256 _startShortPoolDai,
         uint256 _fixedNACB,
         uint256 _startingTime,
         uint256 _endingTime,
         uint256 _endcDaiEndPrice
     ) public returns (uint256 longPayout, uint256 shortPayout) {
-        shortPayout = futureValue(_shortPoolDai, _fixedNACB, _startingTime, _endingTime);
-        uint256 totalPoolDaiValueEnd = cDaitoDai(_cDaiEnd, _endcDaiEndPrice);
+        shortPayout = futureValue(_startShortPoolDai, _fixedNACB, _startingTime, _endingTime);
+        uint256 totalPoolDaiValueEnd = cDaitoDai(_startcDaiPool, _endcDaiEndPrice);
         longPayout = totalPoolDaiValueEnd - shortPayout;
     }
 
