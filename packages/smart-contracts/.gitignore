@@ -7,3 +7,5 @@ build/
 dist/
 .openzeppelin/dev-*.json
 package-lock.json
+
+.openzeppelin/.session

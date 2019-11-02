@@ -1,24 +1,15 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "CTokenMock": "CTokenMock",
-    "Cherryswap": "Cherryswap",
-    "Migrations": "Migrations",
-    "Swapmath": "Swapmath",
-    "TokenMock": "TokenMock"
+    "Cherryswap": "Cherryswap"
   },
-  "dependencies": {
-    "@openzeppelin/contracts-ethereum-package": "^2.3.0"
-  },
-  "name": "cherryswap",
-  "version": "0.1.0",
+  "dependencies": {},
+  "name": "Cherryswap",
+  "version": "1.0.0",
   "compiler": {
     "manager": "openzeppelin",
     "compilerSettings": {
-      "optimizer": {
-        "enabled": false,
-        "runs": "200"
-      }
+      "optimizer": {}
     },
     "solcVersion": "0.5.0"
   }
