@@ -11,6 +11,7 @@ notifications:
 node_js:
   - '11.0.0'
 env:
+  - TASK=contracts:lint
   - TASK=contracts:test
   - TASK=frontend:test
 before_script:
