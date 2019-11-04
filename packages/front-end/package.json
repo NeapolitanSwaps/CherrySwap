@@ -53,7 +53,7 @@
         "serve": "vue-cli-service serve",
         "build": "cross-env NODE_OPTIONS=--max_old_space_size=4096 vue-cli-service build",
         "lint": "vue-cli-service lint",
-        "test": "echo \"Error: run tests from root\" && exit 1"
+        "test": "echo \"No tests\" && exit 0"
     },
     "bugs": {
         "url": "https://github.com/NeapolitanSwaps/CherrySwap/issues"
