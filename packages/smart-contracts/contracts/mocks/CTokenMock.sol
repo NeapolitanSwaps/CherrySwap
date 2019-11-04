@@ -1,10 +1,9 @@
 pragma solidity ^0.5.0;
 
-import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
 
-contract CTokenMock is Initializable, ERC20 {
+contract CTokenMock is ERC20 {
   
   function mint(uint mintAmount) public returns(uint256) {
     _mint(msg.sender, mintAmount);
