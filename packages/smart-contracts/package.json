@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "truffle": "^5.0.37",
     "@openzeppelin/cli": "^2.5.3",
     "@openzeppelin/contracts-ethereum-package": "^2.3.0",
-    "@openzeppelin/upgrades": "^2.5.3"
+    "@openzeppelin/upgrades": "^2.5.3",
+    "truffle": "^5.0.37"
   },
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.3",
