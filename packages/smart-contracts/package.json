@@ -22,7 +22,7 @@
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "yarn run compile && TRUFFLE_TEST=true yarn run ganache-cli:test",
     "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
-    "test-ci": "yarn run ganache-ci sleep 5 && truffle test && stop-ganache",
+    "test-ci": "yarn run ganache-ci sleep 5 && truffle test && yarn run stop-ganache",
     "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop-ganache": "sudo kill `sudo lsof -t -i:9545`",
     "prettier": "prettier --write **/*.sol"
