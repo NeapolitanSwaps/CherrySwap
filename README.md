@@ -1,4 +1,4 @@
-# Cherryswap-monorepo
+# Cherryswap-monorepo [![Build Status](https://travis-ci.com/NeapolitanSwaps/CherrySwap.svg?branch=master)](https://travis-ci.com/NeapolitanSwaps/CherrySwap)
 
 Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
 
