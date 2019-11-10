@@ -22,7 +22,7 @@ jobs:
             - ./node_modules
       - run:
           name: test solidity smart contracts
-          command: truffle test
+          command: yarn run contracts:test-ci
       #- run:
       #    name: code-coverage
       #    command: './node_modules/.bin/nyc report --reporter=text-lcov'
