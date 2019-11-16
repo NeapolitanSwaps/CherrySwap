@@ -19,6 +19,8 @@ contract Cherrypool is Initializable {
   uint256 private _poolUtilization;                     // total pool utilization 0->1*DECIMALS = 100%
   uint256 private _longPoolUtilization;                 // long pool utilization  0->1*DECIMALS = 100%
   uint256 private _shortPoolUtilization;                // short pool utilization 0->1*DECIMALS = 100%
+  uint256 private _longPoolReserved;                 // amount of DAI reserved in the long pool
+  uint256 private _shortPoolReserved;                // amount of DAI reserved in the short pool
 
   IERC20 public token;                                  // collateral asset = DAI
   ICERC20 public cToken;                                // cDAI token
@@ -36,7 +38,9 @@ contract Cherrypool is Initializable {
 
     _poolUtilization = 0;
     _longPoolUtilization = 0;
+    _longPoolReserved = 0;
     _shortPoolUtilization = 0;
+    _shortPoolReserved = 0;
   }
 
   /**
@@ -64,11 +68,19 @@ contract Cherrypool is Initializable {
   }
 
   /**
-   * @dev Get pool utilisation
-   * @return Total pool utilization
+   * @dev Get long pool utilisation
+   * @return Long pool utilization
    */
   function longPoolUtilization() public view returns(uint256) {
     return _longPoolUtilization;
+  }
+
+  /**
+   * @dev Get reserved long pool
+   * @return Amount reserved for traders in the long pool
+   */
+  function longPoolReserved() public view returns(uint256) {
+    return _longPoolReserved;
   }
 
   /**
@@ -80,11 +92,19 @@ contract Cherrypool is Initializable {
   }
 
   /**
-   * @dev Get pool utilisation
-   * @return Total pool utilization
+   * @dev Get short pool utilisation
+   * @return Short pool utilization
    */
   function shortPoolUtilization() public view returns(uint256) {
     return _shortPoolUtilization;
+  }
+
+  /**
+   * @dev Get reserved short pool
+   * @return Amount reserved for traders in the short pool
+   */
+  function shortPoolReserved() public view returns(uint256) {
+    return _shortPoolReserved;
   }
 
 }
