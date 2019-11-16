@@ -5,7 +5,9 @@
     "CTokenMock": "CTokenMock",
     "Migrations": "Migrations",
     "Swapmath": "Swapmath",
-    "TokenMock": "TokenMock"
+    "TokenMock": "TokenMock",
+    "CherryDai": "CherryDai",
+    "Cherrypool": "Cherrypool"
   },
   "dependencies": {
     "@openzeppelin/contracts-ethereum-package": "^2.3.0"
