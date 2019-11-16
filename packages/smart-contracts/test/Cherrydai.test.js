@@ -23,7 +23,7 @@ contract('Cherry Dai', ([contractOwner, participant1, participant2, participant3
       from: contractOwner
     })
 
-    await cherryDai.initialize(contractOwner);
+    await cherryDai.initialize();
   });
 
   context("Deployment", async() => {
