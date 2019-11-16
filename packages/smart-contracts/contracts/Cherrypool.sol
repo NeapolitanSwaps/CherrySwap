@@ -11,16 +11,16 @@ contract Cherrypool is Initializable {
 
   using SafeMath for uint256;
 
-  uint256 constant public DECIMALS = 10**3;
+  uint256 constant public DECIMALS = 10**18;
 
   uint256 private _poolBalance;                         // total pool balance
   uint256 private _longPoolBalance;                     // long pool balance
   uint256 private _shortPoolBalance;                    // short pool balance
-  uint256 private _poolUtilization;                     // total pool utilization 0->1*DECIMALS = 100%
-  uint256 private _longPoolUtilization;                 // long pool utilization  0->1*DECIMALS = 100%
-  uint256 private _shortPoolUtilization;                // short pool utilization 0->1*DECIMALS = 100%
-  uint256 private _longPoolReserved;                 // amount of DAI reserved in the long pool
-  uint256 private _shortPoolReserved;                // amount of DAI reserved in the short pool
+  //uint256 private _poolUtilization;                   
+  uint256 private _longPoolUtilization;                 // long pool utilization  0->1*DECIMALS
+  uint256 private _shortPoolUtilization;                // short pool utilization 0->1*DECIMALS
+  uint256 private _longPoolReserved;                    // amount of DAI reserved in the long pool
+  uint256 private _shortPoolReserved;                   // amount of DAI reserved in the short pool
 
   IERC20 public token;                                  // collateral asset = DAI
   ICERC20 public cToken;                                // cDAI token
@@ -33,14 +33,43 @@ contract Cherrypool is Initializable {
    * @dev Initialize contract states
    * @notice Cherrypool deploy CherryDai and therefore CherryDai is not upgradeable (we can change that)
    */
-  function initialize() public initializer {
+  function initialize(
+    address _token,
+    address _cToken
+  ) public initializer {
+    token = IERC20(_token);
+    cToken = ICERC20(_cToken);
     cherryDai = new CherryDai();
 
-    _poolUtilization = 0;
+    //_poolUtilization = 0;
     _longPoolUtilization = 0;
     _longPoolReserved = 0;
     _shortPoolUtilization = 0;
     _shortPoolReserved = 0;
+  }
+
+  function deposit(
+    address _liquidityProvider,
+    uint256 _amount
+  ) public {
+    require(_liquidityProvider != address(0), "Cherrypool: invalid liquidity provider address");
+    require(_amount > 0, "Cherrypool: amount provided should be higher");
+
+    // collect liquidity from provider
+    require(
+      token.transferFrom(_liquidityProvider, address(this), _amount),
+      "Cherrypool: deposit liquidity failed"
+    );
+  }
+
+  function updateLongPoolUtilization(uint256 totalReservedLong) internal {
+    // this function should update the utilization % in the long pool
+    // should be called whenver a provider deposit liquidity or when a trader go long
+  }
+
+  function updateShortPoolUtilization(uint256 totalReservedShort) internal {
+    // this function should update the utilization % in the short pool
+    // should be called whenver a provider deposit liquidity or when a trader go short
   }
 
   /**
@@ -55,9 +84,9 @@ contract Cherrypool is Initializable {
    * @dev Get pool utilisation
    * @return Total pool utilization
    */
-  function poolUtilization() public view returns(uint256) {
-    return _poolUtilization;
-  }
+  //function poolUtilization() public view returns(uint256) {
+  //  return _poolUtilization;
+  //}
 
   /**
    * @dev Get long pool balance
