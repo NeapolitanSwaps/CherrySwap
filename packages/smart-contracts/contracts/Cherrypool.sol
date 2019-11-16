@@ -13,20 +13,23 @@ contract Cherrypool is Initializable {
 
   uint256 constant public DECIMALS = 10**18;
 
-  uint256 private _poolBalance;                         // total pool balance
-  uint256 private _longPoolBalance;                     // long pool balance
-  uint256 private _shortPoolBalance;                    // short pool balance
-  //uint256 private _poolUtilization;                   
-  uint256 private _longPoolUtilization;                 // long pool utilization  0->1*DECIMALS
-  uint256 private _shortPoolUtilization;                // short pool utilization 0->1*DECIMALS
-  uint256 private _longPoolReserved;                    // amount of DAI reserved in the long pool
-  uint256 private _shortPoolReserved;                   // amount of DAI reserved in the short pool
+  uint256 private _poolBalance;                           // total pool balance
+  uint256 private _longPoolBalance;                       // long pool balance
+  uint256 private _shortPoolBalance;                      // short pool balance
+  uint256 private _longPoolUtilization;                   // long pool utilization  0->1*DECIMALS
+  uint256 private _shortPoolUtilization;                  // short pool utilization 0->1*DECIMALS
+  uint256 private _longPoolReserved;                      // amount of DAI reserved in the long pool
+  uint256 private _shortPoolReserved;                     // amount of DAI reserved in the short pool
 
-  IERC20 public token;                                  // collateral asset = DAI
-  ICERC20 public cToken;                                // cDAI token
-  CherryDai public cherryDai;                           // CherryDai token
+  mapping(address => uint256) private _providersBalances;  // mapping for each liquidity provider with the deposited amount (do we need it?)
 
-  event DepositLiquidity(address indexed liquidityProvider, uint256);
+  IERC20 public token;                                    // collateral asset = DAI
+  ICERC20 public cToken;                                  // cDAI token
+  CherryDai public cherryDai;                             // CherryDai token
+
+  event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
+  event PoolShare(uint256 amount);
+  event MintCherry(address indexed liquidityProvider, uint256 amount);
   event Transfer(address indexed to, uint256 value);
 
   /**
@@ -41,7 +44,6 @@ contract Cherrypool is Initializable {
     cToken = ICERC20(_cToken);
     cherryDai = new CherryDai();
 
-    //_poolUtilization = 0;
     _longPoolUtilization = 0;
     _longPoolReserved = 0;
     _shortPoolUtilization = 0;
@@ -49,17 +51,36 @@ contract Cherrypool is Initializable {
   }
 
   function deposit(
-    address _liquidityProvider,
     uint256 _amount
   ) public {
-    require(_liquidityProvider != address(0), "Cherrypool: invalid liquidity provider address");
     require(_amount > 0, "Cherrypool: amount provided should be higher");
 
     // collect liquidity from provider
     require(
-      token.transferFrom(_liquidityProvider, address(this), _amount),
+      token.transferFrom(msg.sender, address(this), _amount),
       "Cherrypool: deposit liquidity failed"
     );
+
+    // deposit liqudity into compound
+    token.approve(address(cToken), _amount);
+    assert(cToken.mint(_amount) == 0);
+
+    // mint CherryDai to liqudity provider
+    cherryDai.mint(msg.sender, _amount);
+
+    _poolBalance = _amount;
+    _providersBalances[msg.sender].add(_amount);
+    
+    uint256 poolShare = _poolBalance.div(2);
+    _longPoolBalance = poolShare;
+    _shortPoolBalance = poolShare;
+
+    updateLongPoolUtilization(_longPoolReserved);
+    updateShortPoolUtilization(_shortPoolReserved);
+
+    emit DepositLiquidity(msg.sender, _amount);
+    emit MintCherry(msg.sender, _amount);
+    emit PoolShare(poolShare);
   }
 
   function updateLongPoolUtilization(uint256 totalReservedLong) internal {
@@ -79,14 +100,6 @@ contract Cherrypool is Initializable {
   function poolBalance() public view returns(uint256) {
     return _poolBalance;
   }
-
-  /**
-   * @dev Get pool utilisation
-   * @return Total pool utilization
-   */
-  //function poolUtilization() public view returns(uint256) {
-  //  return _poolUtilization;
-  //}
 
   /**
    * @dev Get long pool balance
