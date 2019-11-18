@@ -11,7 +11,7 @@ contract Cherrypool is Initializable {
 
   using SafeMath for uint256;
 
-  uint256 constant public DECIMALS = 10**18;
+  uint256 constant public DECIMALS = 10**3;
 
   uint256 private _poolBalance;                           // total pool balance
   uint256 private _longPoolBalance;                       // long pool balance
@@ -34,7 +34,6 @@ contract Cherrypool is Initializable {
 
   /**
    * @dev Initialize contract states
-   * @notice Cherrypool deploy CherryDai and therefore CherryDai is not upgradeable (we can change that)
    */
   function initialize(
     address _token,
@@ -42,8 +41,14 @@ contract Cherrypool is Initializable {
   ) public initializer {
     token = IERC20(_token);
     cToken = ICERC20(_cToken);
+    // not sure about this, but somehow this way to deploy the Cherrydai use not safe
+    // we can deploy Cherry DAI using the SDK after deploying the pool contract and add a setCherryDaiAddress function in this contract
     cherryDai = new CherryDai();
+    cherryDai.initialize();
 
+    _poolBalance = 0;
+    _longPoolBalance = 0;
+    _shortPoolBalance = 0;
     _longPoolUtilization = 0;
     _longPoolReserved = 0;
     _shortPoolUtilization = 0;
@@ -68,27 +73,27 @@ contract Cherrypool is Initializable {
     // mint CherryDai to liqudity provider
     cherryDai.mint(msg.sender, _amount);
 
-    _poolBalance = _amount;
+    _poolBalance.add(_amount);
     _providersBalances[msg.sender].add(_amount);
     
     uint256 poolShare = _poolBalance.div(2);
-    _longPoolBalance = poolShare;
-    _shortPoolBalance = poolShare;
+    _longPoolBalance.add(poolShare);
+    _shortPoolBalance.add(poolShare);
 
-    updateLongPoolUtilization(_longPoolReserved);
-    updateShortPoolUtilization(_shortPoolReserved);
+    updateLongPoolUtilization();
+    updateShortPoolUtilization();
 
     emit DepositLiquidity(msg.sender, _amount);
     emit MintCherry(msg.sender, _amount);
     emit PoolShare(poolShare);
   }
 
-  function updateLongPoolUtilization(uint256 totalReservedLong) internal {
+  function updateLongPoolUtilization() internal {
     // this function should update the utilization % in the long pool
     // should be called whenver a provider deposit liquidity or when a trader go long
   }
 
-  function updateShortPoolUtilization(uint256 totalReservedShort) internal {
+  function updateShortPoolUtilization() internal {
     // this function should update the utilization % in the short pool
     // should be called whenver a provider deposit liquidity or when a trader go short
   }
@@ -147,6 +152,14 @@ contract Cherrypool is Initializable {
    */
   function shortPoolReserved() public view returns(uint256) {
     return _shortPoolReserved;
+  }
+
+  /**
+   * @dev Get reserved short pool
+   * @return Amount reserved for traders in the short pool
+   */
+  function cherryDaiBalanceOf(address _provider) public view returns(uint256) {
+    return cherryDai.balanceOf(_provider);
   }
 
 }
