@@ -73,7 +73,7 @@ contract Cherrypool is Initializable {
         assert(cToken.mint(_amount) == 0);
 
         // mint CherryDai to liqudity provider
-        cherryDai.mint(msg.sender, _amount);
+        cherryDai.mint(msg.sender, _amount.mul(exchangeRate()));
 
         // internal accounting to store pool balances
         poolBalance.add(_amount);
@@ -106,16 +106,22 @@ contract Cherrypool is Initializable {
     @return 0 if successful otherwise an error code
     */
     function redeem(uint256 _amount) public returns (uint256){
-        return 0;
+        require(longPoolUtilization() < 1e18, "CherryPool::Long pool is fully utilized and so withdraw can not occur");
+        require(shortPoolUtilization() < 1e18, "CherryPool::short pool is fully utilized and so withdraw can not occur");
+        require(_amount<=cherryDai.balanceOf(msg.sender), "CherryPool::redeem request is more than current token balance");
+        
+
+
     }
     
     /**
-    @dev Each CherryDai is convertible into the underlying asset + 
-    the fees accrued through liquidity provision
+    @dev the rate of CherryDai redeemable for Dai.
+    Each CherryDai is convertible into the underlying asset + 
+    the fees accrued through liquidity provision.
     @return 0 if successful otherwise an error code
     */
     function exchangeRate() public view returns (uint256) {
-
+        return 1;
     }
 
     /**
