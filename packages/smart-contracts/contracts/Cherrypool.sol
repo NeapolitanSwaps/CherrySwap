@@ -40,8 +40,8 @@ contract Cherrypool is Initializable {
     Swap[] public swaps;
 
     /**
-   * @dev Initialize contract states
-   */
+    @dev Initialize contract states
+    */
     function initialize(address _token, address _cToken) public initializer {
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
@@ -56,6 +56,9 @@ contract Cherrypool is Initializable {
         shortPoolReserved = 0;
     }
 
+    /**
+    @dev at liquidity to the cherry pool to offer swaps against.
+    */    
     function mint(uint256 _amount) public {
         require(_amount > 0, "Cherrypool: amount provided should be higher");
 
@@ -90,38 +93,48 @@ contract Cherrypool is Initializable {
     }
 
     /**
-    * @dev Get short pool utilization
-    * @return current short pool utilization as a decimal scaled 10*18
+    @dev Get short pool utilization
+    @return current short pool utilization as a decimal scaled 10*18
     */
     function shortPoolUtilization() public view returns (uint256) {
         return (shortPoolReserved * 1e18) / shortPoolBalance;
     }
 
     /**
-    * @dev transfer underlying asset back to liquidity provider assuming liquidity is still sufficient.
-    * the amount returned is the number of cherrytokens multiplied by the current exchange rate
-    * @return 0 if successful otherwise an error code
+    @dev transfer underlying asset back to liquidity provider assuming liquidity is still sufficient.
+    the amount returned is the number of cherrytokens multiplied by the current exchange rate
+    @return 0 if successful otherwise an error code
     */
     function redeem(uint256 _amount) public returns (uint256){
         return 0;
     }
     
     /**
-    * @dev Each CherryDai is convertible into the underlying asset + 
-    * the fees accrued through liquidity provision
-    * @return 0 if successful otherwise an error code
+    @dev Each CherryDai is convertible into the underlying asset + 
+    the fees accrued through liquidity provision
+    @return 0 if successful otherwise an error code
     */
     function exchangeRate() public view returns (uint256) {
 
     }
 
     /**
-    * @dev function called by trader to enter into swap position.
-    * requires to check the current pool direction's utilization. If utilization is
-    * safe then position is entered.
-    * @return 0 if successful otherwise an error code
+    @dev function called by trader to enter into swap position.
+    requires to check the current pool direction's utilization. If utilization is
+    safe then position is entered.
+    @return 0 if successful otherwise an error code
     */
-    function enterPosition(uint256 _amount, uint8 bet) public returns (uint256) {
+    function createPosition(uint256 _amount, uint8 bet) public returns (uint256) {
+        return 0;
+    }
 
+    /**
+    @dev traded withdraw from their position.
+    if the time is after the end of the swap then they will receive the swap rate for
+    the duration of the swap and then the floating market rate between the end of the
+    swap and the current time.
+    */
+    function closePosition(uint256 _swapId) public  returns (uint256) {
+        return 0;
     }
 }
