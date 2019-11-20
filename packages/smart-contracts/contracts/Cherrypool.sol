@@ -8,158 +8,83 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.so
 import "./interface/ICERC20.sol";
 
 contract Cherrypool is Initializable {
+    using SafeMath for uint256;
 
-  using SafeMath for uint256;
+    uint256 public _poolBalance; // total pool balance
+    uint256 public _longPoolBalance; // long pool balance in DAI
+    uint256 public _shortPoolBalance; // short pool balance in DAI
+    uint256 public _longPoolReserved; // amount of DAI reserved in the long pool
+    uint256 public _shortPoolReserved; // amount of DAI reserved in the short pool
 
-  uint256 constant public DECIMALS = 10**3;
+    mapping(address => uint256) public _providersBalances; // mapping for each liquidity provider with the deposited amount (do we need it?)
 
-  uint256 private _poolBalance;                           // total pool balance
-  uint256 private _longPoolBalance;                       // long pool balance
-  uint256 private _shortPoolBalance;                      // short pool balance
-  uint256 private _longPoolUtilization;                   // long pool utilization  0->1*DECIMALS
-  uint256 private _shortPoolUtilization;                  // short pool utilization 0->1*DECIMALS
-  uint256 private _longPoolReserved;                      // amount of DAI reserved in the long pool
-  uint256 private _shortPoolReserved;                     // amount of DAI reserved in the short pool
+    IERC20 public token; // collateral asset = DAI
+    ICERC20 public cToken; // cDAI token
+    CherryDai public cherryDai; // CherryDai token
 
-  mapping(address => uint256) private _providersBalances;  // mapping for each liquidity provider with the deposited amount (do we need it?)
+    event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
+    event PoolShare(uint256 amount);
+    event MintCherry(address indexed liquidityProvider, uint256 amount);
+    event Transfer(address indexed to, uint256 value);
 
-  IERC20 public token;                                    // collateral asset = DAI
-  ICERC20 public cToken;                                  // cDAI token
-  CherryDai public cherryDai;                             // CherryDai token
-
-  event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
-  event PoolShare(uint256 amount);
-  event MintCherry(address indexed liquidityProvider, uint256 amount);
-  event Transfer(address indexed to, uint256 value);
-
-  /**
+    /**
    * @dev Initialize contract states
    */
-  function initialize(
-    address _token,
-    address _cToken
-  ) public initializer {
-    token = IERC20(_token);
-    cToken = ICERC20(_cToken);
-    // not sure about this, but somehow this way to deploy the Cherrydai use not safe
-    // we can deploy Cherry DAI using the SDK after deploying the pool contract and add a setCherryDaiAddress function in this contract
-    cherryDai = new CherryDai();
-    cherryDai.initialize();
+    function initialize(address _token, address _cToken) public initializer {
+        token = IERC20(_token);
+        cToken = ICERC20(_cToken);
+        
+        cherryDai = new CherryDai();
+        cherryDai.initialize();
 
-    _poolBalance = 0;
-    _longPoolBalance = 0;
-    _shortPoolBalance = 0;
-    _longPoolUtilization = 0;
-    _longPoolReserved = 0;
-    _shortPoolUtilization = 0;
-    _shortPoolReserved = 0;
-  }
+        _poolBalance = 0;
+        _longPoolBalance = 0;
+        _shortPoolBalance = 0;
+        _longPoolReserved = 0;
+        _shortPoolReserved = 0;
+    }
 
-  function deposit(
-    uint256 _amount
-  ) public {
-    require(_amount > 0, "Cherrypool: amount provided should be higher");
+    function mint(uint256 _amount) public {
+        require(_amount > 0, "Cherrypool: amount provided should be higher");
 
-    // collect liquidity from provider
-    require(
-      token.transferFrom(msg.sender, address(this), _amount),
-      "Cherrypool: deposit liquidity failed"
-    );
+        // collect liquidity from provider
+        require(
+            token.transferFrom(msg.sender, address(this), _amount),
+            "Cherrypool: deposit liquidity failed"
+        );
 
-    // deposit liqudity into compound
-    token.approve(address(cToken), _amount);
-    assert(cToken.mint(_amount) == 0);
+        // deposit liqudity into compound
+        token.approve(address(cToken), _amount);
+        assert(cToken.mint(_amount) == 0);
 
-    // mint CherryDai to liqudity provider
-    cherryDai.mint(msg.sender, _amount);
+        // mint CherryDai to liqudity provider
+        cherryDai.mint(msg.sender, _amount);
 
-    _poolBalance.add(_amount);
-    _providersBalances[msg.sender].add(_amount);
-    
-    uint256 poolShare = _poolBalance.div(2);
-    _longPoolBalance.add(poolShare);
-    _shortPoolBalance.add(poolShare);
+        // internal accounting to store pool balances
+        _poolBalance.add(_amount);
+        _longPoolBalance.add(_amount.div(2));
+        _shortPoolBalance.add(_amount.div(2));
 
-    updateLongPoolUtilization();
-    updateShortPoolUtilization();
+        //allocate lequidity provision to sender
+        _providersBalances[msg.sender].add(_amount);
 
-    emit DepositLiquidity(msg.sender, _amount);
-    emit MintCherry(msg.sender, _amount);
-    emit PoolShare(poolShare);
-  }
+        emit DepositLiquidity(msg.sender, _amount);
+        emit MintCherry(msg.sender, _amount);
+    }
 
-  function updateLongPoolUtilization() internal {
-    // this function should update the utilization % in the long pool
-    // should be called whenver a provider deposit liquidity or when a trader go long
-  }
+    /**
+    * @dev Get long pool utilization
+    * @return current long pool utilization as a decimal scaled 10*18
+    */
+    function longPoolUtilization() public view returns (uint256) {
+        return (_longPoolReserved * 1e18) / _longPoolBalance;
+    }
 
-  function updateShortPoolUtilization() internal {
-    // this function should update the utilization % in the short pool
-    // should be called whenver a provider deposit liquidity or when a trader go short
-  }
-
-  /**
-   * @dev Get pool balance
-   * @return Total pool balance
-   */
-  function poolBalance() public view returns(uint256) {
-    return _poolBalance;
-  }
-
-  /**
-   * @dev Get long pool balance
-   * @return long pool balance
-   */
-  function longPoolBalance() public view returns(uint256) {
-    return _longPoolBalance;
-  }
-
-  /**
-   * @dev Get long pool utilisation
-   * @return Long pool utilization
-   */
-  function longPoolUtilization() public view returns(uint256) {
-    return _longPoolUtilization;
-  }
-
-  /**
-   * @dev Get reserved long pool
-   * @return Amount reserved for traders in the long pool
-   */
-  function longPoolReserved() public view returns(uint256) {
-    return _longPoolReserved;
-  }
-
-  /**
-   * @dev Get short pool balance
-   * @return Short pool balance
-   */
-  function shortPoolBalance() public view returns(uint256) {
-    return _shortPoolBalance;
-  }
-
-  /**
-   * @dev Get short pool utilisation
-   * @return Short pool utilization
-   */
-  function shortPoolUtilization() public view returns(uint256) {
-    return _shortPoolUtilization;
-  }
-
-  /**
-   * @dev Get reserved short pool
-   * @return Amount reserved for traders in the short pool
-   */
-  function shortPoolReserved() public view returns(uint256) {
-    return _shortPoolReserved;
-  }
-
-  /**
-   * @dev Get reserved short pool
-   * @return Amount reserved for traders in the short pool
-   */
-  function cherryDaiBalanceOf(address _provider) public view returns(uint256) {
-    return cherryDai.balanceOf(_provider);
-  }
-
+    /**
+    * @dev Get short pool utilization
+    * @return current short pool utilization as a decimal scaled 10*18
+    */
+    function shortPoolUtilization() public view returns (uint256) {
+        return (_shortPoolReserved * 1e18) / _shortPoolBalance;
+    }
 }
