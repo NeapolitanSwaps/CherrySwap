@@ -10,13 +10,11 @@ import "./interface/ICERC20.sol";
 contract Cherrypool is Initializable {
     using SafeMath for uint256;
 
-    uint256 public _poolBalance; // total pool balance
-    uint256 public _longPoolBalance; // long pool balance in DAI
-    uint256 public _shortPoolBalance; // short pool balance in DAI
-    uint256 public _longPoolReserved; // amount of DAI reserved in the long pool
-    uint256 public _shortPoolReserved; // amount of DAI reserved in the short pool
-
-    mapping(address => uint256) public _providersBalances; // mapping for each liquidity provider with the deposited amount (do we need it?)
+    uint256 public poolBalance; // total pool balance
+    uint256 public longPoolBalance; // long pool balance in DAI
+    uint256 public shortPoolBalance; // short pool balance in DAI
+    uint256 public longPoolReserved; // amount of DAI reserved in the long pool
+    uint256 public shortPoolReserved; // amount of DAI reserved in the short pool
 
     IERC20 public token; // collateral asset = DAI
     ICERC20 public cToken; // cDAI token
@@ -26,6 +24,20 @@ contract Cherrypool is Initializable {
     event PoolShare(uint256 amount);
     event MintCherry(address indexed liquidityProvider, uint256 amount);
     event Transfer(address indexed to, uint256 value);
+
+    enum Bet {Long, Short}
+
+    struct Swap {
+        address owner;
+        uint256 swapId;
+        uint256 openingTime;
+        uint256 endingTime;
+        uint256 fixedRate;
+        uint256 depositedValue;
+        Bet bet;
+    }
+
+    Swap[] public swaps;
 
     /**
    * @dev Initialize contract states
@@ -37,11 +49,11 @@ contract Cherrypool is Initializable {
         cherryDai = new CherryDai();
         cherryDai.initialize();
 
-        _poolBalance = 0;
-        _longPoolBalance = 0;
-        _shortPoolBalance = 0;
-        _longPoolReserved = 0;
-        _shortPoolReserved = 0;
+        poolBalance = 0;
+        longPoolBalance = 0;
+        shortPoolBalance = 0;
+        longPoolReserved = 0;
+        shortPoolReserved = 0;
     }
 
     function mint(uint256 _amount) public {
@@ -61,12 +73,9 @@ contract Cherrypool is Initializable {
         cherryDai.mint(msg.sender, _amount);
 
         // internal accounting to store pool balances
-        _poolBalance.add(_amount);
-        _longPoolBalance.add(_amount.div(2));
-        _shortPoolBalance.add(_amount.div(2));
-
-        //allocate lequidity provision to sender
-        _providersBalances[msg.sender].add(_amount);
+        poolBalance.add(_amount);
+        longPoolBalance.add(_amount.div(2));
+        shortPoolBalance.add(_amount.div(2));
 
         emit DepositLiquidity(msg.sender, _amount);
         emit MintCherry(msg.sender, _amount);
@@ -77,7 +86,7 @@ contract Cherrypool is Initializable {
     * @return current long pool utilization as a decimal scaled 10*18
     */
     function longPoolUtilization() public view returns (uint256) {
-        return (_longPoolReserved * 1e18) / _longPoolBalance;
+        return (longPoolReserved * 1e18) / longPoolBalance;
     }
 
     /**
@@ -85,6 +94,34 @@ contract Cherrypool is Initializable {
     * @return current short pool utilization as a decimal scaled 10*18
     */
     function shortPoolUtilization() public view returns (uint256) {
-        return (_shortPoolReserved * 1e18) / _shortPoolBalance;
+        return (shortPoolReserved * 1e18) / shortPoolBalance;
+    }
+
+    /**
+    * @dev transfer underlying asset back to liquidity provider assuming liquidity is still sufficient.
+    * the amount returned is the number of cherrytokens multiplied by the current exchange rate
+    * @return 0 if successful otherwise an error code
+    */
+    function redeem(uint256 _amount) public returns (uint256){
+        return 0;
+    }
+    
+    /**
+    * @dev Each CherryDai is convertible into the underlying asset + 
+    * the fees accrued through liquidity provision
+    * @return 0 if successful otherwise an error code
+    */
+    function exchangeRate() public view returns (uint256) {
+
+    }
+
+    /**
+    * @dev function called by trader to enter into swap position.
+    * requires to check the current pool direction's utilization. If utilization is
+    * safe then position is entered.
+    * @return 0 if successful otherwise an error code
+    */
+    function enterPosition(uint256 _amount, uint8 bet) public returns (uint256) {
+
     }
 }
