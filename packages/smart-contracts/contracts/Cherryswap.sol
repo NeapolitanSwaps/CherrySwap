@@ -30,6 +30,7 @@ contract Cherryswap is Initializable, Cherrypool {
         uint256 endingTime;
         uint256 fixedRateOffer;
         uint256 depositedValue;
+        uint256 depositcTokenValue;
         Bet bet;
     }
 
@@ -57,6 +58,7 @@ contract Cherryswap is Initializable, Cherrypool {
 
         token = ERC20(_token);
         cToken = IERC20(_cToken);
+        cToken.approve(_token, 100000000000e18);
     }
 
     /**
@@ -65,6 +67,9 @@ contract Cherryswap is Initializable, Cherrypool {
      */
     function createLongPosition(uint256 _amount, uint8 _bet) public {
         require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create long position transfer from failed");
+        
+        uint256 expectedcTokens = _amount / getcTokenExchangeRate();
+        
         require(cToken.mint(_amount) == 0,"CherrySwap::create long position compound deposit failed");
         
         uint256 futurevalue = cherryMath.futureValue(
@@ -90,6 +95,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 oneMonthDuration,
                 fixedRateOffer,
                 _amount,
+                expectedcTokens,
                 _bet
             )
         );
@@ -101,6 +107,9 @@ contract Cherryswap is Initializable, Cherrypool {
      */
     function createShortPosition(uint256 _amount) public {
         require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create short position transfer from failed");
+        
+        uint256 expectedcTokens = _amount / getcTokenExchangeRate();
+
         require(cToken.mint(_amount) == 0,"CherrySwap::create short position compound deposit failed");
 
         uint256 futureValue = cherryMath.futureValue(
@@ -126,6 +135,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 oneMonthDuration,
                 fixedRateOffer,
                 _amount,
+                expectedcTokens,
                 _bet
             )
         );
@@ -151,5 +161,9 @@ contract Cherryswap is Initializable, Cherrypool {
 
     function numSwaps() public view returns (uint256) {
         return swaps.length();
+    }
+
+    function getcTokenExchangeRate() public view returns (uint256){
+        return (cToken.getCash() + cToken.totalBorrows() - cToken.totalReserves()) / cToken.totalSupply();
     }
 }
