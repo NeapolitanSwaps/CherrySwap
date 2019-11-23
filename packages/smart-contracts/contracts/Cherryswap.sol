@@ -60,31 +60,25 @@ contract Cherryswap is Initializable, Cherrypool {
     }
 
     /**
-     * @dev function called by trader to enter into swap position.
-     * @notice requires to check the current pool direction's utilization. 
-     * If utilization is safe then position is entered.
-     * trader enters position at the current rate offered by the pool.
-     * @return 0 if successful otherwise an error code
+     * @dev function called by trader to enter into long swap position.
+     * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
-    function createLongPosition(uint256 _amount, uint8 _bet)
-        public
-        returns (uint256)
-    {
-        uint256 reserveAmount = futureValue.futureValue(
+    function createLongPosition(uint256 _amount, uint8 _bet) public {
+        uint256 futurevalue = cherryMath.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
             0,
             oneMonthDuration
-        ) -
-            _amount;
-        require(
-            CherryPool.canReserveLong(_amount),
-            "Trying to reserve more than pool can take"
         );
-        cherryPool._reserveLongPool(reserveAmount);
+
+        uint256 reserveAmount = futurevalue - _amount;
+
+        reserveLongPool(reserveAmount);
+
         uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
             (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) /
             1e18;
+
         swaps.push(
             Swap(
                 msg.sender,
@@ -97,19 +91,23 @@ contract Cherryswap is Initializable, Cherrypool {
             )
         );
     }
-    function createShortPosition(uint256 _amount) public returns (uint256) {
-        uint256 reserveAmount = futureValue.futureValue(
+
+    /**
+     * @dev function called by trader to enter into short swap position.
+     * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
+     */
+    function createShortPosition(uint256 _amount) public {
+        uint256 futureValue = cherryMath.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
             0,
             oneMonthDuration
-        ) -
-            _amount;
-        require(
-            CherryPool.canReserveShort(_amount),
-            "Trying to reserve more than pool can take"
         );
-        cherryPool._reserveShortPool(reserveAmount);
+
+        uint256 reserveAmount = futureValue - _amount;
+
+        reserveShortPool(reserveAmount);
+
         uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
                 (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
             1e18;
@@ -137,11 +135,11 @@ contract Cherryswap is Initializable, Cherrypool {
         return 0;
     }
 
-    function reserveLongPool(uint256 _amount) internal isLongUtilized {
+    function reserveLongPool(uint256 _amount) internal isLongUtilized canReserveLong(_amount) {
         _reserveLongPool(_amount);
     }
 
-    function reserveShortPool(uint256 _amount) internal isShortUtilized {
+    function reserveShortPool(uint256 _amount) internal isShortUtilized canReserveShort(_amount) {
         _reserveLongPool(_amount);
     }
 

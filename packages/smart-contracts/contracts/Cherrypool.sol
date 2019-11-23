@@ -77,6 +77,32 @@ contract Cherrypool is Initializable {
     }
 
     /**
+     * @dev Modifier to check if long pool is not fully utilized
+     */
+    modifier isLongUtilized() {
+        require (calcLongPoolUtilization(longPoolReserved) < 1e18, "Cherrypool::long pool if fully utilized");
+        _;
+    }
+
+    /**
+     * @dev Modifier to check if short pool is not fully utilized
+     */
+    modifier isShortUtilized() {
+        require(calcShortPoolUtilization(shortPoolReserve) < 1e18, "Cherrypool::short pool is fully utilized");
+        _;
+    }
+
+    modifier canReserveLong(uint256 _amount) {
+        require(longPoolReserved.add(_amount) <= longPoolBalance, "Cherrypool::long pool does not have liquidity");
+        _;
+    }
+
+    modifier canReserveShort(uint256 _amount) {
+        require(shortPoolReserved.add(_amount) <= shortPoolBalance, "Cherrypool::short pool does not have liquidity");
+        _;
+    }
+
+    /**
      * @dev Get long pool utilization
      * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
@@ -90,10 +116,6 @@ contract Cherrypool is Initializable {
         return (_longPoolReserved * 1e18) / longPoolBalance;
     }
 
-    function longPoolUtilization() public view returns (uint256) {
-        return calcLongPoolUtilization(longPoolReserved);
-    }
-
     /**
      * @dev Get short pool utilization
      * @param _shortPoolReserved amount of liquidity reserved in the short pool
@@ -105,19 +127,6 @@ contract Cherrypool is Initializable {
         returns (uint256)
     {
         return (_shortPoolReserved * 1e18) / shortPoolBalance;
-    }
-
-    function shortPoolUtilization() public view returns (uint256) {
-        return calcShortPoolUtilization(shortPoolReserved);
-    }
-
-    function canReserveLong(uint256 depositAmount) public view returns (bool) {
-        return calcLongPoolUtilization(longPoolBalance + depositAmount) > 1e18;
-    }
-
-    function canReserveShort(uint256 depositAmount) public view returns (bool) {
-        return
-            calcShortPoolUtilization(ShortPoolBalance + depositAmount) < 1e18;
     }
 
     /**
@@ -139,15 +148,7 @@ contract Cherrypool is Initializable {
      * @param _amount amount of CherryDai to redeem
      * @return 0 if successful otherwise an error code
      */
-    function redeem(uint256 _amount) public returns (uint256) {
-        require(
-            canReserveLong() && canReserveShort(),
-            "CherryPool::Long pool is fully utilized and so withdraw can not occur"
-        );
-        require(
-            shortPoolUtilization(shortPoolReserved) < 1e18,
-            "CherryPool::short pool is fully utilized and so withdraw can not occur"
-        );
+    function redeem(uint256 _amount) public isLongUtilized() isShortUtilized() returns (uint256) {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
             "CherryPool::redeem request is more than current token balance"
@@ -164,18 +165,13 @@ contract Cherrypool is Initializable {
     }
 
     function _reserveLongPool(uint256 _amount) internal {
-        require(_amount > 0, "Cherrypool::invalid amount");
-        require(canReserveLong(longPoolReserved + _amount), "Cherrypool::not enough liquidity");
+        require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         longPoolReserved.add(_amount);
     }
 
     function _reserveShortPool(uint256 _amount) internal {
-        require(_amount > 0, "Cherrypool::invalid amount");
-        require(
-            canReserveShort(shortPoolReserved + _amount),
-            "Cherrypool::not enough liquidity"
-        );
+        require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         shortPoolReserved.add(_amount);
     }
