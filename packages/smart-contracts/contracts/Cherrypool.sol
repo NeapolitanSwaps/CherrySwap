@@ -48,6 +48,22 @@ contract Cherrypool is Initializable {
   }
 
   /**
+   * @dev Modifier to check if pool can provide more swap going short
+   */
+  modifier isShortUtilized() {
+    require(shortPoolUtilization(shortPoolReserved) < 1e18, "Cherrypool::short pool is fully utilized");
+    _;
+  }
+
+  /**
+   * @dev Modifier to check if pool can provider more swap going long
+   */
+  modifier isLongUtilized() {
+    require(longPoolUtilization(longPoolReserved) < 1e18, "Cherrypool::long pool is fully utilized");
+    _;
+  }
+
+  /**
      * @dev at liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
      */
