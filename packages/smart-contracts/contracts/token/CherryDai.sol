@@ -5,13 +5,17 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Deta
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol";
 
-contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable {
+contract CherryDai is
+    Initializable,
+    ERC20Detailed,
+    ERC20Mintable,
+    ERC20Burnable
+{
+    function initialize() public initializer {
+        // need a better name & symbol for sure
+        ERC20Detailed.initialize("Cherry Dai", "CHD", 18);
 
-  function initialize() public initializer {
-    // need a better name & symbol for sure
-    ERC20Detailed.initialize("Cherry Dai", "CHD", 18);
-
-    ERC20Mintable.initialize(msg.sender);
-  }
+        ERC20Mintable.initialize(msg.sender);
+    }
 
 }
