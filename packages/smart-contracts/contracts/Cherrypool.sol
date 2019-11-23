@@ -81,6 +81,7 @@ contract Cherrypool is Initializable {
      * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
      */
+
     function calcLongPoolUtilization(uint256 _longPoolReserved)
         public
         view
@@ -110,12 +111,21 @@ contract Cherrypool is Initializable {
         return calcShortPoolUtilization(shortPoolReserved);
     }
 
-    function canReserveLong(uint256 depositAmount) public view returns (uint256) {
+    function canReserveLong(uint256 depositAmount)
+        public
+        view
+        returns (uint256)
+    {
         return calcLongPoolUtilization(longPoolBalance + depositAmount) > 1e18;
     }
 
-    function canReserveShort(uint256 depositAmount) public view returns (uint256) {
-        return calcShortPoolUtilization(ShortPoolBalance + depositAmount) < 1e18;
+    function canReserveShort(uint256 depositAmount)
+        public
+        view
+        returns (uint256)
+    {
+        return
+            calcShortPoolUtilization(ShortPoolBalance + depositAmount) < 1e18;
     }
 
     /**
@@ -139,7 +149,7 @@ contract Cherrypool is Initializable {
      */
     function redeem(uint256 _amount) public returns (uint256) {
         require(
-            calcLongPoolUtilization(longPoolReserved) < 1e18,
+            canReserveLong() && canReserveShort(),
             "CherryPool::Long pool is fully utilized and so withdraw can not occur"
         );
         require(
@@ -162,27 +172,15 @@ contract Cherrypool is Initializable {
     }
 
     function _reserveLongPool(uint256 _amount) internal {
-        require(
-        _amount > 0,
-        "Cherrypool::invalid amount"
-        );
-        require(
-        canReserveLong(_amount),
-        "Cherrypool::not enough liquidity"
-        );
+        require(_amount > 0, "Cherrypool::invalid amount");
+        require(canReserveLong(_amount), "Cherrypool::not enough liquidity");
 
         longPoolReserved.add(_amount);
     }
 
     function _reserveShortPool(uint256 _amount) internal {
-        require(
-        _amount > 0,
-        "Cherrypool::invalid amount"
-        );
-        require(
-        canReserveShort(_amount),
-        "Cherrypool::not enough liquidity"
-        );
+        require(_amount > 0, "Cherrypool::invalid amount");
+        require(canReserveShort(_amount), "Cherrypool::not enough liquidity");
 
         shortPoolReserved.add(_amount);
     }

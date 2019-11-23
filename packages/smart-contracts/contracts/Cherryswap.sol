@@ -19,9 +19,9 @@ contract Cherryswap is Initializable, Cherrypool {
 
     uint256 oneMonthDuration = 60 * 60 * 24 * 30;
     uint256 maxInterestRatePaidPerBlock = (25 * 1e16) / (4 * 60 * 24 * 365);
-    
-    uint ALPHA = 150; //scaled by 100 so 150 = 1.5
-    uint BETA = 0;
+
+    uint256 ALPHA = 150; //scaled by 100 so 150 = 1.5
+    uint256 BETA = 0;
 
     struct Swap {
         address owner;
@@ -43,7 +43,10 @@ contract Cherryswap is Initializable, Cherrypool {
     /**
      * @dev Initialize contract states
      */
-    function initialize(address _token, address _cToken, address _cherryMath) public initializer {
+    function initialize(address _token, address _cToken, address _cherryMath)
+        public
+        initializer
+    {
         require(
             (_token != address(0)) && (_cToken != address(0)),
             "Cherryswap::invalid tokens addresses"
@@ -68,18 +71,46 @@ contract Cherryswap is Initializable, Cherrypool {
         returns (uint256)
     {
         uint256 fixedRateOffer = 0;
-        uint reserveAmount = futureValue.futureValue(_amount, maxInterestRatePaidPerBlock, 0, oneMonthDuration) - _amount;
-        if (Bet(_bet) == Bet.Long){
-            require(CherryPool.canReserveLong(_amount),"Trying to reserve more than pool can take");
+        uint256 reserveAmount = futureValue.futureValue(
+            _amount,
+            maxInterestRatePaidPerBlock,
+            0,
+            oneMonthDuration
+        ) -
+            _amount;
+        if (Bet(_bet) == Bet.Long) {
+            require(
+                CherryPool.canReserveLong(_amount),
+                "Trying to reserve more than pool can take"
+            );
             cherryPool._reserveLongPool(reserveAmount);
-            fixedRateOffer = (cToken.supplyRatePerBlock() * (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) / 1e18;
+            fixedRateOffer =
+                (cToken.supplyRatePerBlock() *
+                    (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) /
+                1e18;
         }
-        if (Bet(_bet) == Bet.Short){
-            require(CherryPool.canReserveShort(_amount),"Trying to reserve more than pool can take");
+        if (Bet(_bet) == Bet.Short) {
+            require(
+                CherryPool.canReserveShort(_amount),
+                "Trying to reserve more than pool can take"
+            );
             cherryPool._reserveShortPool(reserveAmount);
-            fixedRateOffer = (cToken.supplyRatePerBlock() * (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) / 1e18;
+            fixedRateOffer =
+                (cToken.supplyRatePerBlock() *
+                    (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
+                1e18;
         }
-        swaps.push(Swap(msg.sender, numSwaps, now, oneMonthDuration, fixedRateOffer, _amount, _bet));
+        swaps.push(
+            Swap(
+                msg.sender,
+                numSwaps,
+                now,
+                oneMonthDuration,
+                fixedRateOffer,
+                _amount,
+                _bet
+            )
+        );
     }
 
     /**
@@ -90,6 +121,14 @@ contract Cherryswap is Initializable, Cherrypool {
      */
     function closePosition(uint256 _swapId) public returns (uint256) {
         return 0;
+    }
+
+    function reserveLongPool(uint256 _amount) internal isLongUtilized {
+        _reserveLongPool(_amount);
+    }
+
+    function reserveShortPool(uint256 _amount) internal isShortUtilized {
+        _reserveLongPool(_amount);
     }
 
     function numSwaps() public view returns (uint256) {
