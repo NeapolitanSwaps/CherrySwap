@@ -1,12 +1,17 @@
 pragma solidity ^0.5.0;
 
-import "@openzeppelin/upgrades/contracts/Initializable.sol";
-import "./token/CherryDai.sol";
-
+// Library & interfaces
 import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol";
 import "./interface/ICERC20.sol";
+// Contracts
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "./token/CherryDai.sol";
 
+/**
+ * @title Cherrypool Contract
+ * @dev This contract handle Cherry Pool functionalities
+ */
 contract Cherrypool is Initializable {
   using SafeMath for uint256;
 
@@ -19,20 +24,6 @@ contract Cherrypool is Initializable {
   IERC20 public token; // collateral asset = DAI
   ICERC20 public cToken; // cDAI token
   CherryDai public cherryDai; // CherryDai token
-
-  enum Bet {Long, Short}
-
-  struct Swap {
-    address owner;
-    uint256 swapId;
-    uint256 openingTime;
-    uint256 endingTime;
-    uint256 fixedRate;
-    uint256 depositedValue;
-    Bet bet;
-  }
-
-  Swap[] public swaps;
 
   event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
   event PoolShare(uint256 amount);
@@ -128,24 +119,5 @@ contract Cherrypool is Initializable {
      */
   function exchangeRate() public view returns (uint256) {
     return 1;
-  }
-
-  /**
-     * @dev function called by trader to enter into swap position.
-     * @notice requires to check the current pool direction's utilization. If utilization is safe then position is entered.
-     * @return 0 if successful otherwise an error code
-     */
-  function createPosition(uint256 _amount, uint8 bet) public returns (uint256) {
-    return 0;
-  }
-
-  /**
-     * @dev traded withdraw from their position.
-     * @notice if the time is after the end of the swap then they will receive the swap rate for
-     * the duration of the swap and then the floating market rate between the end of the
-     * swap and the current time.
-     */
-  function closePosition(uint256 _swapId) public returns (uint256) {
-    return 0;
   }
 }
