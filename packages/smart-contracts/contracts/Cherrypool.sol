@@ -114,7 +114,7 @@ contract Cherrypool is Initializable {
     function canReserveLong(uint256 depositAmount)
         public
         view
-        returns (uint256)
+        returns (bool)
     {
         return calcLongPoolUtilization(longPoolBalance + depositAmount) > 1e18;
     }
@@ -122,7 +122,7 @@ contract Cherrypool is Initializable {
     function canReserveShort(uint256 depositAmount)
         public
         view
-        returns (uint256)
+        returns (bool)
     {
         return
             calcShortPoolUtilization(ShortPoolBalance + depositAmount) < 1e18;
@@ -173,14 +173,14 @@ contract Cherrypool is Initializable {
 
     function _reserveLongPool(uint256 _amount) internal {
         require(_amount > 0, "Cherrypool::invalid amount");
-        require(canReserveLong(_amount), "Cherrypool::not enough liquidity");
+        require(canReserveLong(longPoolReserved +_amount), "Cherrypool::not enough liquidity");
 
         longPoolReserved.add(_amount);
     }
 
     function _reserveShortPool(uint256 _amount) internal {
         require(_amount > 0, "Cherrypool::invalid amount");
-        require(canReserveShort(_amount), "Cherrypool::not enough liquidity");
+        require(canReserveShort(shortPoolReserved + _amount), "Cherrypool::not enough liquidity");
 
         shortPoolReserved.add(_amount);
     }
