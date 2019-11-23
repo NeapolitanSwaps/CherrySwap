@@ -66,11 +66,10 @@ contract Cherryswap is Initializable, Cherrypool {
      * trader enters position at the current rate offered by the pool.
      * @return 0 if successful otherwise an error code
      */
-    function createPosition(uint256 _amount, uint8 _bet)
+    function createLongPosition(uint256 _amount, uint8 _bet)
         public
         returns (uint256)
     {
-        uint256 fixedRateOffer = 0;
         uint256 reserveAmount = futureValue.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
@@ -78,28 +77,43 @@ contract Cherryswap is Initializable, Cherrypool {
             oneMonthDuration
         ) -
             _amount;
-        if (Bet(_bet) == Bet.Long) {
-            require(
-                CherryPool.canReserveLong(_amount),
-                "Trying to reserve more than pool can take"
-            );
-            cherryPool._reserveLongPool(reserveAmount);
-            fixedRateOffer =
-                (cToken.supplyRatePerBlock() *
-                    (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) /
-                1e18;
-        }
-        if (Bet(_bet) == Bet.Short) {
-            require(
-                CherryPool.canReserveShort(_amount),
-                "Trying to reserve more than pool can take"
-            );
-            cherryPool._reserveShortPool(reserveAmount);
-            fixedRateOffer =
-                (cToken.supplyRatePerBlock() *
-                    (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
-                1e18;
-        }
+        require(
+            CherryPool.canReserveLong(_amount),
+            "Trying to reserve more than pool can take"
+        );
+        cherryPool._reserveLongPool(reserveAmount);
+        uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
+            (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) /
+            1e18;
+        swaps.push(
+            Swap(
+                msg.sender,
+                numSwaps,
+                now,
+                oneMonthDuration,
+                fixedRateOffer,
+                _amount,
+                _bet
+            )
+        );
+    }
+    function createShortPosition(uint256 _amount) public returns (uint256) {
+        uint256 reserveAmount = futureValue.futureValue(
+            _amount,
+            maxInterestRatePaidPerBlock,
+            0,
+            oneMonthDuration
+        ) -
+            _amount;
+        require(
+            CherryPool.canReserveShort(_amount),
+            "Trying to reserve more than pool can take"
+        );
+        cherryPool._reserveShortPool(reserveAmount);
+        uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
+                (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
+            1e18;
+
         swaps.push(
             Swap(
                 msg.sender,
