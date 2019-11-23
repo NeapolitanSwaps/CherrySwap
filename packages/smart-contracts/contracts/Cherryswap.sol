@@ -8,7 +8,6 @@ import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./Cherrypool.sol";
 import "./CherryMath.sol";
-import "interfaces/IERC20.sol";
 
 /**
  * @title Cherryswap Contract
@@ -36,7 +35,7 @@ contract Cherryswap is Initializable, Cherrypool {
 
     Swap[] public swaps;
 
-    CherryMath cherryMath;
+    Cherrymath cherryMath;
 
     ERC20 token;
     IERC20 cToken;
@@ -54,10 +53,8 @@ contract Cherryswap is Initializable, Cherrypool {
         );
 
         Cherrypool.initialize(_token, _cToken);
-        cherryMath = CherryMath(_cherryMath);
+        cherryMath = Cherrymath(_cherryMath);
 
-        token = ERC20(_token);
-        cToken = IERC20(_cToken);
         cToken.approve(_token, 100000000000e18);
     }
 
@@ -90,7 +87,7 @@ contract Cherryswap is Initializable, Cherrypool {
         reserveLongPool(reserveAmount);
 
         uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
-            (1e18 - cherryPool.LongPoolUtilization() / ALPHA - BETA)) /
+            (1e18 - calcLongPoolUtilization(longPoolReserved) / ALPHA - BETA)) /
             1e18;
 
         swaps.push(
@@ -102,7 +99,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 fixedRateOffer,
                 _amount,
                 expectedcTokens,
-                _bet
+                Bet(_bet)
             )
         );
     }
@@ -111,7 +108,7 @@ contract Cherryswap is Initializable, Cherrypool {
      * @dev function called by trader to enter into short swap position.
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
-    function createShortPosition(uint256 _amount) public {
+    function createShortPosition(uint256 _amount, uint8 _bet) public {
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create short position transfer from failed"
@@ -136,7 +133,7 @@ contract Cherryswap is Initializable, Cherrypool {
         reserveShortPool(reserveAmount);
 
         uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
-            (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
+            (1e18 + calcShortPoolUtilization(shortPoolReserved) / ALPHA + BETA)) /
             1e18;
 
         swaps.push(
@@ -148,7 +145,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 fixedRateOffer,
                 _amount,
                 expectedcTokens,
-                _bet
+                Bet(_bet)
             )
         );
     }

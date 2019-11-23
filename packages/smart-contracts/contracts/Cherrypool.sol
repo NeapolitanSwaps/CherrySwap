@@ -92,7 +92,7 @@ contract Cherrypool is Initializable {
      */
     modifier isShortUtilized() {
         require(
-            calcShortPoolUtilization(shortPoolReserve) < 1e18,
+            calcShortPoolUtilization(shortPoolReserved) < 1e18,
             "Cherrypool::short pool is fully utilized"
         );
         _;
@@ -175,7 +175,7 @@ contract Cherrypool is Initializable {
         uint256 mantissaEchangeRate = exchangeRate(); // I think this function should get the amount of tokens to redeem, no ?
 
         // trying to mimic the way compound do it... does this work ?
-        redeemAmount = mulScalarTruncate(mantissaEchangeRate, _amount);
+        uint redeemAmount = mulScalarTruncate(mantissaEchangeRate, _amount);
 
         // TODO: payout
     }
@@ -233,7 +233,7 @@ contract Cherrypool is Initializable {
      */
     function mulUInt(uint a, uint b) internal pure returns (uint) {
         if (a == 0) {
-            return (MathError.NO_ERROR, 0);
+            return 0;
         }
 
         uint c = a * b;
@@ -251,7 +251,7 @@ contract Cherrypool is Initializable {
      */
     function truncate(uint mantissa) internal pure returns (uint) {
         // Note: We are not using careful math here as we're performing a division that cannot fail => REALLY !
-        return mantissa / expScale;
+        return mantissa / 1e18;
     }
 
 }

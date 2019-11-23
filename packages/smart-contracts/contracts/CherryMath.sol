@@ -2,7 +2,7 @@ pragma solidity ^0.5.12;
 
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 
-contract Swapmath is Initializable {
+contract Cherrymath is Initializable {
     uint256 private constant FIXED_1 = 0x080000000000000000000000000000000;
 
     /**
