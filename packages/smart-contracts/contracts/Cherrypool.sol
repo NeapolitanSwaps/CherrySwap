@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.12;
 
 // Library & interfaces
 import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
@@ -142,5 +142,21 @@ contract Cherrypool is Initializable {
       longPoolUtilization(longPoolReserved.add(_amount)) <= 1e18,
       "Cherrypool::not enough liquidity"
     );
+
+    longPoolReserved.add(_amount);
   }
+
+  function _reserveShortPool(uint256 _amount) internal {
+    require(
+      _amount > 0,
+      "Cherrypool::invalid amount"
+    );
+    require(
+      shortPoolUtilization(shortPoolReserved.add(_amount)) <= 1e18,
+      "Cherrypool::not enough liquidity"
+    );
+
+    shortPoolReserved.add(_amount);
+  }
+
 }
