@@ -80,7 +80,10 @@ contract Cherrypool is Initializable {
      * @dev Modifier to check if long pool is not fully utilized
      */
     modifier isLongUtilized() {
-        require (calcLongPoolUtilization(longPoolReserved) < 1e18, "Cherrypool::long pool if fully utilized");
+        require(
+            calcLongPoolUtilization(longPoolReserved) < 1e18,
+            "Cherrypool::long pool if fully utilized"
+        );
         _;
     }
 
@@ -88,17 +91,26 @@ contract Cherrypool is Initializable {
      * @dev Modifier to check if short pool is not fully utilized
      */
     modifier isShortUtilized() {
-        require(calcShortPoolUtilization(shortPoolReserve) < 1e18, "Cherrypool::short pool is fully utilized");
+        require(
+            calcShortPoolUtilization(shortPoolReserve) < 1e18,
+            "Cherrypool::short pool is fully utilized"
+        );
         _;
     }
 
     modifier canReserveLong(uint256 _amount) {
-        require(longPoolReserved.add(_amount) <= longPoolBalance, "Cherrypool::long pool does not have liquidity");
+        require(
+            longPoolReserved.add(_amount) <= longPoolBalance,
+            "Cherrypool::long pool does not have liquidity"
+        );
         _;
     }
 
     modifier canReserveShort(uint256 _amount) {
-        require(shortPoolReserved.add(_amount) <= shortPoolBalance, "Cherrypool::short pool does not have liquidity");
+        require(
+            shortPoolReserved.add(_amount) <= shortPoolBalance,
+            "Cherrypool::short pool does not have liquidity"
+        );
         _;
     }
 
@@ -148,7 +160,12 @@ contract Cherrypool is Initializable {
      * @param _amount amount of CherryDai to redeem
      * @return 0 if successful otherwise an error code
      */
-    function redeem(uint256 _amount) public isLongUtilized() isShortUtilized() returns (uint256) {
+    function redeem(uint256 _amount)
+        public
+        isLongUtilized()
+        isShortUtilized()
+        returns (uint256)
+    {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
             "CherryPool::redeem request is more than current token balance"

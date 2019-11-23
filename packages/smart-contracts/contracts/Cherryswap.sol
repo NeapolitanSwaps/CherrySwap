@@ -66,12 +66,18 @@ contract Cherryswap is Initializable, Cherrypool {
      * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
     function createLongPosition(uint256 _amount, uint8 _bet) public {
-        require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create long position transfer from failed");
-        
+        require(
+            token.transferFrom(msg.sender, address(this), _amount),
+            "CherrySwap::create long position transfer from failed"
+        );
+
         uint256 expectedcTokens = _amount / getcTokenExchangeRate();
-        
-        require(cToken.mint(_amount) == 0,"CherrySwap::create long position compound deposit failed");
-        
+
+        require(
+            cToken.mint(_amount) == 0,
+            "CherrySwap::create long position compound deposit failed"
+        );
+
         uint256 futurevalue = cherryMath.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
@@ -106,11 +112,17 @@ contract Cherryswap is Initializable, Cherrypool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
     function createShortPosition(uint256 _amount) public {
-        require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create short position transfer from failed");
-        
+        require(
+            token.transferFrom(msg.sender, address(this), _amount),
+            "CherrySwap::create short position transfer from failed"
+        );
+
         uint256 expectedcTokens = _amount / getcTokenExchangeRate();
 
-        require(cToken.mint(_amount) == 0,"CherrySwap::create short position compound deposit failed");
+        require(
+            cToken.mint(_amount) == 0,
+            "CherrySwap::create short position compound deposit failed"
+        );
 
         uint256 futureValue = cherryMath.futureValue(
             _amount,
@@ -124,7 +136,7 @@ contract Cherryswap is Initializable, Cherrypool {
         reserveShortPool(reserveAmount);
 
         uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
-                (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
+            (1e18 + cherryPool.ShortPoolUtilization() / ALPHA + BETA)) /
             1e18;
 
         swaps.push(
@@ -151,11 +163,19 @@ contract Cherryswap is Initializable, Cherrypool {
         return 0;
     }
 
-    function reserveLongPool(uint256 _amount) internal isLongUtilized canReserveLong(_amount) {
+    function reserveLongPool(uint256 _amount)
+        internal
+        isLongUtilized
+        canReserveLong(_amount)
+    {
         _reserveLongPool(_amount);
     }
 
-    function reserveShortPool(uint256 _amount) internal isShortUtilized canReserveShort(_amount) {
+    function reserveShortPool(uint256 _amount)
+        internal
+        isShortUtilized
+        canReserveShort(_amount)
+    {
         _reserveLongPool(_amount);
     }
 
@@ -163,7 +183,11 @@ contract Cherryswap is Initializable, Cherrypool {
         return swaps.length();
     }
 
-    function getcTokenExchangeRate() public view returns (uint256){
-        return (cToken.getCash() + cToken.totalBorrows() - cToken.totalReserves()) / cToken.totalSupply();
+    function getcTokenExchangeRate() public view returns (uint256) {
+        return
+            (cToken.getCash() +
+                cToken.totalBorrows() -
+                cToken.totalReserves()) /
+            cToken.totalSupply();
     }
 }
