@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.12;
 
 // Library & interfaces
 import "@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol";
@@ -81,7 +81,7 @@ contract Cherrypool is Initializable {
      * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
      */
-    function longPoolUtilization(uint256 _longPoolReserved)
+    function calcLongPoolUtilization(uint256 _longPoolReserved)
         public
         view
         returns (uint256)
@@ -89,17 +89,33 @@ contract Cherrypool is Initializable {
         return (_longPoolReserved * 1e18) / longPoolBalance;
     }
 
+    function longPoolUtilization() public view returns (uint256) {
+        return calcLongPoolUtilization(longPoolReserved);
+    }
+
     /**
      * @dev Get short pool utilization
      * @param _shortPoolReserved amount of liquidity reserved in the short pool
      * @return current short pool utilization as a decimal scaled 10*18
      */
-    function shortPoolUtilization(uint256 _shortPoolReserved)
+    function calcShortPoolUtilization(uint256 _shortPoolReserved)
         public
         view
         returns (uint256)
     {
         return (_shortPoolReserved * 1e18) / shortPoolBalance;
+    }
+
+    function shortPoolUtilization() public view returns (uint256) {
+        return calcShortPoolUtilization(shortPoolReserved);
+    }
+
+    function canReserveLong(uint256 depositAmount) public view returns (uint256) {
+        return calcLongPoolUtilization(longPoolBalance + depositAmount) > 1e18;
+    }
+
+    function canReserveShort(uint256 depositAmount) public view returns (uint256) {
+        return calcShortPoolUtilization(ShortPoolBalance + depositAmount) < 1e18;
     }
 
     /**
@@ -123,7 +139,7 @@ contract Cherrypool is Initializable {
      */
     function redeem(uint256 _amount) public returns (uint256) {
         require(
-            longPoolUtilization(longPoolReserved) < 1e18,
+            calcLongPoolUtilization(longPoolReserved) < 1e18,
             "CherryPool::Long pool is fully utilized and so withdraw can not occur"
         );
         require(
@@ -148,7 +164,7 @@ contract Cherrypool is Initializable {
     function _reserveLongPool(uint256 _amount) internal {
         require(_amount > 0, "Cherrypool::invalid amount");
         require(
-            longPoolUtilization(longPoolReserved.add(_amount)) <= 1e18,
+            calcLongPoolUtilization(longPoolReserved.add(_amount)) <= 1e18,
             "Cherrypool::not enough liquidity"
         );
     }

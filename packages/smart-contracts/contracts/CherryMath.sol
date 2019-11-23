@@ -1,6 +1,8 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.12;
 
-contract Swapmath {
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+
+contract Swapmath is Initializable {
     uint256 private constant FIXED_1 = 0x080000000000000000000000000000000;
 
     /**
@@ -99,8 +101,8 @@ contract Swapmath {
         returns (uint256)
     {
         uint256 t = t2 - t1;
-        uint256 x = (r * t * FIXED_1) / (15 * 10**18);
-        uint256 c = (optimalExp(x) * 10**18) / FIXED_1;
+        uint256 x = (r * t * FIXED_1) / (15 * 1e18);
+        uint256 c = (optimalExp(x) * 1e18) / FIXED_1;
         return c;
     }
 
@@ -109,7 +111,7 @@ contract Swapmath {
         view
         returns (uint256)
     {
-        return (capFunction(r, t1, t2) * N) / 10**18;
+        return (capFunction(r, t1, t2) * N) / 1e18;
     }
 
     function cDaitoDai(uint256 _cDai, uint256 _cDaiPrice)
