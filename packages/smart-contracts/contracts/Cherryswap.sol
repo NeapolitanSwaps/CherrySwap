@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.12;
 
 // Library & interfaces
 import "./interface/ICERC20.sol";
@@ -62,6 +62,5 @@ contract Cherryswap is Initializable, Cherrypool {
   function reserveLongPool(uint256 _amount) public {
     _reserveLongPool(_amount);
   }
-
 
 }
