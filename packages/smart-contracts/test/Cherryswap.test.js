@@ -1,4 +1,4 @@
-const {
+/*const {
   BN,
   constants,
   expectEvent,
@@ -169,4 +169,4 @@ contract('Cherryswap contract 🍒', ([contractOwner, participant1, participant2
 
   });
 
-});
+});*/
