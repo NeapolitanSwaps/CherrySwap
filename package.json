@@ -22,8 +22,8 @@
         "truffle-hdwallet-provider-privkey": "^0.3.0"
     },
     "devDependencies": {
+        "@openzeppelin/test-helpers": "^0.5.4",
         "eth-gas-reporter": "^0.2.12",
-        "eth-provider": "^0.2.2",
-        "@openzeppelin/test-helpers": "^0.5.3"
+        "eth-provider": "^0.2.2"
     }
 }

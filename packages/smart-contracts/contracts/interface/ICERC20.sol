@@ -1,6 +1,9 @@
 pragma solidity ^0.5.12;
+<<<<<<< HEAD
 
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
+=======
+>>>>>>> 6d7f276c1247f6f7c096dd66daee4209867e9cc0
 
 interface ICERC20 is ERC20 {
     // CTOKEN functions

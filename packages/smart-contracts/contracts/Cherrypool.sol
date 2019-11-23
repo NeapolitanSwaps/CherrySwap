@@ -162,10 +162,29 @@ contract Cherrypool is Initializable {
     }
 
     function _reserveLongPool(uint256 _amount) internal {
-        require(_amount > 0, "Cherrypool::invalid amount");
         require(
-            calcLongPoolUtilization(longPoolReserved.add(_amount)) <= 1e18,
-            "Cherrypool::not enough liquidity"
+        _amount > 0,
+        "Cherrypool::invalid amount"
         );
+        require(
+        canReserveLong(_amount),
+        "Cherrypool::not enough liquidity"
+        );
+
+        longPoolReserved.add(_amount);
     }
+
+    function _reserveShortPool(uint256 _amount) internal {
+        require(
+        _amount > 0,
+        "Cherrypool::invalid amount"
+        );
+        require(
+        canReserveShort(_amount),
+        "Cherrypool::not enough liquidity"
+        );
+
+        shortPoolReserved.add(_amount);
+    }
+
 }
