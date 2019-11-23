@@ -64,8 +64,8 @@ contract Cherryswap is Initializable, Cherrypool {
      * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
     function createLongPosition(uint256 _amount, uint8 _bet) public {
-        require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create short position transfer from failed");
-        require(cToken.mint(_amount) == 0,"CherrySwap::create short position compound deposit failed");
+        require(token.transferFrom(msg.sender, address(this), _amount), "CherrySwap::create long position transfer from failed");
+        require(cToken.mint(_amount) == 0,"CherrySwap::create long position compound deposit failed");
         
         uint256 futurevalue = cherryMath.futureValue(
             _amount,
