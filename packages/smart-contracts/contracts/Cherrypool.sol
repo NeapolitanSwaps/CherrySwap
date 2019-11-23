@@ -52,12 +52,12 @@ contract Cherrypool is Initializable {
      * @param _amount amount of deposited DAI
      */
   function mint(uint256 _amount) public {
-    require(_amount > 0, "Cherrypool: amount provided should be higher");
+    require(_amount > 0, "Cherrypool::amount provided should be higher");
 
     // collect liquidity from provider
     require(
       token.transferFrom(msg.sender, address(this), _amount),
-      "Cherrypool: deposit liquidity failed"
+      "Cherrypool::deposit liquidity failed"
     );
 
     // deposit liqudity into compound
@@ -78,32 +78,44 @@ contract Cherrypool is Initializable {
 
   /**
      * @dev Get long pool utilization
+     * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
      */
-  function longPoolUtilization() public view returns (uint256) {
-    return (longPoolReserved * 1e18) / longPoolBalance;
+  function longPoolUtilization(uint256 _longPoolReserved) public view returns (uint256) {
+    return (_longPoolReserved * 1e18) / longPoolBalance;
   }
 
   /**
      * @dev Get short pool utilization
+     * @param _shortPoolReserved amount of liquidity reserved in the short pool
      * @return current short pool utilization as a decimal scaled 10*18
      */
-  function shortPoolUtilization() public view returns (uint256) {
-    return (shortPoolReserved * 1e18) / shortPoolBalance;
+  function shortPoolUtilization(uint256 _shortPoolReserved) public view returns (uint256) {
+    return (_shortPoolReserved * 1e18) / shortPoolBalance;
+  }
+
+  /**
+     * @dev Get Cherrydai balance for liquidity provider
+     * @param _provider liquidity provider address
+     * @return CherryDai balance
+     */
+  function cherryDaiBalanceOf(address _provider) public view returns(uint256) {
+    return cherryDai.balanceOf(_provider);
   }
 
   /**
      * @dev transfer underlying asset back to liquidity provider assuming liquidity is still sufficient.
      * @notice the amount returned is the number of cherrytokens multiplied by the current exchange rate
+     * @param _amount amount of CherryDai to redeem
      * @return 0 if successful otherwise an error code
      */
   function redeem(uint256 _amount) public returns (uint256) {
     require(
-      longPoolUtilization() < 1e18,
+      longPoolUtilization(longPoolReserved) < 1e18,
       "CherryPool::Long pool is fully utilized and so withdraw can not occur"
     );
     require(
-      shortPoolUtilization() < 1e18,
+      shortPoolUtilization(shortPoolReserved) < 1e18,
       "CherryPool::short pool is fully utilized and so withdraw can not occur"
     );
     require(
@@ -119,5 +131,16 @@ contract Cherrypool is Initializable {
      */
   function exchangeRate() public view returns (uint256) {
     return 1;
+  }
+
+  function _reserveLongPool(uint256 _amount) internal {
+    require(
+      _amount > 0,
+      "Cherrypool::invalid amount"
+    );
+    require(
+      longPoolUtilization(longPoolReserved.add(_amount)) <= 1e18,
+      "Cherrypool::not enough liquidity"
+    );
   }
 }

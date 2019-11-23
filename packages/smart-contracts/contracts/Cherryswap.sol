@@ -59,4 +59,9 @@ contract Cherryswap is Initializable, Cherrypool {
     return 0;
   }
 
+  function reserveLongPool(uint256 _amount) public {
+    _reserveLongPool(_amount);
+  }
+
+
 }
