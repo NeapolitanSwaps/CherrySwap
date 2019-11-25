@@ -17,10 +17,12 @@ contract Cherryswap is Initializable, Cherrypool {
     enum Bet {Short, Long}
 
     uint256 oneMonthDuration = 60 * 60 * 24 * 30;
-    uint256 maxInterestRatePaidPerBlock = (25 * 1e16) / (4 * 60 * 24 * 365);
+    uint256 maxInterestRatePaidPerBlock = uint256((25 * 1e16) / (4 * 60 * 24 * 365)); //25% APR is the max the pool will pay
 
     uint256 ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 BETA = 0;
+
+    uint256 RAGE_QUITE_PENALTY = 20; //scaled by 100 so 20 = 0.2
 
     struct Swap {
         address owner;
@@ -38,7 +40,7 @@ contract Cherryswap is Initializable, Cherrypool {
     Cherrymath cherryMath;
 
     ERC20 token;
-    IERC20 cToken;
+    ICERC20 cToken;
 
     /**
      * @dev Initialize contract states
@@ -56,7 +58,7 @@ contract Cherryswap is Initializable, Cherrypool {
         cherryMath = Cherrymath(_cherryMath);
 
         token = ERC20(_token);
-        cToken = IERC20(_cToken);
+        cToken = ICERC20(_cToken);
 
         cToken.approve(_token, 100000000000e18);
     }
@@ -94,9 +96,9 @@ contract Cherryswap is Initializable, Cherrypool {
         swaps.push(
             Swap(
                 msg.sender,
-                numSwaps,
+                numSwaps(),
                 now,
-                oneMonthDuration,
+                now + oneMonthDuration,
                 fixedRateOffer,
                 _amount,
                 expectedcTokens,
@@ -138,9 +140,9 @@ contract Cherryswap is Initializable, Cherrypool {
         swaps.push(
             Swap(
                 msg.sender,
-                numSwaps,
+                numSwaps(),
                 now,
-                oneMonthDuration,
+                now + oneMonthDuration,
                 fixedRateOffer,
                 _amount,
                 expectedcTokens,
@@ -156,6 +158,30 @@ contract Cherryswap is Initializable, Cherrypool {
      * swap and the current time.
      */
     function closePosition(uint256 _swapId) public returns (uint256) {
+        Swap memory swap = swaps[_swapId];
+        require (now >= swap.endingTime, "The swap is not finished yet and so cant be closed");
+        if(swap.bet == Bet.Long){
+            closeLongSwap(swap);
+        }
+        if(swap.bet == Bet.Short){
+            closeShortSwap(swap);
+        }
+    }
+
+    function closeLongSwap(Swap _swap) internal returns (uint256) {
+        return 0;
+    }
+
+    function closeShortSwap(Swap _swap) internal returns (uint256) {
+        return 0;
+    }
+
+    /**
+    * @dev at any point a trader in a swap can rage quite. 
+    * @notice This will eject them from the position, free up liquidity and they walk away with some dai
+    * however there is a heavy penalty in doing this!
+     */
+    function rageQuitSwap(uint256 _swapId) public returns (uint256) {
         return 0;
     }
 
