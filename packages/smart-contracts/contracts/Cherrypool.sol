@@ -175,9 +175,10 @@ contract Cherrypool is Initializable {
         uint256 mantissaEchangeRate = exchangeRate(); // I think this function should get the amount of tokens to redeem, no ?
 
         // trying to mimic the way compound do it... does this work ?
-        uint redeemAmount = mulScalarTruncate(mantissaEchangeRate, _amount);
+        uint256 redeemAmount = mulScalarTruncate(mantissaEchangeRate, _amount);
 
         // TODO: payout
+
     }
 
     /**
@@ -201,14 +202,17 @@ contract Cherrypool is Initializable {
         shortPoolReserved.add(_amount);
     }
 
-
     /// Will need to move those... sure they are already in the math contract.... so lazy to look there for now
 
     /**
      * @dev Multiply an Exp by a scalar, then truncate to return an unsigned integer.
      */
-    function mulScalarTruncate(uint a, uint scalar) internal pure returns (uint) {
-        uint product = mulScalar(a, scalar);
+    function mulScalarTruncate(uint256 a, uint256 scalar)
+        internal
+        pure
+        returns (uint256)
+    {
+        uint256 product = mulScalar(a, scalar);
         if (product == 0) {
             return 0;
         }
@@ -219,8 +223,12 @@ contract Cherrypool is Initializable {
     /**
      * @dev Multiply an Exp by a scalar, returning a new Exp.
      */
-    function mulScalar(uint mantissa, uint scalar) internal pure returns (uint256) {
-        uint scaledMantissa = mulUInt(mantissa, scalar);
+    function mulScalar(uint256 mantissa, uint256 scalar)
+        internal
+        pure
+        returns (uint256)
+    {
+        uint256 scaledMantissa = mulUInt(mantissa, scalar);
         if (scaledMantissa == 0) {
             return 0;
         }
@@ -231,12 +239,12 @@ contract Cherrypool is Initializable {
     /**
      * @dev Multiplies two numbers, returns an error on overflow.
      */
-    function mulUInt(uint a, uint b) internal pure returns (uint) {
+    function mulUInt(uint256 a, uint256 b) internal pure returns (uint256) {
         if (a == 0) {
             return 0;
         }
 
-        uint c = a * b;
+        uint256 c = a * b;
 
         if (c / a != b) {
             return 0;
@@ -249,7 +257,7 @@ contract Cherrypool is Initializable {
      * @dev Truncates the given exp to a whole number value.
      *      For example, truncate(Exp{mantissa: 15 * expScale}) = 15
      */
-    function truncate(uint mantissa) internal pure returns (uint) {
+    function truncate(uint256 mantissa) internal pure returns (uint256) {
         // Note: We are not using careful math here as we're performing a division that cannot fail => REALLY !
         return mantissa / 1e18;
     }

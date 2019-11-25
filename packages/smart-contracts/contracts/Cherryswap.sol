@@ -55,6 +55,9 @@ contract Cherryswap is Initializable, Cherrypool {
         Cherrypool.initialize(_token, _cToken);
         cherryMath = Cherrymath(_cherryMath);
 
+        token = ERC20(_token);
+        cToken = IERC20(_cToken);
+
         cToken.approve(_token, 100000000000e18);
     }
 
@@ -75,20 +78,18 @@ contract Cherryswap is Initializable, Cherrypool {
             "CherrySwap::create long position compound deposit failed"
         );
 
-        uint256 futurevalue = cherryMath.futureValue(
+        uint256 futureValue = cherryMath.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
             0,
             oneMonthDuration
         );
 
-        uint256 reserveAmount = futurevalue - _amount;
+        uint256 reserveAmount = futureValue - _amount;
 
         reserveLongPool(reserveAmount);
 
-        uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
-            (1e18 - calcLongPoolUtilization(longPoolReserved) / ALPHA - BETA)) /
-            1e18;
+        uint256 fixedRateOffer = getFixedRateOffer(_bet);
 
         swaps.push(
             Swap(
@@ -132,9 +133,7 @@ contract Cherryswap is Initializable, Cherrypool {
 
         reserveShortPool(reserveAmount);
 
-        uint256 fixedRateOffer = (cToken.supplyRatePerBlock() *
-            (1e18 + calcShortPoolUtilization(shortPoolReserved) / ALPHA + BETA)) /
-            1e18;
+        uint256 fixedRateOffer = getFixedRateOffer(_bet);
 
         swaps.push(
             Swap(
@@ -186,5 +185,31 @@ contract Cherryswap is Initializable, Cherrypool {
                 cToken.totalBorrows() -
                 cToken.totalReserves()) /
             cToken.totalSupply();
+    }
+
+    /**
+    @dev calculate the offered fixed rate for swaps taken against the lequidity pool
+    * in future this will be updated to consider the size of the positon. for now it's kept simple.
+    */
+    function getFixedRateOffer(Bet _bet) public view returns (uint256) {
+        if (_bet == Bet.Long) {
+            return
+                (cToken.supplyRatePerBlock() *
+                    (1e18 -
+                        calcLongPoolUtilization(longPoolReserved) /
+                        ALPHA -
+                        BETA)) /
+                1e18;
+        }
+
+        if (_bet == Bet.Long) {
+            return
+                (cToken.supplyRatePerBlock() *
+                    (1e18 +
+                        calcShortPoolUtilization(shortPoolReserved) /
+                        ALPHA +
+                        BETA)) /
+                1e18;
+        }
     }
 }
