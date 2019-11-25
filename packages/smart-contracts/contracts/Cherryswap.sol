@@ -164,16 +164,22 @@ contract Cherryswap is Initializable, Cherrypool {
         }
     }
 
+    /**
+    * @dev settle a long swap against the pool
+    * @notice long offer swap where the lequidity pool is short: reciving a fixed rate and paying a floating rate
+    */
     function settleLongSwap(Swap _swap) internal returns (uint256) {
+        swapInterestNpv = getFloatingGain(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount) -
+            cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime);
         return 0;
     }
     /**
     @dev settle a short swap
-    * @notice the short party pays float and recives fixed
-     */
+    * @notice short offer swap the lequidity pool is long: reciving floating rate, paying fixed rate
+    */
     function settleShortSwap(Swap _swap) internal returns (uint256) {
-        swapNpv = cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime) -
-            getFloatingGain(_swap.startingcTokenExchangeRate,getcTokenExchangeRate(), _swap.amount);
+        swapInterestNpv = cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime) -
+            getFloatingGain(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount);
         return 0;
     }
 
@@ -215,7 +221,7 @@ contract Cherryswap is Initializable, Cherrypool {
     }
 
     /**
-    @dev calculate the offered fixed rate for swaps taken against the lequidity pool
+    @dev calculate the offered fixed rate for swaps taken against the liquidity pool
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
     */
     function getFixedRateOffer(Bet _bet) public view returns (uint256) {
@@ -239,8 +245,13 @@ contract Cherryswap is Initializable, Cherrypool {
                 1e18;
         }
     }
-
-    function getFloatingGain(_startingExchangeRate, _endingExchangeRate, _amount) public view returns (uint256) {
-        return 0;
+    /**
+    * @dev given the starting and end exchange rate of a cToken calculate the final valuation of the position
+    * @notice this acts to scale the amount by the change in exchange rate seen by the cToken.
+    * If the starting cToken exchange rate is stored and the end rate is known then this function returns
+    * the value that _amount has grown by.
+     */
+    function getFloatingValue(_startingExchangeRate, _endingExchangeRate, _amount) public view returns (uint256) {
+        return (_amount * _endExchangeRate) / _startingExchangeRate;
     }
 }
