@@ -41,9 +41,6 @@ contract Cherryswap is Initializable, Cherrypool {
 
     Cherrymath cherryMath;
 
-    ERC20 token;
-    ICERC20 cToken;
-
     /**
      * @dev Initialize contract states
      */
