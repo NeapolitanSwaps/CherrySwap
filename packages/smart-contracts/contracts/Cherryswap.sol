@@ -27,11 +27,11 @@ contract Cherryswap is Initializable, Cherrypool {
     struct Swap {
         address owner;
         uint256 swapId;
-        uint256 openingTime;
+        uint256 startingTime;
         uint256 endingTime;
         uint256 fixedRateOffer;
         uint256 depositedValue;
-        uint256 depositcTokenValue;
+        uint256 startingcTokenExchangeRate;
         Bet bet;
     }
 
@@ -73,8 +73,6 @@ contract Cherryswap is Initializable, Cherrypool {
             "CherrySwap::create long position transfer from failed"
         );
 
-        uint256 expectedcTokens = _amount / getcTokenExchangeRate();
-
         require(
             cToken.mint(_amount) == 0,
             "CherrySwap::create long position compound deposit failed"
@@ -101,7 +99,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 now + oneMonthDuration,
                 fixedRateOffer,
                 _amount,
-                expectedcTokens,
+                getcTokenExchangeRate(),
                 Bet(_bet)
             )
         );
@@ -116,8 +114,6 @@ contract Cherryswap is Initializable, Cherrypool {
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create short position transfer from failed"
         );
-
-        uint256 expectedcTokens = _amount / getcTokenExchangeRate();
 
         require(
             cToken.mint(_amount) == 0,
@@ -145,7 +141,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 now + oneMonthDuration,
                 fixedRateOffer,
                 _amount,
-                expectedcTokens,
+                getcTokenExchangeRate(),
                 Bet(_bet)
             )
         );
@@ -161,18 +157,23 @@ contract Cherryswap is Initializable, Cherrypool {
         Swap memory swap = swaps[_swapId];
         require (now >= swap.endingTime, "The swap is not finished yet and so cant be closed");
         if(swap.bet == Bet.Long){
-            closeLongSwap(swap);
+            settleLongSwap(swap);
         }
         if(swap.bet == Bet.Short){
-            closeShortSwap(swap);
+            settleShortSwap(swap);
         }
     }
 
-    function closeLongSwap(Swap _swap) internal returns (uint256) {
+    function settleLongSwap(Swap _swap) internal returns (uint256) {
         return 0;
     }
-
-    function closeShortSwap(Swap _swap) internal returns (uint256) {
+    /**
+    @dev settle a short swap
+    * @notice the short party pays float and recives fixed
+     */
+    function settleShortSwap(Swap _swap) internal returns (uint256) {
+        swapNpv = cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime) -
+            getFloatingGain(_swap.startingcTokenExchangeRate,getcTokenExchangeRate(), _swap.amount);
         return 0;
     }
 
@@ -237,5 +238,9 @@ contract Cherryswap is Initializable, Cherrypool {
                         BETA)) /
                 1e18;
         }
+    }
+
+    function getFloatingGain(_startingExchangeRate, _endingExchangeRate, _amount) public view returns (uint256) {
+        return 0;
     }
 }
