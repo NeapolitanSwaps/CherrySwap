@@ -17,7 +17,9 @@ contract Cherryswap is Initializable, Cherrypool {
     enum Bet {Short, Long}
 
     uint256 oneMonthDuration = 60 * 60 * 24 * 30;
-    uint256 maxInterestRatePaidPerBlock = uint256((25 * 1e16) / (4 * 60 * 24 * 365)); //25% APR is the max the pool will pay
+    uint256 maxInterestRatePaidPerBlock = uint256(
+        (25 * 1e16) / (4 * 60 * 24 * 365)
+    ); //25% APR is the max the pool will pay
 
     uint256 ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 BETA = 0;
@@ -155,32 +157,51 @@ contract Cherryswap is Initializable, Cherrypool {
      */
     function closePosition(uint256 _swapId) public returns (uint256) {
         Swap memory swap = swaps[_swapId];
-        require (now >= swap.endingTime, "The swap is not finished yet and so cant be closed");
-        if(swap.bet == Bet.Long){
-            settleLongSwap(swap);
-        }
-        if(swap.bet == Bet.Short){
-            settleShortSwap(swap);
-        }
+        uint256 tokensToSend = tokensToPayTrader(swap);
+        uint256 cTokensToWithDraw = (tokensToSend * 1e28) / getcTokenExchangeRate();
+        cToken.redeem(cTokensToWithDraw);
+        // TODO: add a require here to check that the contract balance change is the what is expected after the redeem.
+        token.transfer(swap.owner,tokensToSend);
     }
 
     /**
-    * @dev settle a long swap against the pool
+    * @dev calculate how much needs to be paid to the trader at end of swap
     * @notice long offer swap where the lequidity pool is short: reciving a fixed rate and paying a floating rate
-    */
-    function settleLongSwap(Swap _swap) internal returns (uint256) {
-        swapInterestNpv = getFloatingGain(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount) -
-            cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime);
-        return 0;
-    }
-    /**
-    @dev settle a short swap
     * @notice short offer swap the lequidity pool is long: reciving floating rate, paying fixed rate
     */
-    function settleShortSwap(Swap _swap) internal returns (uint256) {
-        swapInterestNpv = cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer,_swap.startingTime, _swap.endingTime) -
-            getFloatingGain(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount);
-        return 0;
+    function tokensToPayTrader(Swap _swap) internal returns (uint256) {
+        //if the trader is long then they will pay fixed, recive float.
+        if (swap.bet == Bet.Long) {
+            return
+                _swap.amount +
+                getFloatingValue(
+                    _swap.startingcTokenExchangeRate,
+                    getcTokenExchangeRate(),
+                    _swap.amount
+                ) -
+                cherryMath.futureValue(
+                    _swap.amount,
+                    _swap.fixedRateOffer,
+                    _swap.startingTime,
+                    _swap.endingTime
+                );
+        }
+        //if the trader is short then they will recive fixed, pay float.
+        if (swap.bet == Bet.Short) {
+            return
+                swap.amount +
+                cherryMath.futureValue(
+                    _swap.amount,
+                    _swap.fixedRateOffer,
+                    _swap.startingTime,
+                    _swap.endingTime
+                ) -
+                getFloatingValue(
+                    _swap.startingcTokenExchangeRate,
+                    getcTokenExchangeRate(),
+                    _swap.amount
+                );
+        }
     }
 
     /**
@@ -251,7 +272,11 @@ contract Cherryswap is Initializable, Cherrypool {
     * If the starting cToken exchange rate is stored and the end rate is known then this function returns
     * the value that _amount has grown by.
      */
-    function getFloatingValue(_startingExchangeRate, _endingExchangeRate, _amount) public view returns (uint256) {
+    function getFloatingValue(
+        _startingExchangeRate,
+        _endingExchangeRate,
+        _amount
+    ) public view returns (uint256) {
         return (_amount * _endExchangeRate) / _startingExchangeRate;
     }
 }
