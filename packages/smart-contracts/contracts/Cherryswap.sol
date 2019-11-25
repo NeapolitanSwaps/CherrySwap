@@ -16,15 +16,15 @@ import "./Cherrymath.sol";
 contract Cherryswap is Initializable, Cherrypool {
     enum Bet {Short, Long}
 
-    uint256 oneMonthDuration = 60 * 60 * 24 * 30;
-    uint256 maxInterestRatePaidPerBlock = uint256(
+    uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
+    uint256 constant maxInterestRatePaidPerBlock = uint256(
         (25 * 1e16) / (4 * 60 * 24 * 365)
     ); //25% APR is the max the pool will pay
 
-    uint256 ALPHA = 150; //scaled by 100 so 150 = 1.5
-    uint256 BETA = 0;
+    uint256 constant ALPHA = 150; //scaled by 100 so 150 = 1.5
+    uint256 constant BETA = 0;
 
-    uint256 RAGE_QUITE_PENALTY = 20; //scaled by 100 so 20 = 0.2
+    uint256 constant RAGE_QUITE_PENALTY = 20; //scaled by 100 so 20 = 0.2
 
     struct Swap {
         address owner;
