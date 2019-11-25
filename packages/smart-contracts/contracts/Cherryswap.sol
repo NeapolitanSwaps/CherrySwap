@@ -7,7 +7,7 @@ import "./interface/ISwapMath.sol";
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./Cherrypool.sol";
-import "./CherryMath.sol";
+import "./Cherrymath.sol";
 
 /**
  * @title Cherryswap Contract
@@ -32,7 +32,7 @@ contract Cherryswap is Initializable, Cherrypool {
         uint256 startingTime;
         uint256 endingTime;
         uint256 fixedRateOffer;
-        uint256 depositedValue;
+        uint256 amount;
         uint256 startingcTokenExchangeRate;
         Bet bet;
     }
@@ -169,9 +169,9 @@ contract Cherryswap is Initializable, Cherrypool {
     * @notice long offer swap where the lequidity pool is short: reciving a fixed rate and paying a floating rate
     * @notice short offer swap the lequidity pool is long: reciving floating rate, paying fixed rate
     */
-    function tokensToPayTrader(Swap _swap) internal returns (uint256) {
+    function tokensToPayTrader(Swap memory _swap) internal returns (uint256) {
         //if the trader is long then they will pay fixed, recive float.
-        if (swap.bet == Bet.Long) {
+        if (_swap.bet == Bet.Long) {
             return
                 _swap.amount +
                 getFloatingValue(
@@ -187,9 +187,9 @@ contract Cherryswap is Initializable, Cherrypool {
                 );
         }
         //if the trader is short then they will recive fixed, pay float.
-        if (swap.bet == Bet.Short) {
+        if (_swap.bet == Bet.Short) {
             return
-                swap.amount +
+                _swap.amount +
                 cherryMath.futureValue(
                     _swap.amount,
                     _swap.fixedRateOffer,
@@ -230,13 +230,13 @@ contract Cherryswap is Initializable, Cherrypool {
     }
 
     function numSwaps() public view returns (uint256) {
-        return swaps.length();
+        return swaps.length;
     }
 
-    function getcTokenExchangeRate() public view returns (uint256) {
+    function getcTokenExchangeRate() public returns (uint256) {
         return
             (cToken.getCash() +
-                cToken.totalBorrows() -
+                cToken.totalBorrowsCurrent() -
                 cToken.totalReserves()) /
             cToken.totalSupply();
     }
@@ -245,8 +245,9 @@ contract Cherryswap is Initializable, Cherrypool {
     @dev calculate the offered fixed rate for swaps taken against the liquidity pool
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
     */
-    function getFixedRateOffer(Bet _bet) public view returns (uint256) {
-        if (_bet == Bet.Long) {
+    function getFixedRateOffer(uint8 _bet) public returns (uint256) {
+        Bet bet = Bet(_bet);
+        if (bet == Bet.Long) {
             return
                 (cToken.supplyRatePerBlock() *
                     (1e18 -
@@ -256,7 +257,7 @@ contract Cherryswap is Initializable, Cherrypool {
                 1e18;
         }
 
-        if (_bet == Bet.Long) {
+        if (bet == Bet.Long) {
             return
                 (cToken.supplyRatePerBlock() *
                     (1e18 +
@@ -273,10 +274,10 @@ contract Cherryswap is Initializable, Cherrypool {
     * the value that _amount has grown by.
      */
     function getFloatingValue(
-        _startingExchangeRate,
-        _endingExchangeRate,
-        _amount
+        uint256 _startingExchangeRate,
+        uint256 _endingExchangeRate,
+        uint256 _amount
     ) public view returns (uint256) {
-        return (_amount * _endExchangeRate) / _startingExchangeRate;
+        return (_amount * _endingExchangeRate) / _startingExchangeRate;
     }
 }
