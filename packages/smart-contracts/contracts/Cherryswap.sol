@@ -158,10 +158,11 @@ contract Cherryswap is Initializable, Cherrypool {
     function closePosition(uint256 _swapId) public returns (uint256) {
         Swap memory swap = swaps[_swapId];
         uint256 tokensToSend = tokensToPayTrader(swap);
-        uint256 cTokensToWithDraw = (tokensToSend * 1e28) / getcTokenExchangeRate();
+        uint256 cTokensToWithDraw = (tokensToSend * 1e28) /
+            getcTokenExchangeRate();
         cToken.redeem(cTokensToWithDraw);
         // TODO: add a require here to check that the contract balance change is the what is expected after the redeem.
-        token.transfer(swap.owner,tokensToSend);
+        token.transfer(swap.owner, tokensToSend);
     }
 
     /**
@@ -250,7 +251,7 @@ contract Cherryswap is Initializable, Cherrypool {
             return
                 (cToken.supplyRatePerBlock() *
                     (1e18 -
-                        calcLongPoolUtilization(longPoolReserved) /
+                        calcLongPoolUtil(longPoolReserved) /
                         ALPHA -
                         BETA)) /
                 1e18;
@@ -260,7 +261,7 @@ contract Cherryswap is Initializable, Cherrypool {
             return
                 (cToken.supplyRatePerBlock() *
                     (1e18 +
-                        calcShortPoolUtilization(shortPoolReserved) /
+                        calcShortPoolUtil(shortPoolReserved) /
                         ALPHA +
                         BETA)) /
                 1e18;
