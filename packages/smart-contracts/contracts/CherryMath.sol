@@ -3,7 +3,7 @@ pragma solidity ^0.5.12;
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "./CarefulMath.sol";
 
-contract CherryMath is Initializable {
+contract CherryMath is Initializable, CarefulMath {
     uint256 private constant FIXED_1 = 0x080000000000000000000000000000000;
 
     /**
@@ -141,6 +141,49 @@ contract CherryMath is Initializable {
             _endcDaiEndPrice
         );
         longPayout = totalPoolDaiValueEnd - shortPayout;
+    }
+
+    // compound functions
+
+    /**
+     * @dev Multiply an Exp by a scalar, then truncate to return an unsigned integer.
+     */
+    function mulScalarTruncate(uint256 a, uint256 scalar)
+        internal
+        pure
+        returns (MathError, uint256)
+    {
+        (MathError err, uint256 product) = mulScalar(a, scalar);
+        if (err != MathError.NO_ERROR) {
+            return (err, 0);
+        }
+
+        return (MathError.NO_ERROR, truncate(product));
+    }
+
+    /**
+     * @dev Multiply an Exp by a scalar, returning a new Exp.
+     */
+    function mulScalar(uint256 mantissa, uint256 scalar)
+        internal
+        pure
+        returns (MathError, uint256)
+    {
+        (MathError err0, uint256 scaledMantissa) = mulUInt(mantissa, scalar);
+        if (err0 != MathError.NO_ERROR) {
+            return (err0, 0);
+        }
+
+        return (MathError.NO_ERROR, scaledMantissa);
+    }
+
+    /**
+     * @dev Truncates the given exp to a whole number value.
+     *      For example, truncate(Exp{mantissa: 15 * expScale}) = 15
+     */
+    function truncate(uint256 mantissa) internal pure returns (uint256) {
+        // Note: We are not using careful math here as we're performing a division that cannot fail => REALLY !
+        return mantissa / 1e18;
     }
 
 }

@@ -7,7 +7,6 @@ import "./interface/ISwapMath.sol";
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./CherryPool.sol";
-import "./CherryMath.sol";
 
 /**
  * @title CherrySwap Contract
@@ -39,8 +38,6 @@ contract CherrySwap is Initializable, Cherrypool {
 
     Swap[] public swaps;
 
-    CherryMath cherryMath;
-
     /**
      * @dev Initialize contract states
      */
@@ -49,15 +46,11 @@ contract CherrySwap is Initializable, Cherrypool {
         initializer
     {
         require(
-            (_token != address(0)) && (_cToken != address(0)),
-            "Cherryswap::invalid tokens addresses"
+            (_token != address(0)) && (_cToken != address(0) && (_cherryMath != address(0))),
+            "CherrySwap::invalid tokens addresses"
         );
 
-        Cherrypool.initialize(_token, _cToken);
-        cherryMath = CherryMath(_cherryMath);
-
-        token = ERC20(_token);
-        cToken = ICERC20(_cToken);
+        Cherrypool.initialize(_token, _cToken, _cherryMath);
 
         cToken.approve(_token, 100000000000e18);
     }

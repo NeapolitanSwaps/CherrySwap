@@ -7,12 +7,14 @@ import "./interface/ICERC20.sol";
 // Contracts
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "./token/CherryDai.sol";
+import "./CherryMath.sol";
+import "./ErrorReporter.sol";
 
 /**
  * @title CherryPool Contract
  * @dev This contract handle Cherry Pool functionalities
  */
-contract Cherrypool is Initializable {
+contract Cherrypool is Initializable, TokenErrorReporter {
     using SafeMath for uint256;
 
     uint256 public poolBalance; // total pool balance
@@ -25,20 +27,35 @@ contract Cherrypool is Initializable {
     ICERC20 public cToken; // cDAI token
     CherryDai public cherryDai; // CherryDai token
 
+    CherryMath cherryMath;  // Math library
+
+    struct RedeemLocalVars {
+        Error err;
+        CherryMath.MathError mathErr;
+        uint exchangeRateMantissa;
+        uint redeemTokens;
+        uint redeemAmount;
+        uint totalSupplyNew;
+        uint accountTokensNew;
+    }
+
     event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
     event PoolShare(uint256 amount);
     event MintCherry(address indexed liquidityProvider, uint256 amount);
+    event RedeemCherry(address indexed liquidityProvider, uint256 redeemAmount, uint256 redeemToken);
     event Transfer(address indexed to, uint256 value);
 
     /**
      * @dev Initialize contract states
      */
-    function initialize(address _token, address _cToken) public initializer {
+    function initialize(address _token, address _cToken, address _cherryMath) public initializer {
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
 
         cherryDai = new CherryDai();
         cherryDai.initialize();
+
+        cherryMath = CherryMath(_cherryMath);
 
         poolBalance = 0;
         longPoolBalance = 0;
@@ -65,7 +82,14 @@ contract Cherrypool is Initializable {
         assert(cToken.mint(_amount) == 0);
 
         // mint CherryDai to liqudity provider
-        cherryDai.mint(msg.sender, _amount.mul(exchangeRate()));
+        CherryMath.MathError _err;
+        uint256 _rate;
+        (_err, _rate) = exchangeRateInternal();
+        if (_err != CherryMath.MathError.NO_ERROR) {
+            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(_err));
+        }
+
+        cherryDai.mint(msg.sender, _amount.mul(_rate));
 
         // internal accounting to store pool balances
         poolBalance.add(_amount);
@@ -171,14 +195,57 @@ contract Cherrypool is Initializable {
             "CherryPool::redeem request is more than current token balance"
         );
 
-        // get exchange rate from underlying+fee to Cherrydai
-        uint256 mantissaEchangeRate = exchangeRate(); // I think this function should get the amount of tokens to redeem, no ?
+        RedeemLocalVars memory vars;
 
-        // trying to mimic the way compound do it... does this work ?
-        uint256 redeemAmount = mulScalarTruncate(mantissaEchangeRate, _amount);
+        // get exchange rate from Cherrydai to Dai+fee
+        (vars.mathErr, vars.exchangeRateMantissa) = exchangeRateInternal();
 
-        // TODO: payout
+        if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
+            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(vars.mathErr));
+        }
 
+        vars.redeemTokens = _amount;
+
+        (vars.mathErr, vars.redeemAmount) = cherryMath.mulScalarTruncate(vars.exchangeRateMantissa, _amount);
+        if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
+            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_TOKENS_CALCULATION_FAILED, uint(vars.mathErr));
+        }
+
+        // TODO: in getCashPrior() we need to check if:
+        // pool balance (cDai) - redeemAmount > (longPoolReserved+shortPoolReserved) (in cDai)
+        /* Fail gracefully if pool has insufficient cash */
+        if (getCashPrior() < vars.redeemAmount) {
+            return fail(Error.TOKEN_INSUFFICIENT_CASH, FailureInfo.REDEEM_TRANSFER_OUT_NOT_POSSIBLE);
+        }
+
+        vars.err = payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
+        require(vars.err == Error.NO_ERROR, "redeem transfer out failed");
+
+        emit RedeemCherry(msg.sender, vars.redeemAmount, vars.redeemTokens);
+
+        return uint(Error.NO_ERROR);
+
+    }
+
+    function getCashPrior() internal returns (uint256) {
+
+    }
+
+    function payout(address _redeemer, uint256 _redeemAmount, uint256 _redeemTokens) internal returns (Error) {
+        // cDai to Dai exchange rate
+        uint _exchangeRate = cToken.exchangeRate();
+
+        // Redeem cDai to Dai
+        require(
+            cToken.redeem(_redeemAmount) == 0,
+            "CherryPool::payout - something went wrong"
+        );
+
+        uint256 _payout = _redeemAmount.mul(_exchangeRate);
+        token.transfer(_redeemer, _payout);
+        
+        // TODO: modify burnable token to burn specifi address token
+        // cherryDai.burn(_redeemer, _redeemTokens);
     }
 
     /**
@@ -186,8 +253,8 @@ contract Cherrypool is Initializable {
      * @notice Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
      * @return 0 if successful otherwise an error code
      */
-    function exchangeRate() public view returns (uint256) {
-        return 1;
+    function exchangeRateInternal() internal view returns (CherryMath.MathError, uint256) {
+        return (CherryMath.MathError.NO_ERROR, 1);
     }
 
     function _reserveLongPool(uint256 _amount) internal {
@@ -200,66 +267,6 @@ contract Cherrypool is Initializable {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         shortPoolReserved.add(_amount);
-    }
-
-    /// Will need to move those... sure they are already in the math contract.... so lazy to look there for now
-
-    /**
-     * @dev Multiply an Exp by a scalar, then truncate to return an unsigned integer.
-     */
-    function mulScalarTruncate(uint256 a, uint256 scalar)
-        internal
-        pure
-        returns (uint256)
-    {
-        uint256 product = mulScalar(a, scalar);
-        if (product == 0) {
-            return 0;
-        }
-
-        return truncate(product);
-    }
-
-    /**
-     * @dev Multiply an Exp by a scalar, returning a new Exp.
-     */
-    function mulScalar(uint256 mantissa, uint256 scalar)
-        internal
-        pure
-        returns (uint256)
-    {
-        uint256 scaledMantissa = mulUInt(mantissa, scalar);
-        if (scaledMantissa == 0) {
-            return 0;
-        }
-
-        return scaledMantissa;
-    }
-
-    /**
-     * @dev Multiplies two numbers, returns an error on overflow.
-     */
-    function mulUInt(uint256 a, uint256 b) internal pure returns (uint256) {
-        if (a == 0) {
-            return 0;
-        }
-
-        uint256 c = a * b;
-
-        if (c / a != b) {
-            return 0;
-        } else {
-            return c;
-        }
-    }
-
-    /**
-     * @dev Truncates the given exp to a whole number value.
-     *      For example, truncate(Exp{mantissa: 15 * expScale}) = 15
-     */
-    function truncate(uint256 mantissa) internal pure returns (uint256) {
-        // Note: We are not using careful math here as we're performing a division that cannot fail => REALLY !
-        return mantissa / 1e18;
     }
 
 }
