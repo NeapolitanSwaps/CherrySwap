@@ -1,8 +1,9 @@
 pragma solidity ^0.5.12;
 
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
+import "./CarefulMath.sol";
 
-contract Cherrymath is Initializable {
+contract CherryMath is Initializable {
     uint256 private constant FIXED_1 = 0x080000000000000000000000000000000;
 
     /**

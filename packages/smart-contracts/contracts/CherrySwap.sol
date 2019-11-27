@@ -6,14 +6,14 @@ import "./interface/ISwapMath.sol";
 // Contracts
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
-import "./Cherrypool.sol";
-import "./Cherrymath.sol";
+import "./CherryPool.sol";
+import "./CherryMath.sol";
 
 /**
- * @title Cherryswap Contract
+ * @title CherrySwap Contract
  * @dev This contract handle all swaping operations
  */
-contract Cherryswap is Initializable, Cherrypool {
+contract CherrySwap is Initializable, Cherrypool {
     enum Bet {Short, Long}
 
     uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
@@ -39,7 +39,7 @@ contract Cherryswap is Initializable, Cherrypool {
 
     Swap[] public swaps;
 
-    Cherrymath cherryMath;
+    CherryMath cherryMath;
 
     /**
      * @dev Initialize contract states
@@ -54,7 +54,7 @@ contract Cherryswap is Initializable, Cherrypool {
         );
 
         Cherrypool.initialize(_token, _cToken);
-        cherryMath = Cherrymath(_cherryMath);
+        cherryMath = CherryMath(_cherryMath);
 
         token = ERC20(_token);
         cToken = ICERC20(_cToken);

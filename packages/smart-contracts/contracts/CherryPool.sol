@@ -9,7 +9,7 @@ import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "./token/CherryDai.sol";
 
 /**
- * @title Cherrypool Contract
+ * @title CherryPool Contract
  * @dev This contract handle Cherry Pool functionalities
  */
 contract Cherrypool is Initializable {
