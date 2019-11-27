@@ -81,7 +81,7 @@ contract Cherrypool is Initializable {
      */
     modifier isLongUtilized() {
         require(
-            calcLongPoolUtilization(longPoolReserved) < 1e18,
+            calcLongPoolUtil(longPoolReserved) < 1e18,
             "Cherrypool::long pool if fully utilized"
         );
         _;
@@ -92,7 +92,7 @@ contract Cherrypool is Initializable {
      */
     modifier isShortUtilized() {
         require(
-            calcShortPoolUtilization(shortPoolReserved) < 1e18,
+            calcShortPoolUtil(shortPoolReserved) < 1e18,
             "Cherrypool::short pool is fully utilized"
         );
         _;
@@ -120,7 +120,7 @@ contract Cherrypool is Initializable {
      * @return current long pool utilization as a decimal scaled 10*18
      */
 
-    function calcLongPoolUtilization(uint256 _longPoolReserved)
+    function calcLongPoolUtil(uint256 _longPoolReserved)
         public
         view
         returns (uint256)
@@ -133,7 +133,7 @@ contract Cherrypool is Initializable {
      * @param _shortPoolReserved amount of liquidity reserved in the short pool
      * @return current short pool utilization as a decimal scaled 10*18
      */
-    function calcShortPoolUtilization(uint256 _shortPoolReserved)
+    function calcShortPoolUtil(uint256 _shortPoolReserved)
         public
         view
         returns (uint256)
