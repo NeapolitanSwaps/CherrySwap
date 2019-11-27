@@ -2,7 +2,9 @@ pragma solidity ^0.5.12;
 
 interface ICERC20 {
 
-    function totalSupply() external view returns (uint256);
+    event Transfer(address indexed from, address indexed to, uint256 value);
+
+    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     function balanceOf(address account) external view returns (uint256);
 
@@ -13,10 +15,6 @@ interface ICERC20 {
     function approve(address spender, uint256 amount) external returns (bool);
 
     function transferFrom(address sender, address recipient, uint256 amount) external returns (bool);
-
-    event Transfer(address indexed from, address indexed to, uint256 value);
-
-    event Approval(address indexed owner, address indexed spender, uint256 value);
 
     function mint(uint mintAmount) external returns (uint);
 
@@ -34,4 +32,7 @@ interface ICERC20 {
 
     function totalSupply() external returns (uint);
 
+    function totalBorrowsCurrent() external returns (uint);
+
+    function totalReserves() external returns (uint);
 }
