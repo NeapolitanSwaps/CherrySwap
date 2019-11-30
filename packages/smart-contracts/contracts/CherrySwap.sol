@@ -59,7 +59,7 @@ contract CherrySwap is Initializable, Cherrypool {
      * @dev function called by trader to enter into long swap position.
      * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
-    function createLongPosition(uint256 _amount, uint8 _bet) public {
+    function createLongPosition(uint256 _amount, uint8 _bet) public isLongUtilized {
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create long position transfer from failed"
@@ -79,7 +79,7 @@ contract CherrySwap is Initializable, Cherrypool {
 
         uint256 reserveAmount = futureValue - _amount;
 
-        reserveLongPool(reserveAmount);
+        _reserveLongPool(reserveAmount);
 
         uint256 fixedRateOffer = getFixedRateOffer(_bet);
 
@@ -101,7 +101,7 @@ contract CherrySwap is Initializable, Cherrypool {
      * @dev function called by trader to enter into short swap position.
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
-    function createShortPosition(uint256 _amount, uint8 _bet) public {
+    function createShortPosition(uint256 _amount, uint8 _bet) public isShortUtilized {
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create short position transfer from failed"
@@ -121,7 +121,7 @@ contract CherrySwap is Initializable, Cherrypool {
 
         uint256 reserveAmount = futureValue - _amount;
 
-        reserveShortPool(reserveAmount);
+        _reserveShortPool(reserveAmount);
 
         uint256 fixedRateOffer = getFixedRateOffer(_bet);
 
@@ -202,22 +202,6 @@ contract CherrySwap is Initializable, Cherrypool {
      */
     function rageQuitSwap(uint256 _swapId) public returns (uint256) {
         return 0;
-    }
-
-    function reserveLongPool(uint256 _amount)
-        internal
-        isLongUtilized
-        canReserveLong(_amount)
-    {
-        _reserveLongPool(_amount);
-    }
-
-    function reserveShortPool(uint256 _amount)
-        internal
-        isShortUtilized
-        canReserveShort(_amount)
-    {
-        _reserveLongPool(_amount);
     }
 
     function numSwaps() public view returns (uint256) {

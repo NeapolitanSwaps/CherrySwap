@@ -259,13 +259,13 @@ contract Cherrypool is Initializable, TokenErrorReporter {
         return (CherryMath.MathError.NO_ERROR, 1);
     }
 
-    function _reserveLongPool(uint256 _amount) internal {
+    function _reserveLongPool(uint256 _amount) internal canReserveLong(_amount) {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         longPoolReserved.add(_amount);
     }
 
-    function _reserveShortPool(uint256 _amount) internal {
+    function _reserveShortPool(uint256 _amount) internal canReserveShort(_amount) {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         shortPoolReserved.add(_amount);
