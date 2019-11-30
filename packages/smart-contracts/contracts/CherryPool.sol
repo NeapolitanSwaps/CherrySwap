@@ -65,43 +65,6 @@ contract Cherrypool is Initializable, TokenErrorReporter {
     }
 
     /**
-     * @dev at liquidity to the cherry pool to offer swaps against
-     * @param _amount amount of deposited DAI
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
-     */
-    function mint(uint256 _amount) public returns (uint) {
-        require(_amount > 0, "Cherrypool::amount provided should be higher");
-
-        // collect liquidity from provider
-        require(
-            token.transferFrom(msg.sender, address(this), _amount),
-            "Cherrypool::deposit liquidity failed"
-        );
-
-        // deposit liqudity into compound
-        token.approve(address(cToken), _amount);
-        assert(cToken.mint(_amount) == 0);
-
-        CherryMath.MathError _err;
-        uint256 _rate;
-        (_err, _rate) = exchangeRateInternal();
-        if (_err != CherryMath.MathError.NO_ERROR) {
-            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(_err));
-        }
-
-        // mint CherryDai to liqudity provider
-        cherryDai.mint(msg.sender, _amount.mul(_rate));
-
-        // internal accounting to store pool balances
-        poolBalance.add(_amount);
-        longPoolBalance.add(_amount.div(2));
-        shortPoolBalance.add(_amount.div(2));
-
-        emit DepositLiquidity(msg.sender, _amount);
-        emit MintCherry(msg.sender, _amount);
-    }
-
-    /**
      * @dev Modifier to check if long pool is not fully utilized
      */
     modifier isLongUtilized() {
@@ -137,6 +100,43 @@ contract Cherrypool is Initializable, TokenErrorReporter {
             "Cherrypool::short pool does not have liquidity"
         );
         _;
+    }
+
+     /**
+     * @dev at liquidity to the cherry pool to offer swaps against
+     * @param _amount amount of deposited DAI
+     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     */
+    function mint(uint256 _amount) public returns (uint) {
+        require(_amount > 0, "Cherrypool::amount provided should be higher");
+
+        // collect liquidity from provider
+        require(
+            token.transferFrom(msg.sender, address(this), _amount),
+            "Cherrypool::deposit liquidity failed"
+        );
+
+        // deposit liqudity into compound
+        token.approve(address(cToken), _amount);
+        assert(cToken.mint(_amount) == 0);
+
+        CherryMath.MathError _err;
+        uint256 _rate;
+        (_err, _rate) = exchangeRateInternal();
+        if (_err != CherryMath.MathError.NO_ERROR) {
+            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(_err));
+        }
+
+        // mint CherryDai to liqudity provider
+        cherryDai.mint(msg.sender, _amount.mul(_rate));
+
+        // internal accounting to store pool balances
+        poolBalance.add(_amount);
+        longPoolBalance.add(_amount.div(2));
+        shortPoolBalance.add(_amount.div(2));
+
+        emit DepositLiquidity(msg.sender, _amount);
+        emit MintCherry(msg.sender, _amount);
     }
 
     /**
@@ -182,6 +182,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
     /**
      * @dev transfer underlying asset back to liquidity provider assuming liquidity is still sufficient.
      * @notice the amount returned is the number of cherrytokens multiplied by the current exchange rate
+     * The sender should approve the _amount to this contract address
      * @param _amount amount of CherryDai to redeem
      * @return 0 if successful otherwise an error code
      */
@@ -208,7 +209,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
         vars.redeemTokens = _amount;
 
         // Calculate the amount of Dai to get(redeemAmount) from redeeming CherryDai(redeemTokens)
-        (vars.mathErr, vars.redeemAmount) = cherryMath.mulScalarTruncate(vars.exchangeRateMantissa, _amount);
+        (vars.mathErr, vars.redeemAmount) = cherryMath.mulScalarTruncate(vars.exchangeRateMantissa, vars.redeemTokens);
         if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_TOKENS_CALCULATION_FAILED, uint(vars.mathErr));
         }
@@ -218,8 +219,8 @@ contract Cherrypool is Initializable, TokenErrorReporter {
             return fail(Error.TOKEN_INSUFFICIENT_CASH, FailureInfo.REDEEM_TRANSFER_OUT_NOT_POSSIBLE);
         }
 
-        vars.err = payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
-        require(vars.err == Error.NO_ERROR, "redeem transfer out failed");
+        payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
+        //require(vars.err == Error.NO_ERROR, "redeem transfer out failed");
 
         emit RedeemCherry(msg.sender, vars.redeemAmount, vars.redeemTokens);
 
@@ -227,25 +228,26 @@ contract Cherrypool is Initializable, TokenErrorReporter {
 
     }
 
+    /**
+     * @dev Get available pool balance (total pool balance - total reserved balance)
+     * @return available pool balance
+     * @return 0 if successful otherwise an error code
+     */
     function getCashPrior() internal returns (uint256) {
         return poolBalance - (shortPoolReserved + longPoolReserved);
     }
 
     function payout(address _redeemer, uint256 _redeemAmount, uint256 _redeemTokens) internal returns (Error) {
-        // cDai to Dai exchange rate
-        uint _exchangeRate = cToken.exchangeRateCurrent();
-
-        // Redeem cDai to Dai
+        cherryDai.burnFrom(_redeemer, _redeemTokens);
+        
+        // redeem an amount of underlying
         require(
-            cToken.redeem(_redeemAmount) == 0,
+            cToken.redeemUnderlying(_redeemAmount) == 0,
             "CherryPool::payout - something went wrong"
         );
 
-        uint256 _payout = _redeemAmount.mul(_exchangeRate);
-        token.transfer(_redeemer, _payout);
-        
-        // TODO: modify burnable token to burn specifi address token
-        // cherryDai.burn(_redeemer, _redeemTokens);
+        // transfer Dai to redeemer
+        token.transfer(_redeemer, _redeemAmount);
     }
 
     /**
