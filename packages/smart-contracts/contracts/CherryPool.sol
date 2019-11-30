@@ -207,13 +207,12 @@ contract Cherrypool is Initializable, TokenErrorReporter {
 
         vars.redeemTokens = _amount;
 
+        // Calculate the amount of Dai to get(redeemAmount) from redeeming CherryDai(redeemTokens)
         (vars.mathErr, vars.redeemAmount) = cherryMath.mulScalarTruncate(vars.exchangeRateMantissa, _amount);
         if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_TOKENS_CALCULATION_FAILED, uint(vars.mathErr));
         }
 
-        // TODO: in getCashPrior() we need to check if:
-        // pool balance (cDai) - redeemAmount > (longPoolReserved+shortPoolReserved) (in cDai)
         /* Fail gracefully if pool has insufficient cash */
         if (getCashPrior() < vars.redeemAmount) {
             return fail(Error.TOKEN_INSUFFICIENT_CASH, FailureInfo.REDEEM_TRANSFER_OUT_NOT_POSSIBLE);
@@ -229,7 +228,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
     }
 
     function getCashPrior() internal returns (uint256) {
-
+        return poolBalance - (shortPoolReserved + longPoolReserved);
     }
 
     function payout(address _redeemer, uint256 _redeemAmount, uint256 _redeemTokens) internal returns (Error) {
