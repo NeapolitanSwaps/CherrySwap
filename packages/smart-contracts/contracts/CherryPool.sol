@@ -67,8 +67,9 @@ contract Cherrypool is Initializable, TokenErrorReporter {
     /**
      * @dev at liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
+     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
      */
-    function mint(uint256 _amount) public {
+    function mint(uint256 _amount) public returns (uint) {
         require(_amount > 0, "Cherrypool::amount provided should be higher");
 
         // collect liquidity from provider
@@ -81,7 +82,6 @@ contract Cherrypool is Initializable, TokenErrorReporter {
         token.approve(address(cToken), _amount);
         assert(cToken.mint(_amount) == 0);
 
-        // mint CherryDai to liqudity provider
         CherryMath.MathError _err;
         uint256 _rate;
         (_err, _rate) = exchangeRateInternal();
@@ -89,6 +89,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(_err));
         }
 
+        // mint CherryDai to liqudity provider
         cherryDai.mint(msg.sender, _amount.mul(_rate));
 
         // internal accounting to store pool balances
@@ -188,7 +189,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
         public
         isLongUtilized()
         isShortUtilized()
-        returns (uint256)
+        returns (uint)
     {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
@@ -233,7 +234,7 @@ contract Cherrypool is Initializable, TokenErrorReporter {
 
     function payout(address _redeemer, uint256 _redeemAmount, uint256 _redeemTokens) internal returns (Error) {
         // cDai to Dai exchange rate
-        uint _exchangeRate = cToken.exchangeRate();
+        uint _exchangeRate = cToken.exchangeRateCurrent();
 
         // Redeem cDai to Dai
         require(
