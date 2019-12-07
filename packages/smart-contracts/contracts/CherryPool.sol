@@ -17,11 +17,12 @@ import "./ErrorReporter.sol";
 contract CherryPool is Initializable, TokenErrorReporter {
     using SafeMath for uint256;
 
-    uint256 public poolBalance; // total pool balance
+    uint256 public poolBalance; // total pool balance in DAI
     uint256 public longPoolBalance; // long pool balance in DAI
     uint256 public shortPoolBalance; // short pool balance in DAI
     uint256 public longPoolReserved; // amount of DAI reserved in the long pool
     uint256 public shortPoolReserved; // amount of DAI reserved in the short pool
+    int256 public poolcTokenProfit; //the total net profit the pool has made (or lost) during it life
 
     IERC20 public token; // collateral asset = DAI
     ICERC20 public cToken; // cDAI token
@@ -102,7 +103,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         _;
     }
 
-     /**
+    /**
      * @dev at liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
      * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
@@ -122,7 +123,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         CherryMath.MathError _err;
         uint256 _rate;
-        (_err, _rate) = exchangeRateInternal();
+        (_err, _rate) = exchangeRate();
         if (_err != CherryMath.MathError.NO_ERROR) {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(_err));
         }
@@ -200,7 +201,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         RedeemLocalVars memory vars;
 
         // get exchange rate from Cherrydai to Dai+fee
-        (vars.mathErr, vars.exchangeRateMantissa) = exchangeRateInternal();
+        (vars.mathErr, vars.exchangeRateMantissa) = exchangeRate();
 
         if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint(vars.mathErr));
@@ -255,10 +256,11 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @notice Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
      * @return 0 if successful otherwise an error code
      */
-    function exchangeRateInternal() internal view returns (CherryMath.MathError, uint256) {
-        return (CherryMath.MathError.NO_ERROR, 1);
+    function exchangeRate() public returns (CherryMath.MathError, uint256) {
+        int256 rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        return (CherryMath.MathError.NO_ERROR, uint256(rate));
     }
-
+    
     function _reserveLongPool(uint256 _amount) internal canReserveLong(_amount) {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
@@ -269,6 +271,28 @@ contract CherryPool is Initializable, TokenErrorReporter {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
         shortPoolReserved.add(_amount);
+    }
+
+    function _freeLongPool(uint256 _amount) internal {
+        require(_amount > 0, "Cherrypool::invalid amount to free");
+        longPoolReserved.sub(_amount);
+    }
+
+    function _freeShortPool(uint256 _amount) internal {
+        require(_amount > 0, "Cherrypool::invalid amount to free");
+        shortPoolReserved.sub(_amount);
+    }
+
+    function _addcTokenPoolProfit(int256 _profit) internal {
+        poolcTokenProfit += _profit;
+    }
+
+    function getcTokenExchangeRate() public returns (uint256) {
+        return
+            (cToken.getCash() +
+                cToken.totalBorrowsCurrent() -
+                cToken.totalReserves()) /
+            cToken.totalSupply();
     }
 
 }
