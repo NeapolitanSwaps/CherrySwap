@@ -14,7 +14,7 @@ import "./ErrorReporter.sol";
  * @title CherryPool Contract
  * @dev This contract handle Cherry Pool functionalities
  */
-contract Cherrypool is Initializable, TokenErrorReporter {
+contract CherryPool is Initializable, TokenErrorReporter {
     using SafeMath for uint256;
 
     uint256 public poolBalance; // total pool balance

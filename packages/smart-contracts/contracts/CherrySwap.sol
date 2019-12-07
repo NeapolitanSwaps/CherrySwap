@@ -12,7 +12,7 @@ import "./CherryPool.sol";
  * @title CherrySwap Contract
  * @dev This contract handle all swaping operations
  */
-contract CherrySwap is Initializable, Cherrypool {
+contract CherrySwap is Initializable, CherryPool {
     enum Bet {Short, Long}
 
     uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
@@ -50,7 +50,7 @@ contract CherrySwap is Initializable, Cherrypool {
             "CherrySwap::invalid tokens addresses"
         );
 
-        Cherrypool.initialize(_token, _cToken, _cherryMath);
+        CherryPool.initialize(_token, _cToken, _cherryMath);
 
         cToken.approve(_token, 100000000000e18);
     }
