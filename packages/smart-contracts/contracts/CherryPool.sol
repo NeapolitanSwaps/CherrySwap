@@ -45,6 +45,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
     event MintCherry(address indexed liquidityProvider, uint256 amount);
     event RedeemCherry(address indexed liquidityProvider, uint256 redeemAmount, uint256 redeemToken);
     event Transfer(address indexed to, uint256 value);
+    event CurrentExchangeRate(uint256 rate);
 
     /**
      * @dev Initialize contract states
@@ -132,9 +133,9 @@ contract CherryPool is Initializable, TokenErrorReporter {
         cherryDai.mint(msg.sender, _amount.mul(_rate));
 
         // internal accounting to store pool balances
-        poolBalance.add(_amount);
-        longPoolBalance.add(_amount.div(2));
-        shortPoolBalance.add(_amount.div(2));
+        poolBalance = poolBalance.add(_amount);
+        longPoolBalance = longPoolBalance.add(_amount.div(2));
+        shortPoolBalance = shortPoolBalance.add(_amount.div(2));
 
         emit DepositLiquidity(msg.sender, _amount);
         emit MintCherry(msg.sender, _amount);
@@ -257,20 +258,23 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return 0 if successful otherwise an error code
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
-        int256 rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        int256 rate = int256(getcTokenExchangeRate() / 1e10); //+ (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+
+        emit CurrentExchangeRate(uint256(rate));
+
         return (CherryMath.MathError.NO_ERROR, uint256(rate));
     }
     
     function _reserveLongPool(uint256 _amount) internal canReserveLong(_amount) {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
-        longPoolReserved.add(_amount);
+        longPoolReserved = longPoolReserved.add(_amount);
     }
 
     function _reserveShortPool(uint256 _amount) internal canReserveShort(_amount) {
         require(_amount > 0, "Cherrypool::invalid amount to reserve");
 
-        shortPoolReserved.add(_amount);
+        shortPoolReserved = shortPoolReserved.add(_amount);
     }
 
     function _freeLongPool(uint256 _amount) internal {
