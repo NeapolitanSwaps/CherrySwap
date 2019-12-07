@@ -69,7 +69,7 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
     it("Deposit liquidity into the pool", async() => {
       await token.approve(cherryswap.address, _amountToDeposit, {from: provider1});
       await cherryswap.mint(_amountToDeposit, {from: provider1});
-      let _exchangeRate = await cherryswap.exchangeRateInternal();
+      let _exchangeRate = await cherryswap.exchangeRate();
       let providerCherryDaiBalance = await cherryswap.cherryDaiBalanceOf(provider1);
       assert.equal(providerCherryDaiBalance, _amountToDeposit*parseInt(_exchangeRate[1]), "Wrong CherryDai minted amount for liquidity provider");
       assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
@@ -96,7 +96,7 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
 
     it("create long position", async() => {
       await token.approve(cherryswap.address, _longPositionSize, { from: trader1 });
-      await cherryswap.createLongPosition(_longPositionSize, 1, { from: trader1 });
+      await cherryswap.createLongPosition(_longPositionSize, { from: trader1 });
     });
   });
   
