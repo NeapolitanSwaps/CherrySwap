@@ -62,8 +62,6 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
     function createLongPosition(uint256 _amount) public isLongUtilized {
-        Bet bet = Bet.Short;
-        
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create long position transfer from failed"
@@ -91,7 +89,7 @@ contract CherrySwap is Initializable, CherryPool {
 
         _reserveLongPool(reserveAmount);
 
-        uint256 fixedRateOffer = getFixedRateOffer(bet);
+        uint256 fixedRateOffer = getFixedRateOffer(Bet.Long);
 
         swaps.push(
             Swap(
@@ -104,7 +102,7 @@ contract CherrySwap is Initializable, CherryPool {
                 cTokensMinted,
                 reserveAmount,
                 getcTokenExchangeRate(),
-                Bet(bet)
+                Bet.Long
             )
         );
     }
@@ -114,8 +112,6 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
     function createShortPosition(uint256 _amount) public isShortUtilized {
-        Bet bet = Bet.Short;
-        
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create short position transfer from failed"
@@ -143,7 +139,7 @@ contract CherrySwap is Initializable, CherryPool {
 
         _reserveShortPool(reserveAmount);
 
-        uint256 fixedRateOffer = getFixedRateOffer(bet);
+        uint256 fixedRateOffer = getFixedRateOffer(Bet.Short);
 
         swaps.push(
             Swap(
@@ -156,7 +152,7 @@ contract CherrySwap is Initializable, CherryPool {
                 cTokensMinted,
                 reserveAmount,
                 getcTokenExchangeRate(),
-                Bet(bet)
+                Bet.Short
             )
         );
     }
@@ -241,20 +237,11 @@ contract CherrySwap is Initializable, CherryPool {
         return swaps.length;
     }
 
-    function getcTokenExchangeRate() public returns (uint256) {
-        return
-            (cToken.getCash() +
-                cToken.totalBorrowsCurrent() -
-                cToken.totalReserves()) /
-            cToken.totalSupply();
-    }
-
     /**
     @dev calculate the offered fixed rate for swaps taken against the liquidity pool
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
     */
-    function getFixedRateOffer(Bet _bet) public returns (uint256) {
-        Bet bet = Bet(_bet);
+    function getFixedRateOffer(Bet bet) public returns (uint256) {
         if (bet == Bet.Long) {
             return
                 (cToken.supplyRatePerBlock() *
