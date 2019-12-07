@@ -16,9 +16,9 @@ contract CherrySwap is Initializable, CherryPool {
     enum Bet {Short, Long}
 
     uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
-    uint256 constant maxInterestRatePaidPerBlock = uint256(
-        (25 * 1e16) / (4 * 60 * 24 * 365)
-    ); //25% APR is the max the pool will pay
+    //25% APR is the max the pool will pay. This is 25%, compounding per block,
+    // scaled by 10^18. calculate by: (0.25 * 1e18) / (4 * 60 * 24 * 365)
+    uint256 constant maxInterestRatePaidPerBlock = 118911719939; 
 
     uint256 constant ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 constant BETA = 0;
