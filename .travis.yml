@@ -15,7 +15,7 @@ env:
   - TASK=contracts:test
   - TASK=frontend:test
 before_script:
-  - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &,
+  - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
 script:
   - travis_wait 60 npm run $TASK
