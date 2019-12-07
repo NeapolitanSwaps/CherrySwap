@@ -288,11 +288,13 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     function getcTokenExchangeRate() public returns (uint256) {
-        return
+        /*return
             (cToken.getCash() +
                 cToken.totalBorrowsCurrent() -
                 cToken.totalReserves()) /
-            cToken.totalSupply();
+            cToken.totalSupply();*/
+
+        return cToken.exchangeRateCurrent();
     }
 
 }

@@ -22,7 +22,7 @@ interface ICERC20 {
 
     function redeemUnderlying(uint redeemAmount) external returns (uint);
 
-    function exchangeRateCurrent() external returns (uint);
+    function exchangeRateCurrent() external returns (uint256);
 
     function getCash() external returns (uint);
 

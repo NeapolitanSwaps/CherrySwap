@@ -1,8 +1,5 @@
 pragma solidity ^0.5.12;
 
-// Library & interfaces
-import "./interface/ICERC20.sol";
-import "./interface/ISwapMath.sol";
 // Contracts
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
@@ -18,7 +15,7 @@ contract CherrySwap is Initializable, CherryPool {
     uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
     //25% APR is the max the pool will pay. This is 25%, compounding per block,
     // scaled by 10^18. calculate by: (0.25 * 1e18) / (4 * 60 * 24 * 365)
-    uint256 constant maxInterestRatePaidPerBlock = 118911719939; 
+    uint256 constant maxInterestRatePaidPerBlock = 118911719939;
 
     uint256 constant ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 constant BETA = 0;
@@ -167,7 +164,7 @@ contract CherrySwap is Initializable, CherryPool {
         Swap memory swap = swaps[_swapId];
         uint256 tokensToSend = tokensToPayTrader(swap);
         uint256 cTokensToWithDraw = (tokensToSend * 1e28) /
-            getcTokenExchangeRate();
+        getcTokenExchangeRate();
         cToken.redeemUnderlying(cTokensToWithDraw);
         // TODO: add a require here to check that the contract balance change is the what is expected after the redeem.
         token.transfer(swap.owner, tokensToSend);
@@ -262,6 +259,7 @@ contract CherrySwap is Initializable, CherryPool {
                 1e18;
         }
     }
+
     /**
     * @dev given the starting and end exchange rate of a cToken calculate the final valuation of the position
     * @notice this acts to scale the amount by the change in exchange rate seen by the cToken.

@@ -29,4 +29,8 @@ contract CTokenMock is ERC20 {
     function totalSupply() public view returns (uint256) {
         return 112835765547222288;
     }
+
+    function exchangeRateCurrent() public view returns (uint256) {
+        return 200127082732698445793170721;
+    }
 }
