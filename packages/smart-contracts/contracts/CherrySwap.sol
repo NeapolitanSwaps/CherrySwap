@@ -66,7 +66,7 @@ contract CherrySwap is Initializable, CherryPool {
             oneMonthDuration
         );
 
-        uint256 reserveAmount = (futureValue - _amount) * 1e3;
+        uint256 reserveAmount = futureValue - _amount;
 
         // should first check if pool have enough liquidity to cover swap position
         _reserveLongPool(reserveAmount);
@@ -115,7 +115,7 @@ contract CherrySwap is Initializable, CherryPool {
             oneMonthDuration
         );
 
-        uint256 reserveAmount = (futureValue - _amount) * 1e3;
+        uint256 reserveAmount = futureValue - _amount;
 
         // should first check if pool have enough liquidity to cover swap position
         _reserveShortPool(reserveAmount);
