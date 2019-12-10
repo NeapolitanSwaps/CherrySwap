@@ -59,6 +59,18 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
      */
     function createLongPosition(uint256 _amount) public isLongUtilized {
+        uint256 futureValue = cherryMath.futureValue(
+            _amount,
+            maxInterestRatePaidPerBlock,
+            0,
+            oneMonthDuration
+        );
+
+        uint256 reserveAmount = (futureValue - _amount) * 1e3;
+
+        // should first check if pool have enough liquidity to cover swap position
+        _reserveLongPool(reserveAmount);
+
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create long position transfer from failed"
@@ -72,20 +84,7 @@ contract CherrySwap is Initializable, CherryPool {
         );
 
         uint256 cherrySwapBalanceAfter = cToken.balanceOf(address(this));
-
         uint256 cTokensMinted = cherrySwapBalanceAfter - cherrySwapBalanceBefore;
-
-        uint256 futureValue = cherryMath.futureValue(
-            _amount,
-            maxInterestRatePaidPerBlock,
-            0,
-            oneMonthDuration
-        );
-
-        uint256 reserveAmount = futureValue - _amount;
-
-        _reserveLongPool(reserveAmount);
-
         uint256 fixedRateOffer = getFixedRateOffer(Bet.Long);
 
         swaps.push(
@@ -109,22 +108,6 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
     function createShortPosition(uint256 _amount) public isShortUtilized {
-        require(
-            token.transferFrom(msg.sender, address(this), _amount),
-            "CherrySwap::create short position transfer from failed"
-        );
-
-        uint256 cherrySwapBalanceBefore = cToken.balanceOf(address(this));
-
-        require(
-            cToken.mint(_amount) == 0,
-            "CherrySwap::create short position compound deposit failed"
-        );
-
-        uint256 cherrySwapBalanceAfter = cToken.balanceOf(address(this));
-
-        uint256 cTokensMinted = cherrySwapBalanceAfter - cherrySwapBalanceBefore;
-
         uint256 futureValue = cherryMath.futureValue(
             _amount,
             maxInterestRatePaidPerBlock,
@@ -132,10 +115,24 @@ contract CherrySwap is Initializable, CherryPool {
             oneMonthDuration
         );
 
-        uint256 reserveAmount = futureValue - _amount;
+        uint256 reserveAmount = (futureValue - _amount) * 1e3;
 
+        // should first check if pool have enough liquidity to cover swap position
         _reserveShortPool(reserveAmount);
 
+        require(
+            token.transferFrom(msg.sender, address(this), _amount),
+            "CherrySwap::create short position transfer from failed"
+        );
+
+        require(
+            cToken.mint(_amount) == 0,
+            "CherrySwap::create short position compound deposit failed"
+        );
+
+        uint256 cherrySwapBalanceBefore = cToken.balanceOf(address(this));
+        uint256 cherrySwapBalanceAfter = cToken.balanceOf(address(this));
+        uint256 cTokensMinted = cherrySwapBalanceAfter - cherrySwapBalanceBefore;
         uint256 fixedRateOffer = getFixedRateOffer(Bet.Short);
 
         swaps.push(
