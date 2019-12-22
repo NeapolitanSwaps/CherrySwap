@@ -2,7 +2,6 @@ pragma solidity ^0.5.12;
 
 // Contracts
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
-import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 import "./CherryPool.sol";
 
 /**

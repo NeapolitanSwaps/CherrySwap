@@ -13,6 +13,7 @@ const TokenContract = artifacts.require("TokenMock");
 const CTokenContract = artifacts.require("CTokenMock");
 
 const CherryMathContract = artifacts.require("CherryMath");
+const CherryDai = artifacts.require("CherryDai");
 const CherryswapContract = artifacts.require("CherrySwap");
 
 require('chai')
@@ -23,7 +24,7 @@ require('chai')
 contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider3, trader1, trader2, trader3, random]) => {
   const supplyToMint = ether("500");
 
-  let token, cToken, cherrymath, cherryswap;
+  let token, cToken, cherrymath, cherryDai, cherryswap;
 
   before(async function () {
     token = await TokenContract.new({
@@ -40,12 +41,22 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
 
     cherryswap = await CherryswapContract.new({
       from: contractOwner
-    })
+    });
+
+    cherryDai = await CherryDai.new({
+      from: contractOwner
+    }  
+    );  
 
     await cherryswap.initialize(token.address, cToken.address, cherrymath.address, {
       from: contractOwner
-    })
+    });
 
+    await cherryDai.initialize(cherryswap.address);
+
+    await cherryswap.setToken(cherryDai.address, {
+      from: contractOwner
+    });
 
     // Mint DAI for liquidity providers
     token.mint(provider1, supplyToMint);
@@ -58,37 +69,23 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
 
   context("Deployment", async function () {
     it("check deployment", async function () {
+      let minter = await cherryDai.isMinter.call(cherryswap.address);
       let poolBalance = await cherryswap.poolBalance.call();
+      assert.equal(minter, true);
       assert.equal(poolBalance, 0);
     });
   });
-
+  
   context("Deposit Liquidity", async() => {
     let _amountToDeposit = ether("100");
 
     it("Deposit liquidity into the pool", async() => {
       await token.approve(cherryswap.address, _amountToDeposit, {from: provider1});
       await cherryswap.mint(_amountToDeposit, {from: provider1});
-      //let _exchangeRate = await cherryswap.exchangeRate();
-      //let providerCherryDaiBalance = await cherryswap.cherryDaiBalanceOf(provider1);
-      //assert.equal(providerCherryDaiBalance, _amountToDeposit*parseInt(_exchangeRate[1]), "Wrong CherryDai minted amount for liquidity provider");
+
       assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
       assert.equal((await cherryswap.longPoolBalance()).toString(), (await cherryswap.shortPoolBalance()).toString(), "Long and Short pool are not equal");
     });
-
-    /*
-    it("reserve", async() => {
-      let longPoolReserved = await cherryswap.longPoolReserved.call();
-      console.log(longPoolReserved.toString());
-
-      let amountToReserve = ether("30");
-      await cherryswap.reserveLongPool(40);
-
-      longPoolReserved = await cherryswap.longPoolReserved.call();
-      console.log(longPoolReserved.toString());
-
-    });
-    */
   });
   
   context("Create Position", async() => {
@@ -105,9 +102,6 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
       let longPoolReservedAfter = await cherryswap.longPoolReserved();
       let swapObject = await cherryswap.swaps(0);
 
-      console.log("cToken amount before : ", cherrswapCtokenBalanceBefore.toString());
-      console.log("cToken amount after  : ", cherrswapCtokenBalanceAfter.toString());
-      console.log("long pool reserved   : ", longPoolReservedAfter.toString());
       assert.equal(cherrswapCtokenBalanceAfter-_longPositionSize, cherrswapCtokenBalanceBefore, "Wrong minted amount of cToken");
       assert.equal(longPoolReservedAfter-longPoolReservedBefore, swapObject[7].toString(), "Wrong reserved amount for long position");
     });

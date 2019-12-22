@@ -17,6 +17,8 @@ import "./ErrorReporter.sol";
 contract CherryPool is Initializable, TokenErrorReporter {
     using SafeMath for uint256;
 
+    address public owner;
+
     uint256 public poolBalance; // total pool balance in DAI
     uint256 public longPoolBalance; // long pool balance in DAI
     uint256 public shortPoolBalance; // short pool balance in DAI
@@ -26,8 +28,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
     IERC20 public token; // collateral asset = DAI
     ICERC20 public cToken; // cDAI token
-    CherryDai public cherryDai; // CherryDai token
 
+    CherryDai public cherryDai; // CherryDai token
     CherryMath cherryMath;  // Math library
 
     struct RedeemLocalVars {
@@ -51,11 +53,13 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @dev Initialize contract states
      */
     function initialize(address _token, address _cToken, address _cherryMath) public initializer {
+        owner = msg.sender;
+
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
 
-        cherryDai = new CherryDai();
-        cherryDai.initialize();
+        //cherryDai = new CherryDai();
+        //cherryDai.initialize(address(this));
 
         cherryMath = CherryMath(_cherryMath);
 
@@ -258,11 +262,22 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return 0 if successful otherwise an error code
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
-        int256 rate = int256(getcTokenExchangeRate() / 1e10); //+ (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        int256 rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
 
         emit CurrentExchangeRate(uint256(rate));
 
         return (CherryMath.MathError.NO_ERROR, uint256(rate));
+    }
+
+    /**
+     * @dev Set CherryDai token address
+     * @notice can only be called by the owner
+     * @param _token CherryDai token address
+     */
+    function setToken(address _token) external {
+        require(msg.sender == owner, "Cherrypool::not authorized to call function");
+
+        cherryDai = CherryDai(_token);
     }
     
     function _reserveLongPool(uint256 _amount) internal canReserveLong(_amount) {
