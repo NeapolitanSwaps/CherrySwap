@@ -9,7 +9,7 @@ cache:
 notifications:
   email: false
 node_js:
-  - '11.0.0'
+  - '12.13.1'
 env:
   - TASK=contracts:lint
   - TASK=contracts:test
