@@ -22,7 +22,6 @@
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "truffle test",
     "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
-    "test-ci": "truffle test",
     "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
     "stop-ganache": "sudo kill `sudo lsof -t -i:8545`",
     "prettier": "prettier --write **/*.sol",

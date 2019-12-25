@@ -1,18 +1,18 @@
 sudo: required
 language: node_js
-#cache:
-#  directories:
-#    - node_modules
-#    - packages/front-end/node_modules
-#    - packages/smart-contracts/node_modules
-#    - packages/shared/node_modules
+cache:
+  directories:
+    - node_modules
+    - packages/front-end/node_modules
+    - packages/smart-contracts/node_modules
+    - packages/shared/node_modules
 notifications:
   email: false
 node_js:
   - '12.13.1'
 env:
   - TASK=contracts:lint
-  - TASK=contracts:test-ci
+  - TASK=contracts:test
   - TASK=frontend:test
 before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
