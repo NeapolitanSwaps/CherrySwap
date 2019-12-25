@@ -12,7 +12,7 @@ node_js:
   - '12.13.1'
 env:
   - TASK=contracts:lint
-  - TASK=contracts:test
+  - TASK=cd packages/smart-contracts && yarn run test
   - TASK=frontend:test
 before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
