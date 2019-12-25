@@ -15,8 +15,8 @@ before_script:
   - sleep 5
 script:
   - travis_wait 60
+  - yarn run frontend:test
   - yarn run contracts:lint
   - cd ./packages/smart-contracts && yarn run test
-  - yarn run frontend:test
 #after_success:
 #  - ./node_modules/.bin/lcov-result-merger 'apps/*/coverage/lcov.info' | ./node_modules/.bin/coveralls
