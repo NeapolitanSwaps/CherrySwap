@@ -11,8 +11,7 @@
         "contracts:compile": "lerna run --scope=@cherryswap/smart-contracts --stream compile",
         "contracts:deploy": "lerna run --scope=@cherryswap/smart-contracts --stream deploy",
         "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint",
-        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
-        "contracts:test-ci": "cd ./packages/smart-contracts/ && yarn run test-ci"
+        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
     },
     "dependencies": {
         "homedir": "^0.6.0",
