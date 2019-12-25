@@ -9,13 +9,13 @@ cache:
 notifications:
   email: false
 node_js:
-  - '11.0.0'
+  - '12.13.1'
 env:
   - TASK=contracts:lint
   - TASK=contracts:test
   - TASK=frontend:test
 before_script:
-  - testrpc > /dev/null &
+  - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
 script:
   - travis_wait 60 npm run $TASK

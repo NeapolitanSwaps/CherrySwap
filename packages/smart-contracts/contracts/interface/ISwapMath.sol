@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.5.12;
 
 interface ISwapMath {
     function computeRatios(
@@ -8,5 +8,5 @@ interface ISwapMath {
         uint256 t1,
         uint256 t2,
         uint256 poolEnd
-    ) external pure returns(int128, int128);
+    ) external pure returns (int128, int128);
 }
