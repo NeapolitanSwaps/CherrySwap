@@ -18,6 +18,6 @@ before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
 script:
-  - travis_wait 60 npm run $TASK
+  - travis_wait 60 yarn run $TASK
 #after_success:
 #  - ./node_modules/.bin/lcov-result-merger 'apps/*/coverage/lcov.info' | ./node_modules/.bin/coveralls
