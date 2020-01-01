@@ -9,6 +9,9 @@
         "frontend:test": "lerna run --scope=@cherryswap/front-end --stream test",
         "contracts:compile": "lerna run --scope=@cherryswap/smart-contracts --stream compile",
         "contracts:deploy": "lerna run --scope=@cherryswap/smart-contracts --stream deploy",
+        "contracts:migrate:development": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:development",
+        "contracts:migrate:rinkeby": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:rinkeby",
+        "contracts:migrate:mainnet": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:mainnet",
         "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
     },
