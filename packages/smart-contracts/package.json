@@ -17,8 +17,13 @@
   },
   "scripts": {
     "add-contract": "openzeppelin add",
+    "link-dependencies": "openzeppelin link",
+    "push-project": "openzeppelin push",
     "compile": "openzeppelin compile",
     "deploy": "truffle deploy",
+    "migrate:development": "truffle migrate --network development",
+    "migrate:rinkeby": "truffle migrate --network rinkeby",
+    "migrate:mainnet": "truffle migrate --network mainnet",
     "ganache-cli:test": "../shared/ganache-cli.sh",
     "test": "truffle test",
     "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",

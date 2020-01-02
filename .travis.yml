@@ -9,13 +9,13 @@ cache:
 notifications:
   email: false
 node_js:
-  - '12.13.1'
+  - '10.18.0'
 before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
 script:
   - travis_wait 60
-  - yarn run frontend:test
+#  - yarn run frontend:test
   - yarn run contracts:lint
   - cd ./packages/smart-contracts && yarn run test
 #after_success:

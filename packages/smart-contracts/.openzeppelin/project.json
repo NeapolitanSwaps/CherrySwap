@@ -1,16 +1,18 @@
 {
   "manifestVersion": "2.2",
   "contracts": {
-    "Cherryswap": "Cherryswap",
     "CTokenMock": "CTokenMock",
-    "Migrations": "Migrations",
-    "Swapmath": "Swapmath",
-    "TokenMock": "TokenMock",
     "CherryDai": "CherryDai",
-    "Cherrypool": "Cherrypool"
+    "CherryMath": "CherryMath",
+    "CherryPool": "CherryPool",
+    "CherrySwap": "CherrySwap",
+    "ComptrollerErrorReporter": "ComptrollerErrorReporter",
+    "Migrations": "Migrations",
+    "TokenErrorReporter": "TokenErrorReporter",
+    "TokenMock": "TokenMock"
   },
   "dependencies": {
-    "@openzeppelin/contracts-ethereum-package": "^2.3.0"
+    "@openzeppelin/contracts-ethereum-package": "^2.4.0"
   },
   "name": "Cherryswap",
   "version": "1.0.0",
@@ -18,10 +20,11 @@
     "manager": "openzeppelin",
     "compilerSettings": {
       "optimizer": {
-        "enabled": false,
+        "enabled": true,
         "runs": "200"
       }
     },
-    "solcVersion": "0.5.0"
-  }
+    "solcVersion": "0.5.12"
+  },
+  "telemetryOptIn": false
 }
