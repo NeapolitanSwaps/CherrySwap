@@ -1,10 +1,12 @@
 pragma solidity >=0.4.21 <0.6.0;
 
-contract Migrations {
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
+
+contract Migrations is Initializable{
     address public owner;
     uint256 public last_completed_migration;
 
-    constructor() public {
+    function initialize() public initializer {
         owner = msg.sender;
     }
 
