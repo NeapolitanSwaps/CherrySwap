@@ -15,7 +15,7 @@ before_script:
   - sleep 5
 script:
   - travis_wait 60
-  - yarn run frontend:test
+#  - yarn run frontend:test
   - yarn run contracts:lint
   - cd ./packages/smart-contracts && yarn run test
 #after_success:
