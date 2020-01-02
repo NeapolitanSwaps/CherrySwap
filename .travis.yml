@@ -9,7 +9,7 @@ cache:
 notifications:
   email: false
 node_js:
-  - '12.14.0'
+  - '10.18.0'
 before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
