@@ -7,6 +7,8 @@
         "frontend:start": "lerna run --scope=@cherryswap/front-end --stream start",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
         "frontend:test": "lerna run --scope=@cherryswap/front-end --stream test",
+        "contracts:link": "lerna run --scope=@cherryswap/smart-contracts --stream link-dependencies",
+        "contracts:push": "lerna run --scope=@cherryswap/smart-contracts --stream push-project",
         "contracts:compile": "lerna run --scope=@cherryswap/smart-contracts --stream compile",
         "contracts:deploy": "lerna run --scope=@cherryswap/smart-contracts --stream deploy",
         "contracts:migrate:development": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:development",

@@ -1,58 +1,67 @@
 const { scripts, ConfigManager } = require("@openzeppelin/cli");
 const { add, push, create } = scripts;
 
+var CherrySwap = artifacts.require("CherrySwap")
+
 const config = require("./deployment-config.json");
 
 async function deployDev(options) {
-    add({ contractsData: [{ name: 'TokenMock', alias: 'TokenMock' }] });
+    add({ 
+        contractsData: [
+            { name: 'TokenMock', alias: 'TokenMock' },
+            { name: 'CTokenMock', alias: 'CTokenMock' },
+            { name: 'CherryMath', alias: 'CherryMath' },
+            { name: 'CherrySwap', alias: 'CherrySwap' },
+            { name: 'CherryDai', alias: 'CherryDai' }
+        ]
+    });
+    
     await push(options);
-    await create(Object.assign({ contractAlias: 'TokenMock' }, options));
-
-    add({ contractsData: [{ name: 'CTokenMock', alias: 'CTokenMock' }] });
-    await push(options);
-    await create(Object.assign({ contractAlias: 'CTokenMock' }, options));
-
-    add({ contractsData: [{ name: 'CherryMath', alias: 'CherryMath' }] });
-    await push(options);
-    await create(Object.assign({ contractAlias: 'CherryMath' }, options));
-
-    add({ contractsData: [{ name: 'CherrySwap', alias: 'CherrySwap' }] });
-    await push(options);
-    await create(Object.assign({ 
+    
+    let tokenMock = await create(Object.assign({ contractAlias: 'TokenMock' }, options));
+    let cTokenMock = await create(Object.assign({ contractAlias: 'CTokenMock' }, options));
+    let cherryMath = await create(Object.assign({ contractAlias: 'CherryMath' }, options));
+    let cherrySwap = await create(Object.assign({ 
         contractAlias: 'CherrySwap', 
         methodName: 'initialize', 
         methodArgs: [
-            TokenMock.address,
-            CTokenMock.address,
-            CherryMath.address
+            tokenMock.address,
+            cTokenMock.address,
+            cherryMath.address
         ]
     }, options));
-
-    add({ contractsData: [{ name: 'CherryDai', alias: 'CherryDai' }] });
-    await push(options);
-    await create(Object.assign({ contractAlias: 'CherryDai', methodName: 'initialize', methodArgs: [CherrySwap.address] }, options));
+    let cherryDai = await create(Object.assign({ contractAlias: 'CherryDai', methodName: 'initialize', methodArgs: [cherrySwap.address] }, options));
+    
+    let cherrySwapInstance = await CherrySwap.at(cherrySwap.address)
+    await cherrySwapInstance.setToken(cherryDai.address);
 }
 
 async function deploy(options) {
-    add({ contractsData: [{ name: 'CherryMath', alias: 'CherryMath' }] });
-    await push(options);
-    await create(Object.assign({ contractAlias: 'CherryMath' }, options));
+    add({ 
+        contractsData: [
+            { name: 'CherryMath', alias: 'CherryMath' },
+            { name: 'CherrySwap', alias: 'CherrySwap' },
+            { name: 'CherryDai', alias: 'CherryDai' }
+        ]
+    });
 
-    add({ contractsData: [{ name: 'CherrySwap', alias: 'CherrySwap' }] });
     await push(options);
-    await create(Object.assign({ 
+
+    let cherryMath = await create(Object.assign({ contractAlias: 'CherryMath' }, options));
+    let cherrySwap = await create(Object.assign({ 
         contractAlias: 'CherrySwap', 
         methodName: 'initialize', 
         methodArgs: [
             config.Token,
             config.CToken,
-            CherryMath.address
+            cherryMath.address
         ]
     }, options));
 
-    add({ contractsData: [{ name: 'CherryDai', alias: 'CherryDai' }] });
-    await push(options);
-    await create(Object.assign({ contractAlias: 'CherryDai', methodName: 'initialize', methodArgs: [CherrySwap.address] }, options));
+    let cherryDai = await create(Object.assign({ contractAlias: 'CherryDai', methodName: 'initialize', methodArgs: [cherrySwap.address] }, options));
+
+    let cherrySwapInstance = await CherrySwap.at(cherrySwap.address)
+    await cherrySwapInstance.setToken(cherryDai.address);
 }
 
 module.exports = function(deployer, networkName, accounts) {

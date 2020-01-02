@@ -17,6 +17,8 @@
   },
   "scripts": {
     "add-contract": "openzeppelin add",
+    "link-dependencies": "openzeppelin link",
+    "push-project": "openzeppelin push",
     "compile": "openzeppelin compile",
     "deploy": "truffle deploy",
     "migrate:development": "truffle migrate --network development",
