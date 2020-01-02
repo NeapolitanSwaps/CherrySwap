@@ -5,6 +5,8 @@
   "dependencies": {
     "@cherryswap/smart-contracts": "^1.0.0",
     "@drizzle/store": "^1.5.1",
+    "@drizzle/react-components": "^1.5.1",
+    "@drizzle/react-plugin": "^1.5.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
