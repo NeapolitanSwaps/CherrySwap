@@ -11,6 +11,8 @@
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.4",
     "bignumber.js": "^9.0.0",
+    "chai-as-promised": "^7.1.1",
+    "chai-bignumber": "^3.0.0",
     "decimal.js": "^10.2.0",
     "prettier": "^1.18.2",
     "prettier-plugin-solidity": "^1.0.0-alpha.34"
