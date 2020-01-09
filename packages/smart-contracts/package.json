@@ -15,23 +15,26 @@
     "chai-bignumber": "^3.0.0",
     "decimal.js": "^10.2.0",
     "prettier": "^1.18.2",
-    "prettier-plugin-solidity": "^1.0.0-alpha.34"
+    "prettier-plugin-solidity": "^1.0.0-alpha.34",
+    "solhint": "^2.3.0",
+    "solhint-plugin-prettier": "0.0.3",
+    "solidity-coverage": "^0.6.7"
   },
   "scripts": {
+    "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
+    "ganache-cli:test": "../shared/ganache-cli.sh",
+    "stop-ganache": "sudo kill `sudo lsof -t -i:8545`",
     "add-contract": "openzeppelin add",
-    "link-dependencies": "openzeppelin link",
+    "link-dependencies": "openzeppelin link @openzeppelin/contracts-ethereum-package@^2.4.0",
     "push-project": "openzeppelin push",
     "compile": "openzeppelin compile",
+    "lint:solhint": "solhint -f table contracts/**/*.sol",
+    "lint:prettier": "prettier --write contracts/**/*.sol",
+    "test": "npm run compile && npm run link-dependencies && openzeppelin push --network development && truffle test",
+    "coverage": "npx solidity-coverage",
     "deploy": "truffle deploy",
     "migrate:development": "truffle migrate --network development",
     "migrate:rinkeby": "truffle migrate --network rinkeby",
-    "migrate:mainnet": "truffle migrate --network mainnet",
-    "ganache-cli:test": "../shared/ganache-cli.sh",
-    "test": "truffle test",
-    "coverage": "SOLIDITY_COVERAGE=true yarn run ganache-cli:test",
-    "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",
-    "stop-ganache": "sudo kill `sudo lsof -t -i:8545`",
-    "prettier": "prettier --write **/*.sol",
-    "lint": "yarn run prettier"
+    "migrate:mainnet": "truffle migrate --network mainnet"
   }
 }

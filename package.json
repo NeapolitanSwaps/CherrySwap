@@ -14,7 +14,8 @@
         "contracts:migrate:development": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:development",
         "contracts:migrate:rinkeby": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:rinkeby",
         "contracts:migrate:mainnet": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:mainnet",
-        "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint",
+        "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint:solhint",
+        "contracts:prettier": "lerna run --scope=@cherryswap/smart-contracts --stream lint:prettier",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
     },
     "dependencies": {
@@ -27,6 +28,12 @@
     "devDependencies": {
         "@openzeppelin/test-helpers": "^0.5.4",
         "eth-gas-reporter": "^0.2.12",
-        "eth-provider": "^0.2.2"
+        "eth-provider": "^0.2.2",
+        "husky": "^4.0.3"
+    },
+    "husky": {
+        "hooks": {
+          "pre-push": "yarn run contracts:prettier"
+        }
     }
 }
