@@ -18,7 +18,7 @@ contract CherryDai is
         ERC20Mintable.initialize(msg.sender);
         mint(_cherrySwap, 100);
 
-        if(msg.sender != _cherrySwap) {
+        if (msg.sender != _cherrySwap) {
             MinterRole.addMinter(_cherrySwap);
             MinterRole.renounceMinter();
         }
