@@ -18,7 +18,8 @@
     "prettier-plugin-solidity": "^1.0.0-alpha.34",
     "solhint": "^2.3.0",
     "solhint-plugin-prettier": "0.0.3",
-    "solidity-coverage": "^0.6.7"
+    "solidity-coverage": "^0.6.7",
+    "truffle-assertions": "^0.9.2"
   },
   "scripts": {
     "ganache-ci": "ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30 > /dev/null &",

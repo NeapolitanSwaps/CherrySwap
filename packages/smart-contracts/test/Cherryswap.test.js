@@ -79,12 +79,43 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
   context("Deposit Liquidity", async() => {
     let _amountToDeposit = ether("100");
 
-    it("Deposit liquidity into the pool", async() => {
+    it("should revert depositing into pool without approving tokens", async() => {
+      await cherryswap.mint(_amountToDeposit, {from: provider1}).should.be.rejectedWith(EVMRevert);
+    });
+
+    it("deposit liquidity into the pool", async() => {
+      let cherryDaiBalanceBefore = await cherryswap.cherryDaiBalanceOf(provider1);
+
       await token.approve(cherryswap.address, _amountToDeposit, {from: provider1});
       await cherryswap.mint(_amountToDeposit, {from: provider1});
 
+      let cherryDaiBalanceAfter = await cherryswap.cherryDaiBalanceOf(provider1);
+
       assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
       assert.equal((await cherryswap.longPoolBalance()).toString(), (await cherryswap.shortPoolBalance()).toString(), "Long and Short pool are not equal");
+      assert.equal(cherryDaiBalanceAfter - cherryDaiBalanceBefore, await cherryDai.balanceOf(provider1), "Wrong minted amount of CherryDai for provider");
+    });
+  });
+
+  context("Redeem CherryDai", async() => {
+    let _amountToRedeem = ether("20");
+
+    it("should revert redeeming an amount greater than the provider balance", async() => {
+      await cherryswap.redeem(ether("200"), {from: provider1}).should.be.rejectedWith(EVMRevert);
+    });
+
+    it("redeem CherryDai", async() => {
+      let poolBalanceBefore = await cherryswap.poolBalance();
+      let cherryDaiBalanceBefore = await cherryswap.cherryDaiBalanceOf(provider1);
+
+      await cherryswap.redeem(ether("200"), {from: provider1});
+
+      let poolBalanceAfter = await cherryswap.poolBalance();
+      let cherryDaiBalanceAfter = await cherryswap.cherryDaiBalanceOf(provider1);
+
+      assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
+      assert.equal((await cherryswap.longPoolBalance()).toString(), (await cherryswap.shortPoolBalance()).toString(), "Long and Short pool are not equal");
+      assert.equal(cherryDaiBalanceAfter - cherryDaiBalanceBefore, await cherryDai.balanceOf(provider1), "Wrong minted amount of CherryDai for provider");
     });
   });
   
