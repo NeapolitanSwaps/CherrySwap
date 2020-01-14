@@ -30,6 +30,10 @@ contract CTokenMock is ERC20 {
         return 112835765547222288;
     }
 
+    function redeemUnderlying(uint redeemAmount) public returns (uint) {
+        return 0;
+    }
+
     function exchangeRateCurrent() public view returns (uint256) {
         return 200127082732698445793170721;
     }

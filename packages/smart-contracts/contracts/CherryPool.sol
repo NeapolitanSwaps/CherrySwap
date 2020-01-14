@@ -227,12 +227,10 @@ contract CherryPool is Initializable, TokenErrorReporter {
         }
 
         payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
-        //require(vars.err == Error.NO_ERROR, "redeem transfer out failed");
 
         emit RedeemCherry(msg.sender, vars.redeemAmount, vars.redeemTokens);
 
         return uint(Error.NO_ERROR);
-
     }
 
     /**
@@ -308,12 +306,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     function getcTokenExchangeRate() public returns (uint256) {
-        /*return
-            (cToken.getCash() +
-                cToken.totalBorrowsCurrent() -
-                cToken.totalReserves()) /
-            cToken.totalSupply();*/
-
         return cToken.exchangeRateCurrent();
     }
 

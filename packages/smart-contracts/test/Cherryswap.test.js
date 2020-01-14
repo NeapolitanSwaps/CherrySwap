@@ -105,25 +105,33 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
   });
 
   context("Redeem CherryDai", async() => {
-    let _amountToRedeem = ether("20");
+    let _amountToRedeem = ether("100");
 
     it("should revert redeeming an amount greater than the provider balance", async() => {
       await cherryswap.redeem(ether("200"), {from: provider1}).should.be.rejectedWith(EVMRevert);
     });
 
-    /*it("redeem CherryDai", async() => {
+    it("redeem CherryDai", async() => {
       let poolBalanceBefore = await cherryswap.poolBalance();
       let cherryDaiBalanceBefore = await cherryswap.cherryDaiBalanceOf(provider1);
 
-      await cherryswap.redeem(ether("200"), {from: provider1});
+      await cherryDai.approve(cherryswap.address, cherryDaiBalanceBefore, {from: provider1});
+      let tx = await cherryswap.redeem(_amountToRedeem, {from: provider1});
 
       let poolBalanceAfter = await cherryswap.poolBalance();
       let cherryDaiBalanceAfter = await cherryswap.cherryDaiBalanceOf(provider1);
+      
+      truffleAssert.eventEmitted(tx, 'CurrentExchangeRate', async (ev) => {
+        let _redeemAmount = await cherrymath.mulScalarTruncate(ev.rate, _amountToRedeem);
 
-      assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
-      assert.equal((await cherryswap.longPoolBalance()).toString(), (await cherryswap.shortPoolBalance()).toString(), "Long and Short pool are not equal");
-      assert.equal(cherryDaiBalanceAfter - cherryDaiBalanceBefore, await cherryDai.balanceOf(provider1), "Wrong minted amount of CherryDai for provider");
-    });*/
+        console.log(cherryDaiBalanceBefore.toString());
+        console.log(cherryDaiBalanceAfter.toString());
+        console.log(_redeemAmount[1].toString());
+        assert.equal(cherryDaiBalanceBefore - cherryDaiBalanceAfter, _redeemAmount[1], "Wrong amount of underlying asset for the amount of cToken");
+
+        return ev.rate;
+      });
+    });
   });
   
   context("Create Position", async() => {
