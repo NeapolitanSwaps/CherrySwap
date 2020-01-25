@@ -261,7 +261,13 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return 0 if successful otherwise an error code
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
-        int256 rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        int256 rate;
+        if(cherryDai.totalSupply() == 0) {
+            rate = 1;
+        }
+        else {
+            rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        }
 
         emit CurrentExchangeRate(uint256(rate));
 
