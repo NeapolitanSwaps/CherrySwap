@@ -31,7 +31,7 @@
     "compile": "openzeppelin compile",
     "lint:solhint": "solhint -f table contracts/**/*.sol",
     "lint:prettier": "prettier --write contracts/**/*.sol",
-    "test": "npm run compile && npm run link-dependencies && openzeppelin push --network development && truffle test",
+    "test": "yarn run compile && openzeppelin link @openzeppelin/contracts-ethereum-package@^2.4.0 --timeout 1000 && openzeppelin push --network development && truffle test",
     "coverage": "npx solidity-coverage",
     "deploy": "truffle deploy",
     "migrate:development": "truffle migrate --network development",
