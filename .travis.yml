@@ -10,13 +10,14 @@ notifications:
   email: false
 node_js:
   - '10.18.0'
+env:
+  - TASK=contracts:lint
+  - TASK=contracts:test
+  #- TASK=frontend:test
 before_script:
   - ganache-cli -e 300 -p 8545 -m --accounts 30 > /dev/null &
   - sleep 5
 script:
-  - travis_wait 60
-  #- yarn run frontend:test
-  - yarn run contracts:lint
-  - yarn run contracts:test
+  - travis_wait 60 yarn run $TASK
 #after_success:
 #  - ./node_modules/.bin/lcov-result-merger 'apps/*/coverage/lcov.info' | ./node_modules/.bin/coveralls
