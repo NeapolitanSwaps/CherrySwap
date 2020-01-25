@@ -3,15 +3,15 @@ jobs:
   build:
     working_directory: ~/CherrySwap
     docker:
-      - image: circleci/python:3-node
+      - image: circleci/node:10.18.0
       - image: trufflesuite/ganache-cli
         command: ganache-cli --deterministic -e 300 -p 8545 -m 'candy maple cake sugar pudding cream honey rich smooth crumble sweet treat' --accounts 30
     steps: 
       - checkout 
-      - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+      #- restore_cache:
+      #    name: Restore Yarn Package Cache
+      #    keys:
+      #      - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
           name: Install Dependencies
           command: yarn install
