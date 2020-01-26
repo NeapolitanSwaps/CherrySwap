@@ -250,7 +250,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
         // TODO: I suspect this function is wrong.
-        // Current thinking is r = ((poolcDai+profitcDai)*1e46)/(ratecDaitoDai*cherryDaiSupply)
+        // Current thinking is r = ((poolcDai+profitcDai)*1e46)/(cDaitoDairate*cherryDaiSupply)
 
         // int256 rate = int256(   )
 
@@ -301,6 +301,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     function getcTokenExchangeRate() public returns (uint256) {
+        //TODO: replace this with the actual definition from compound
         /*return
             (cToken.getCash() +
                 cToken.totalBorrowsCurrent() -
