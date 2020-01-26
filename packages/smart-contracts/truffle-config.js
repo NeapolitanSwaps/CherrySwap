@@ -1,16 +1,16 @@
-const HDWalletProvider = require('truffle-hdwallet-provider');
-const infuraApikey = '';
-let mnemonic = '';
+const HDWalletProvider = require("truffle-hdwallet-provider");
+const infuraApikey = "";
+let mnemonic = "";
 
 module.exports = {
   networks: {
     development: {
-      host: '127.0.0.1',
+      host: "127.0.0.1",
       port: 8545,
-      network_id: '*', // Match any network id
+      network_id: "*" // Match any network id
     },
     kovan: {
-      provider: function () {
+      provider: function() {
         return new HDWalletProvider(mnemonic, `https://kovan.infura.io/v3/${infuraApikey}`);
       },
       network_id: 42,
@@ -21,7 +21,7 @@ module.exports = {
   compilers: {
     solc: {
       version: "0.5.12",
-      settings: { 
+      settings: {
         optimizer: {
           enabled: true,
           runs: 200
@@ -29,4 +29,4 @@ module.exports = {
       }
     }
   }
-}
+};
