@@ -11,6 +11,8 @@
   "devDependencies": {
     "@openzeppelin/test-helpers": "^0.5.4",
     "bignumber.js": "^9.0.0",
+    "bn-chai": "^1.0.1",
+    "bn.js": "^5.1.1",
     "chai-as-promised": "^7.1.1",
     "chai-bignumber": "^3.0.0",
     "decimal.js": "^10.2.0",

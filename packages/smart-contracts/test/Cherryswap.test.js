@@ -1,11 +1,9 @@
 const {
-  BN,
   constants,
   expectEvent,
   expectRevert,
   ether
 } = require("@openzeppelin/test-helpers");
-const BigNumber = require('bignumber.js');
 const EVMRevert = require('./helpers/EVMRevert').EVMRevert;
 const truffleAssert = require('truffle-assertions');
 
@@ -17,55 +15,64 @@ const CherryMathContract = artifacts.require("CherryMath");
 const CherryDai = artifacts.require("CherryDai");
 const CherryswapContract = artifacts.require("CherrySwap");
 
-require('chai')
+/*require('chai')
 .use(require('chai-as-promised'))
 .use(require('chai-bignumber')(BigNumber))
-.should();
+.should();*/
+const chai = require('chai');
+const BN = require('bn.js');
+const bnChai = require('bn-chai');
+chai.use(bnChai(BN));
 
-contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider3, trader1, trader2, trader3, random]) => {
+contract('Cherryswap contracts', ([cherryTeam, provider1, provider2, provider3, trader1, trader2, trader3, random]) => {
+  const cherryTeamSupply = ether("1000");
   const supplyToMint = ether("500");
 
   let token, cToken, cherrymath, cherryDai, cherryswap;
 
   before(async function () {
     token = await TokenContract.new({
-      from: contractOwner
+      from: cherryTeam
     });
 
     cToken = await CTokenContract.new({
-      from: contractOwner
+      from: cherryTeam
     })
 
     cherrymath = await CherryMathContract.new({
-      from: contractOwner
+      from: cherryTeam
     });
 
     cherryswap = await CherryswapContract.new({
-      from: contractOwner
+      from: cherryTeam
     });
 
     cherryDai = await CherryDai.new({
-      from: contractOwner
+      from: cherryTeam
     }  
     );  
 
     await cherryswap.initialize(token.address, cToken.address, cherrymath.address, {
-      from: contractOwner
+      from: cherryTeam
     });
 
     await cherryDai.initialize(cherryswap.address);
 
     await cherryswap.setToken(cherryDai.address, {
-      from: contractOwner
+      from: cherryTeam
     });
 
     // Mint DAI for liquidity providers
+    token.mint(cherryTeam, cherryTeamSupply);
     token.mint(provider1, supplyToMint);
     token.mint(provider2, supplyToMint);
     token.mint(provider3, supplyToMint);
     token.mint(trader1, supplyToMint);
     token.mint(trader2, supplyToMint);
     token.mint(trader3, supplyToMint);
+
+    await token.approve(cherryswap.address, cherryTeamSupply, {from: cherryTeam});
+    await cherryswap.mint(cherryTeamSupply, {from: cherryTeam});
   });
 
   context("Deployment", async function () {
@@ -73,7 +80,7 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
       let minter = await cherryDai.isMinter.call(cherryswap.address);
       let poolBalance = await cherryswap.poolBalance.call();
       assert.equal(minter, true);
-      assert.equal(poolBalance, 0);
+      assert.equal(poolBalance.toString(), cherryTeamSupply.toString());
     });
   });
   
@@ -85,20 +92,23 @@ contract('Cherryswap contracts', ([contractOwner, provider1, provider2, provider
     });
 
     it("deposit liquidity into the pool", async() => {
+      let poolBalanceBefore = await cherryswap.poolBalance();
       let cherryDaiBalanceBefore = await cherryswap.cherryDaiBalanceOf(provider1);
 
       await token.approve(cherryswap.address, _amountToDeposit, {from: provider1});
       let tx = await cherryswap.mint(_amountToDeposit, {from: provider1});
  
+      let poolBalanceAfter = await cherryswap.poolBalance();
       let cherryDaiBalanceAfter = await cherryswap.cherryDaiBalanceOf(provider1);
 
-      assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
-      assert.equal((await cherryswap.longPoolBalance()).toString(), (await cherryswap.shortPoolBalance()).toString(), "Long and Short pool are not equal");
+      expect(poolBalanceAfter.eq(poolBalanceBefore.add(_amountToDeposit))).to.be.true;
+      //assert.equal(poolBalanceAfter, poolBalanceBefore.add(_amountToDeposit), "Wrong pool balance");
+      assert.equal(await cherryswap.longPoolBalance(), await cherryswap.shortPoolBalance(), "Long and Short pool are not equal");
       assert.equal(cherryDaiBalanceAfter - cherryDaiBalanceBefore, await cherryDai.balanceOf(provider1), "Wrong CherryDai balance for provider");
       
       truffleAssert.eventEmitted(tx, 'CurrentExchangeRate', (ev) => {
         console.log("Dai=>CherryDai exchange rate: ", ev.rate.toString());
-        assert.equal(cherryDaiBalanceAfter.toString(), _amountToDeposit * ev.rate, "Wrong minted amount of CherryDai for provider");
+        assert.equal(cherryDaiBalanceAfter, _amountToDeposit * ev.rate, "Wrong minted amount of CherryDai for provider");
         return ev.rate;
       });
 
