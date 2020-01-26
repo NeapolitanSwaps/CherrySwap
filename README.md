@@ -13,14 +13,14 @@ This monorepo contains the following packages:
 ## Table of Contents
 
 - [Links](#links)
-- [How It Works](#how-it-works)
 - [Our Team](#our-team)
-- [Technical Description](#technical-description)
 - [Networks](#networks)
   - [Testnets](#testnets)
     - [Kovan Testnet](#kovan-testnet)
   - [Mainnets](#mainnets)
     - [Ethereum Mainnet](#ethereum-mainnet)
+- [How It Works](#how-it-works)
+- [Technical Description](#technical-description)
 - [Local development](#local-development)
     - [Testing](#testing)
     - [Code Linting](#code-linting)
@@ -35,8 +35,6 @@ This monorepo contains the following packages:
 
 [Cherryswap V2 Paper:Double bonding curve liquidity pool as an automatic swap market maker](https://www.notion.so/neapolitan/Double-bonding-curve-liquidity-pool-as-an-automatic-swap-market-maker-e6f2eb5001244ed89832789e07e1ca71)
 
-## How It Works
-
 ## Our Team
 
 * 🇿🇦 Chris Maree - Integrations
@@ -44,8 +42,6 @@ This monorepo contains the following packages:
 * 🇹🇳 Haythem Sellami - Solidity contracts
 * 🇬🇧 Chris Fulford - Front-end development
 * 🇳🇿 Liesl Eichholz - Design, UX/UI
-
-## Technical Description
 
 ## Networks
 
@@ -72,6 +68,10 @@ The contract addresses deployed on `Mainnet` Mainnet:
 | CherryDai     | []()                                                                                                                          |
 | CherryMath    | []()                                                                                                                          |
 | CherrySwap    | []()                                                                                                                          |
+
+## How It Works
+
+## Technical Description
 
 ## Local Development
 
