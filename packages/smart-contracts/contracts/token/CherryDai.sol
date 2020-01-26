@@ -13,7 +13,6 @@ contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable
         ERC20Detailed.initialize("Cherry Dai", "CHD", 18);
 
         ERC20Mintable.initialize(msg.sender);
-        mint(_cherrySwap, 100);
 
         if (msg.sender != _cherrySwap) {
             MinterRole.addMinter(_cherrySwap);

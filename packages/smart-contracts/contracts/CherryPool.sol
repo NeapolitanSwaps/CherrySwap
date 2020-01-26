@@ -70,6 +70,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         shortPoolBalance = 0;
         longPoolReserved = 0;
         shortPoolReserved = 0;
+        poolcTokenProfit = 0;
     }
 
     /**
@@ -216,7 +217,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
         }
 
         payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
-        //require(vars.err == Error.NO_ERROR, "redeem transfer out failed");
 
         emit RedeemCherry(msg.sender, vars.redeemAmount, vars.redeemTokens);
 
@@ -251,13 +251,13 @@ contract CherryPool is Initializable, TokenErrorReporter {
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
         // TODO: I suspect this function is wrong.
         // Current thinking is r = ((poolcDai+profitcDai)*1e46)/(cDaitoDairate*cherryDaiSupply)
-
-        // int256 rate = int256(   )
-
-        int256 rate = int256(getcTokenExchangeRate() / 1e10) +
-            (poolcTokenProfit * 1e18) /
-            int256(cherryDai.totalSupply());
-
+        int256 rate;
+        if(cherryDai.totalSupply() == 0) {
+            rate = 1;
+        }
+        else {
+            rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+        }
         emit CurrentExchangeRate(uint256(rate));
 
         return (CherryMath.MathError.NO_ERROR, uint256(rate));
@@ -301,7 +301,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     function getcTokenExchangeRate() public returns (uint256) {
-        //TODO: replace this with the actual definition from compound
         /*return
             (cToken.getCash() +
                 cToken.totalBorrowsCurrent() -
