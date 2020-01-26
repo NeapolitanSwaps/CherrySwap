@@ -8,6 +8,8 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burn
 contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable {
     function initialize(address _cherrySwap) public initializer {
         // need a better name & symbol for sure
+        //TODO: this should be 8 decimals, in accordance with compounds cDai.
+        //this makes the maths much easier when converting between numbers.
         ERC20Detailed.initialize("Cherry Dai", "CHD", 18);
 
         ERC20Mintable.initialize(msg.sender);

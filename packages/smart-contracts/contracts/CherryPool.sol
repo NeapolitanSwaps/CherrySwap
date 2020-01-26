@@ -99,7 +99,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     /**
-     * @dev at liquidity to the cherry pool to offer swaps against
+     * @dev adds liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
      * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
      */
@@ -117,7 +117,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         assert(cToken.mint(_amount) == 0);
 
-        // Store the pools cBalance
+        // Store the pools increased amount in cTokens.
         uint256 cTokensMinted = (_amount * 1e10) / getcTokenExchangeRate();
         poolcBalance += cTokensMinted;
 
