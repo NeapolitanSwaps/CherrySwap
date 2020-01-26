@@ -7,29 +7,38 @@ Cherry Swap is an autonomous, open-source platform for interest rate swaps on Co
 This monorepo contains the following packages:
 
 - **[front-end](packages/front-end)**: Cherryswap interface
-- **[smart-contracts](packages/smart-contracts)**: Cherryswap contracts
-- **[swap-math](packages/swap-math)**: Cherryswap contracts for the swap model
-- **[shared](packages/shared)**: Script package
+- **[smart-contracts](packages/smart-contracts)**: Cherryswap V2 contracts
+- **[shared](packages/shared)**: Scripts package
+
+## Table of Contents
+
+- [Links](#links)
+- [How It Works](#how-it-works)
+- [Our Team](#our-team)
+- [Technical Description](#technical-description)
+- [Networks](#networks)
+  - [Testnets](#testnets)
+    - [Kovan Testnet](#kovan-testnet)
+  - [Mainnets](#mainnets)
+    - [Ethereum Mainnet](#ethereum-mainnet)
+- [Local development](#local-development)
+    - [Testing](#testing)
+    - [Code Linting](#code-linting)
+- [Deployment](#deployment)
+- [Issues](#issues)
+- [Additional Resources](#additional-resources)
+- [License](#license)
+
+---
 
 ## Links
 
-Demo: https://cherryswap.now.sh
+[Cherryswap V2 Paper:Double bonding curve liquidity pool as an automatic swap market maker](https://www.notion.so/neapolitan/Double-bonding-curve-liquidity-pool-as-an-automatic-swap-market-maker-e6f2eb5001244ed89832789e07e1ca71)
 
-Devpost: https://devpost.com/software/cherry-swap
-
-Smart Contracts:
-* [SwapMath](https://kovan.etherscan.io/address/0x41c08aba8c295760d420d3de9a36003b9165607f)
-* [CherrySwap](https://kovan.etherscan.io/address/0xCBDf18886896D236Ece8fA266015016f02c45aAf)
-
-## How it works
-
-Every market on Compound has an interest rate, which fluctuates according to supply and demand of credit and debt within that market. With Cherry Swap, users can hedge against these fluctuations - or speculate on them - by participating in pooled interest rate swaps.
-
-With Cherry Swap, users predict interest rate trends and then commit funds into a fixed-term deposit into a Compound market, taking a position on future interest rates. Long positions gamble on the interest rate increasing, while short positions anticipate a decrease.
-
-Any interest accrued while funds are locked up in Compound is pooled to be returned to participants at the end of the lock-up. Participants who predicted the correct trend in interest rates will earn more than they would have if they had invested directly into the Compound market.
+## How It Works
 
 ## Our Team
+
 * 🇿🇦 Chris Maree - Integrations
 * 🇩🇪 Sabine Bertram - Vyper contracts
 * 🇹🇳 Haythem Sellami - Solidity contracts
@@ -38,77 +47,65 @@ Any interest accrued while funds are locked up in Compound is pooled to be retur
 
 ## Technical Description
 
-Individuals are able to jointly swap a fixed interest rate (in our case the observed interest rate per block on cDAI at time point `t_1`) with the floating interest per block of cDAI between `t_1` and `t_2`. Individual payouts at time `t_2` are dependent on the following ratios for long (swap fixed for float) and short (swap float for fixed) positions:
+## Networks
 
-<a href="https://www.codecogs.com/eqnedit.php?latex=\\&space;r_l&space;=&space;\frac{P_{t_1^{s}}&space;\left(P_{t_2}&space;-&space;P_{t_1}\left(1&space;&plus;&space;\frac{i}{n}\right)^{n}\right)}{P_{t_1}^2}&space;\\&space;r_s&space;=&space;-&space;\frac{P_{t_1^{l}}&space;\left(P_{t_2}&space;-&space;P_{t_1}\left(1&space;&plus;&space;\frac{i}{n}\right)^{n}\right)}{P_{t_1}^2}&space;\\&space;\mathrm{where}&space;\\&space;P_{t_1^l}&space;&plus;&space;P_{t_1^s}&space;=&space;P_{t_1}&space;\\&space;P_{t_1^l}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;long&space;positions&space;at}&space;\hspace{2mm}&space;t_1\\&space;P_{t_1^s}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;short&space;positions&space;at}&space;\hspace{2mm}&space;t_1\\&space;P_{t_2}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;long&space;and&space;short&space;positions&space;at}&space;\hspace{2mm}&space;t_2\\&space;i&space;\hspace{9mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{interest&space;rate&space;per&space;block&space;at}\hspace{2mm}&space;t_1\\&space;n&space;\hspace{8mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{number&space;of&space;blocks&space;mined&space;between}\hspace{2mm}&space;t_1&space;\hspace{2mm}&space;\textrm{and}&space;\hspace{2mm}&space;t_2\\" target="_blank"><img src="https://latex.codecogs.com/gif.latex?\\&space;r_l&space;=&space;\frac{P_{t_1^{s}}&space;\left(P_{t_2}&space;-&space;P_{t_1}\left(1&space;&plus;&space;\frac{i}{n}\right)^{n}\right)}{P_{t_1}^2}&space;\\&space;r_s&space;=&space;-&space;\frac{P_{t_1^{l}}&space;\left(P_{t_2}&space;-&space;P_{t_1}\left(1&space;&plus;&space;\frac{i}{n}\right)^{n}\right)}{P_{t_1}^2}&space;\\&space;\mathrm{where}&space;\\&space;P_{t_1^l}&space;&plus;&space;P_{t_1^s}&space;=&space;P_{t_1}&space;\\&space;P_{t_1^l}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;long&space;positions&space;at}&space;\hspace{2mm}&space;t_1\\&space;P_{t_1^s}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;short&space;positions&space;at}&space;\hspace{2mm}&space;t_1\\&space;P_{t_2}&space;\hspace{5mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{pool&space;of&space;long&space;and&space;short&space;positions&space;at}&space;\hspace{2mm}&space;t_2\\&space;i&space;\hspace{9mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{interest&space;rate&space;per&space;block&space;at}\hspace{2mm}&space;t_1\\&space;n&space;\hspace{8mm}&space;\ldots&space;\hspace{5mm}&space;\textrm{number&space;of&space;blocks&space;mined&space;between}\hspace{2mm}&space;t_1&space;\hspace{2mm}&space;\textrm{and}&space;\hspace{2mm}&space;t_2\\" title="\\ r_l = \frac{P_{t_1^{s}} \left(P_{t_2} - P_{t_1}\left(1 + \frac{i}{n}\right)^{n}\right)}{P_{t_1}^2} \\ r_s = - \frac{P_{t_1^{l}} \left(P_{t_2} - P_{t_1}\left(1 + \frac{i}{n}\right)^{n}\right)}{P_{t_1}^2} \\ \mathrm{where} \\ P_{t_1^l} + P_{t_1^s} = P_{t_1} \\ P_{t_1^l} \hspace{5mm} \ldots \hspace{5mm} \textrm{pool of long positions at} \hspace{2mm} t_1\\ P_{t_1^s} \hspace{5mm} \ldots \hspace{5mm} \textrm{pool of short positions at} \hspace{2mm} t_1\\ P_{t_2} \hspace{5mm} \ldots \hspace{5mm} \textrm{pool of long and short positions at} \hspace{2mm} t_2\\ i \hspace{9mm} \ldots \hspace{5mm} \textrm{interest rate per block at}\hspace{2mm} t_1\\ n \hspace{8mm} \ldots \hspace{5mm} \textrm{number of blocks mined between}\hspace{2mm} t_1 \hspace{2mm} \textrm{and} \hspace{2mm} t_2\\" /></a>
+### Testnets
 
-Due to the pooling, we circumvent the market matching of individuals wanting to swap, however, the ratio of long and short positions increases the swap risk.
+#### Kovan Testnet
 
-## Smart Contracts
-Our code base consists of two main contract files: `Cherryswap.sol` and `SwapMath.vy`.
+The contract addresses deployed on `Kovan` Test Network:
 
-The `Cherryswap.sol` contract handles the different swap periods, which are fixed. A swap period consists of a collection phase `t1 - t0` and an active period `t2 - t1`. During the collection phase, participants are allowed to transfer DAI into either the long pool or the short pool. At `t1`,the start of the active period, the combined funds in the long and the short pool, `P_t1`, are converted into cDAI, where they are locked until `t2`. At that time, `P_t2` is split among the participants relative to their position and whether they were invested into the long or the short pool, and transferred back to them.
+| Contract      | Address                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| CherryDai     | []()                                                                                                                          |
+| CherryMath    | []()                                                                                                                          |
+| CherrySwap    | []()                                                                                                                          |
 
-The `SwapMath.vy` contract serves as a library for the `CherrySwap.sol` contract and computes the payout ratios for long and short positions that are used to compute the payouts within the `Cherryswap.sol` contract.
+### Mainnets
 
-## Development Setup
+#### Ethereum Mainnet
+
+The contract addresses deployed on `Mainnet` Mainnet:
+
+| Contract      | Address                                                                                                                       |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| CherryDai     | []()                                                                                                                          |
+| CherryMath    | []()                                                                                                                          |
+| CherrySwap    | []()                                                                                                                          |
+
+## Local Development
 
 Node.js LTS or greater required.
 
 ```bash
-# Bootstrap project dependencies:
-$ yarn install
 
-# Compile @smart-contracts 
-$ yarn run contracts:compile
-
-# Compile @swap-math
-$ yarn run swapmath:compile
-
-# Build @front-end
-$ yarn run frontend:build
-
-# Run solidity contracts tests
-$ yarn run contracts:test
-
-# Run swap math contracts tests
-# To run the python test, see packages/swap-math/README.md
-$ yarn run swapmath:test
-
-# Run coverage
-$ yarn run packageName:coverage
-
-# current package name aliases: {frontend, contracts, swapmath}
+# current package name aliases: {frontend, contracts}
 ```
+
+### Testing
+
+### Code Linting
+
+Linting is setup for `JavaScript` with [ESLint](https://eslint.org) & Solidity with [Solhint](https://protofire.github.io/solhint/) and [Prettier](https://prettier.io/).
+
+    # lint solidity contracts
+    $ yarn run contracts:prettier
+
+Code style is enforced through the CI test process, builds will fail if there're any linting errors.
 
 ## Deployment
 
-Deploy the SwapMath contract:
-```
-yarn run swapmath:deploy
-```
+## Issues
 
-Copy the deployed address to the `@smart-contract` deployment config file 
-```
-packages/smart-contracts/migrations/config.json
-```
-If you are deploying on testnet or mainnet, make sure to config the ERC20 token and the ctoken addresses.
+If you come across an issue with Cherryswap, do a search in the [Issues](https://github.com/NeapolitanSwaps/CherrySwap/issues) tab of this repo to make sure it hasn't been reported before. Follow these steps to help us prevent duplicate issues and unnecessary notifications going to the many people watching this repo:
 
-
-Deploy the solidity contracts:
-```
-yarn run contracts:deploy
-```
-
-Front end: 
-
-! Needs to know the contract addresses
-```
-yarn run frontend:serve
-```
+- If the issue you found has been reported and is still open, and the details match your issue, give a "thumbs up" to the relevant posts in the issue thread to signal that you have the same issue. No further action is required on your part.
+- If the issue you found has been reported and is still open, but the issue is missing some details, you can add a comment to the issue thread describing the additional details.
+- If the issue you found has been reported but has been closed, you can comment on the closed issue thread and ask to have the issue reopened because you are still experiencing the issue. Alternatively, you can open a new issue, reference the closed issue by number or link, and state that you are still experiencing the issue. Provide any additional details in your post so we can better understand the issue and how to fix it.
 
 ## Additional Resources
 
-* [Pitch Deck](./additionalResources/CherrySwapPitchDeck-ETHBerlinZwei.pdf)
-* [Figma Mockups](https://www.figma.com/file/F5Ykz9BfmWO7YAwqLHUqJ2/Cherry-Swap-ETHBerlinZwei?node-id=0:1)
-* [Formula Validation](https://docs.google.com/spreadsheets/d/1m6Dt99teQvEwX9UYqx_ONWNUgVn40_nJV4qQc6qyoWE/edit?usp=sharing)
+* [Figma Mockups]()
+* [Formula Validation]()
+
+## License
