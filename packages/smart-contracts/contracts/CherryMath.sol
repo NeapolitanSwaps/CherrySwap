@@ -8,13 +8,7 @@ contract CherryMath is Initializable {
     /**
      * @dev Possible error codes that we can return
      */
-    enum MathError {
-        NO_ERROR,
-        DIVISION_BY_ZERO,
-        INTEGER_OVERFLOW,
-        INTEGER_UNDERFLOW,
-        IexpScaleNTEGER_OVERFLOW
-    }
+    enum MathError { NO_ERROR, DIVISION_BY_ZERO, INTEGER_OVERFLOW, INTEGER_UNDERFLOW, IexpScaleNTEGER_OVERFLOW }
 
     /**
     * @dev Multiplies two numbers, returns an error on overflow.
@@ -140,61 +134,35 @@ contract CherryMath is Initializable {
         res = res / 0x21c3677c82b40000 + y + FIXED_1; // divide by 20! and then add y^1 / 1! + y^0 / 0!
 
         if ((x & 0x010000000000000000000000000000000) != 0)
-            res =
-                (res * 0x1c3d6a24ed82218787d624d3e5eba95f9) /
-                0x18ebef9eac820ae8682b9793ac6d1e776; // multiply by e^2^(-3)
+            res = (res * 0x1c3d6a24ed82218787d624d3e5eba95f9) / 0x18ebef9eac820ae8682b9793ac6d1e776; // multiply by e^2^(-3)
         if ((x & 0x020000000000000000000000000000000) != 0)
-            res =
-                (res * 0x18ebef9eac820ae8682b9793ac6d1e778) /
-                0x1368b2fc6f9609fe7aceb46aa619baed4; // multiply by e^2^(-2)
+            res = (res * 0x18ebef9eac820ae8682b9793ac6d1e778) / 0x1368b2fc6f9609fe7aceb46aa619baed4; // multiply by e^2^(-2)
         if ((x & 0x040000000000000000000000000000000) != 0)
-            res =
-                (res * 0x1368b2fc6f9609fe7aceb46aa619baed5) /
-                0x0bc5ab1b16779be3575bd8f0520a9f21f; // multiply by e^2^(-1)
+            res = (res * 0x1368b2fc6f9609fe7aceb46aa619baed5) / 0x0bc5ab1b16779be3575bd8f0520a9f21f; // multiply by e^2^(-1)
         if ((x & 0x080000000000000000000000000000000) != 0)
-            res =
-                (res * 0x0bc5ab1b16779be3575bd8f0520a9f21e) /
-                0x0454aaa8efe072e7f6ddbab84b40a55c9; // multiply by e^2^(+0)
+            res = (res * 0x0bc5ab1b16779be3575bd8f0520a9f21e) / 0x0454aaa8efe072e7f6ddbab84b40a55c9; // multiply by e^2^(+0)
         if ((x & 0x100000000000000000000000000000000) != 0)
-            res =
-                (res * 0x0454aaa8efe072e7f6ddbab84b40a55c5) /
-                0x00960aadc109e7a3bf4578099615711ea; // multiply by e^2^(+1)
+            res = (res * 0x0454aaa8efe072e7f6ddbab84b40a55c5) / 0x00960aadc109e7a3bf4578099615711ea; // multiply by e^2^(+1)
         if ((x & 0x200000000000000000000000000000000) != 0)
-            res =
-                (res * 0x00960aadc109e7a3bf4578099615711d7) /
-                0x0002bf84208204f5977f9a8cf01fdce3d; // multiply by e^2^(+2)
+            res = (res * 0x00960aadc109e7a3bf4578099615711d7) / 0x0002bf84208204f5977f9a8cf01fdce3d; // multiply by e^2^(+2)
         if ((x & 0x400000000000000000000000000000000) != 0)
-            res =
-                (res * 0x0002bf84208204f5977f9a8cf01fdc307) /
-                0x0000003c6ab775dd0b95b4cbee7e65d11; // multiply by e^2^(+3)
+            res = (res * 0x0002bf84208204f5977f9a8cf01fdc307) / 0x0000003c6ab775dd0b95b4cbee7e65d11; // multiply by e^2^(+3)
 
         return res;
     }
 
-    function capFunction(uint256 r, uint256 t1, uint256 t2)
-        public
-        pure
-        returns (uint256)
-    {
+    function capFunction(uint256 r, uint256 t1, uint256 t2) public pure returns (uint256) {
         uint256 t = t2 - t1;
         uint256 x = (r * t * FIXED_1) / (15 * 1e18);
         uint256 c = (optimalExp(x) * 1e18) / FIXED_1;
         return c;
     }
 
-    function futureValue(uint256 N, uint256 r, uint256 t1, uint256 t2)
-        public
-        view
-        returns (uint256)
-    {
+    function futureValue(uint256 N, uint256 r, uint256 t1, uint256 t2) public view returns (uint256) {
         return (capFunction(r, t1, t2) * N) / 1e18;
     }
 
-    function cDaitoDai(uint256 _cDai, uint256 _cDaiPrice)
-        public
-        pure
-        returns (uint256)
-    {
+    function cDaitoDai(uint256 _cDai, uint256 _cDaiPrice) public pure returns (uint256) {
         return (_cDai * _cDaiPrice) / (10**28);
     }
     function computeRatios(
@@ -205,16 +173,8 @@ contract CherryMath is Initializable {
         uint256 _endingTime,
         uint256 _endcDaiEndPrice
     ) public view returns (uint256 longPayout, uint256 shortPayout) {
-        shortPayout = futureValue(
-            _startShortPoolDai,
-            _fixedNACB,
-            _startingTime,
-            _endingTime
-        );
-        uint256 totalPoolDaiValueEnd = cDaitoDai(
-            _startcDaiPool,
-            _endcDaiEndPrice
-        );
+        shortPayout = futureValue(_startShortPoolDai, _fixedNACB, _startingTime, _endingTime);
+        uint256 totalPoolDaiValueEnd = cDaitoDai(_startcDaiPool, _endcDaiEndPrice);
         longPayout = totalPoolDaiValueEnd - shortPayout;
     }
 
@@ -223,11 +183,7 @@ contract CherryMath is Initializable {
     /**
      * @dev Multiply an Exp by a scalar, then truncate to return an unsigned integer.
      */
-    function mulScalarTruncate(uint256 a, uint256 scalar)
-        external
-        pure
-        returns (MathError, uint256)
-    {
+    function mulScalarTruncate(uint256 a, uint256 scalar) external pure returns (MathError, uint256) {
         (MathError err, uint256 product) = mulScalar(a, scalar);
         if (err != MathError.NO_ERROR) {
             return (err, 0);
@@ -239,11 +195,7 @@ contract CherryMath is Initializable {
     /**
      * @dev Multiply an Exp by a scalar, returning a new Exp.
      */
-    function mulScalar(uint256 mantissa, uint256 scalar)
-        internal
-        pure
-        returns (MathError, uint256)
-    {
+    function mulScalar(uint256 mantissa, uint256 scalar) internal pure returns (MathError, uint256) {
         (MathError err0, uint256 scaledMantissa) = mulUInt(mantissa, scalar);
         if (err0 != MathError.NO_ERROR) {
             return (err0, 0);
