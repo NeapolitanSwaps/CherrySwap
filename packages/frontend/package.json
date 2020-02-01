@@ -1,23 +1,21 @@
 {
-  "name": "@cherryswap/front-end",
-  "version": "1.0.0",
+  "name": "my-app",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@cherryswap/smart-contracts": "^1.0.0",
-    "@drizzle/store": "^1.5.1",
-    "@drizzle/react-components": "^1.5.1",
-    "@drizzle/react-plugin": "^1.5.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "drizzle": "^1.4.0",
+    "@types/jest": "^24.0.0",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/styled-components": "^4.4.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.0",
-    "node-sass": "^4.0.0",
-    "sass": "^1.3.0",
-    "fibers": "3.1.0",
-    "typescript": "3.7.4"
+    "react-scripts": "3.3.1",
+    "styled-components": "^5.0.0",
+    "typescript": "~3.7.2"
   },
   "scripts": {
     "start": "react-scripts start",
