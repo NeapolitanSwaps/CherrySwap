@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Toggle from "../elements/Toggle";
+import Button from "../elements/Button";
+import MarketOverview, { MarketHeaderProps } from "../MarketOverview";
 
 const Main = () => {
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(
@@ -14,13 +16,22 @@ const Main = () => {
     setPositionSelectionIndex(index);
   };
 
+  const marketStats: MarketHeaderProps = {
+    liquidity: 77332222,
+    interestRate: 23
+  };
+
   return (
     <Root>
       <Toggle
         onClick={toggleState}
         currentIndex={positionSelectionIndex}
         titles={positionTitles}
-      ></Toggle>
+      />
+      <br />
+      <Button state={"primary"} title={"Pending"} />
+      <Button state={"secondary"} title={"Pending"} />
+      <Market marketStats={marketStats} />
     </Root>
   );
 };
@@ -28,10 +39,17 @@ const Main = () => {
 const Root = styled.div`
   background-color: ${props => props.theme.primaryPink};
   display: flex;
+  flex-direction: column;
   padding: 30px;
   width: 75vw;
   height: 70vh;
   margin: 5vh auto;
+`;
+
+const Market = styled(MarketOverview)`
+  background-color: ${props => props.theme.white};
+  height: 100px;
+  margin-top: 50px;
 `;
 
 export default Main;
