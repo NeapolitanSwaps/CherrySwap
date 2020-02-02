@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import logo from "../assets/svg/logo.svg";
+import logo from "../../assets/svg/logo.svg";
 
 const Header = () => {
   return (
-    <Wrapper>
+    <Root>
       <Navigation>
         <Logo src={logo} alt={"logo"} />
         <Router>
@@ -14,21 +14,22 @@ const Header = () => {
       </Navigation>
       {/* Export out to Web3 component */}
       <Button onClick={() => alert("hi")}>Connect a wallet</Button>
-    </Wrapper>
+    </Root>
   );
 };
 
-const Wrapper = styled.div`
-  background-color: #eee;
+const Root = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 30px;
+  height: 10vh;
+  padding: 0 5vw;
+  min-height: 50px;
 `;
 
 const Navigation = styled.div`
   display: flex;
-  background-color: #ccc;
+  align-self: center;
 `;
 
 const Router = styled.ul`
@@ -48,7 +49,7 @@ const Logo = styled.img`
 const Button = styled.button`
   align-self: center;
   padding: 8px;
-  border: 2px solid #000;
+  border: 2px solid ${props => props.theme.primaryPink};
   border-radius: 15px;
   &:hover {
     cursor: pointer;
