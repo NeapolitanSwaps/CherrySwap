@@ -37,6 +37,8 @@ const theme = darkMode => ({
 
   // Main theme colors:
   primaryPink: "#FFEBE2",
+  togglePrimary: "#B23A48",
+  toggleSecondary: "#FCB9B2",
 
   // Media queries
   mediaWidth: mediaWidthTemplates,
