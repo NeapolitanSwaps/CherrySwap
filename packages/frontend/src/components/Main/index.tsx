@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import Toggle from "../elements/Toggle";
 import Button from "../elements/Button";
-import MarketOverview, { MarketHeaderProps } from "../MarketOverview";
+import MarketOverview, {
+  MarketHeaderProps,
+  MarketBodyProps
+} from "../MarketOverview";
 
 const Main = () => {
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(
@@ -21,6 +24,11 @@ const Main = () => {
     interestRate: 23
   };
 
+  const providerStats: MarketBodyProps = {
+    longPoolBalance: 2300,
+    shortPoolBalance: 3200
+  };
+
   return (
     <Root>
       <Toggle
@@ -31,7 +39,7 @@ const Main = () => {
       <br />
       <Button state={"primary"} title={"Pending"} />
       <Button state={"secondary"} title={"Pending"} />
-      <Market marketStats={marketStats} />
+      <MarketOverview marketStats={marketStats} providerStats={providerStats} />
     </Root>
   );
 };
@@ -44,12 +52,6 @@ const Root = styled.div`
   width: 75vw;
   height: 70vh;
   margin: 5vh auto;
-`;
-
-const Market = styled(MarketOverview)`
-  background-color: ${props => props.theme.white};
-  height: 100px;
-  margin-top: 50px;
 `;
 
 export default Main;

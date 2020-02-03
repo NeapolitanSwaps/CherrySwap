@@ -39,6 +39,10 @@ const theme = darkMode => ({
   primaryPink: "#FFEBE2",
   togglePrimary: "#B23A48",
   toggleSecondary: "#FCB9B2",
+  green: "#007713",
+
+  greyAlpha: "rgba(70, 18, 32, 0.2)",
+  darkCherry: "#461220",
 
   // Media queries
   mediaWidth: mediaWidthTemplates,
