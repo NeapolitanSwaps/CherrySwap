@@ -1,5 +1,5 @@
 import React from "react";
-import { formatInterestRate, formatLiquidity } from "../../utils";
+import { formatInterestRate, formatCurrency } from "../../utils";
 import * as S from "./styles";
 
 interface MarketOverviewProps {
@@ -30,7 +30,7 @@ const MarketHeader = (props: MarketHeaderProps) => {
     <S.MarketHeader>
       <S.MarketHeaderTitle>Market Overview</S.MarketHeaderTitle>
       <S.MarketHeaderTitle>
-        Liquidity: {formatLiquidity(liquidity, "DAI")}
+        Liquidity: {formatCurrency(liquidity, "DAI")}
       </S.MarketHeaderTitle>
       <S.MarketHeaderTitle>
         Current IR (Compound):
@@ -57,10 +57,10 @@ const MarketBody = (props: MarketBodyProps) => {
       />
       <S.MarketBody>
         <S.MarketBodyBalanceTitle short>
-          {formatLiquidity(shortPoolBalance, "DAI")}
+          {formatCurrency(shortPoolBalance, "DAI")}
         </S.MarketBodyBalanceTitle>
         <S.MarketBodyBalanceTitle>
-          {formatLiquidity(longPoolBalance, "DAI")}
+          {formatCurrency(longPoolBalance, "DAI")}
         </S.MarketBodyBalanceTitle>
       </S.MarketBody>
     </>
