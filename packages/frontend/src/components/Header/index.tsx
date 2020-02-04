@@ -2,9 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import logo from "../../assets/svg/logo.svg";
 
+import * as S from "./styles";
+
 const Header = () => {
   return (
-    <Root>
+    <S.Header>
       <Navigation>
         <Logo src={logo} alt={"logo"} />
         <Router>
@@ -14,18 +16,9 @@ const Header = () => {
       </Navigation>
       {/* Export out to Web3 component */}
       <Button onClick={() => alert("hi")}>Connect a wallet</Button>
-    </Root>
+    </S.Header>
   );
 };
-
-const Root = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 10vh;
-  padding: 0 5vw;
-  min-height: 50px;
-`;
 
 const Navigation = styled.div`
   display: flex;

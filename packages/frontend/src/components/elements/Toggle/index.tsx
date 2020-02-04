@@ -1,6 +1,6 @@
 import React from "react";
-import styled from "styled-components";
-import StyledButton from "../Button";
+import Button from "../Button";
+import * as S from "./styles";
 
 interface Props {
   currentIndex: number;
@@ -11,25 +11,20 @@ interface Props {
 const Toggle = (props: Props) => {
   const { currentIndex, titles, onClick } = props;
   return (
-    <Wrapper>
-      <StyledButton
+    <S.Toggle>
+      <Button
         title={titles[0]}
         onClick={() => onClick(0)}
         toggled={0 === currentIndex}
       />
-      <StyledButton
+      <Button
         title={titles[1]}
         onClick={() => onClick(1)}
         toggled={1 === currentIndex}
         leftMargin={-40}
       />
-    </Wrapper>
+    </S.Toggle>
   );
 };
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 export default Toggle;

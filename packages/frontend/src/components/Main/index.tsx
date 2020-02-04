@@ -7,6 +7,7 @@ import MarketOverview, {
   MarketBodyProps
 } from "../MarketOverview";
 import Deposit from "../Deposit";
+import * as S from "./styles";
 
 const Main = () => {
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(
@@ -33,35 +34,27 @@ const Main = () => {
   };
 
   return (
-    <Root>
+    <S.Main>
       <Toggle
         onClick={toggleState}
         currentIndex={positionSelectionIndex}
         titles={positionTitles}
       />
-      <br />
-      <Button state={"primary"} title={"Pending"} />
-      <Button state={"secondary"} title={"Pending"} />
+      {/* <br />
+      <div>
+        <Button state={"primary"} title={"Pending"} />
+        <Button state={"secondary"} title={"Pending"} />
+      </div> */}
       <MarketOverview marketStats={marketStats} providerStats={providerStats} />
-      <Deposit
+      {/* <Deposit
         onTextInput={input => {
           userInput.current = input;
         }}
         balance={10023}
       />
-      <button onClick={() => alert(userInput.current)}>test ref</button>
-    </Root>
+      <button onClick={() => alert(userInput.current)}>test ref</button> */}
+    </S.Main>
   );
 };
-
-const Root = styled.div`
-  background-color: ${props => props.theme.primaryPink};
-  display: flex;
-  flex-direction: column;
-  padding: 30px;
-  width: 75vw;
-  height: 70vh;
-  margin: 5vh auto;
-`;
 
 export default Main;
