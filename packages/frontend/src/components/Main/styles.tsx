@@ -8,4 +8,5 @@ export const Main = styled.div`
   width: 75vw;
   height: 70vh;
   margin: 5vh auto;
+  align-items: center;
 `;

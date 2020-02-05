@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { formatInterestRate, formatCurrency } from "../../utils";
 import * as S from "./styles";
+import { useResize } from "../../hooks";
 
 export interface Props {
   marketStats: MarketHeaderProps;
@@ -45,8 +46,12 @@ const MarketBody = (props: MarketBodyProps) => {
   const poolBalance = shortPoolBalance + longPoolBalance;
   const shortPercentage = 100 * (shortPoolBalance / poolBalance);
   const longPercentage = 100 * (longPoolBalance / poolBalance);
+
+  const ref: any = useRef<any>(null);
+  const { width } = useResize(ref);
+
   return (
-    <>
+    <div ref={ref}>
       <S.MarketBody>
         <span>Short</span>
         <span>Long</span>
@@ -54,6 +59,7 @@ const MarketBody = (props: MarketBodyProps) => {
       <ProgressBar
         shortPercentage={shortPercentage}
         longPercentage={longPercentage}
+        width={width}
       />
       <S.MarketBody>
         <S.MarketBodyBalanceTitle short>
@@ -63,16 +69,18 @@ const MarketBody = (props: MarketBodyProps) => {
           {formatCurrency(longPoolBalance, "DAI")}
         </S.MarketBodyBalanceTitle>
       </S.MarketBody>
-    </>
+    </div>
   );
 };
 
 const ProgressBar = ({
   shortPercentage,
-  longPercentage
+  longPercentage,
+  width
 }: {
   shortPercentage: number;
   longPercentage: number;
+  width: number;
 }) => (
   <S.ProgressBar>
     <S.ProgressBarPercentage>
@@ -81,10 +89,10 @@ const ProgressBar = ({
     <S.ProgressBarPercentage>
       {longPercentage.toFixed(0)}%
     </S.ProgressBarPercentage>
-    <S.Bar>
+    <S.Bar width={width}>
       <S.ColoredBar percentage={shortPercentage} position={"left"} />
     </S.Bar>
-    <S.Bar>
+    <S.Bar width={width}>
       <S.ColoredBar percentage={longPercentage} position={"right"} />
     </S.Bar>
   </S.ProgressBar>

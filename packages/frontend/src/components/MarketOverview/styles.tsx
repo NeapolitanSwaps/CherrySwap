@@ -50,9 +50,9 @@ export const ProgressBarPercentage = styled.span`
   z-index: 2;
 `;
 
-export const Bar = styled.div`
+export const Bar = styled.div<{ width?: number }>`
   position: absolute;
-  width: 75vw;
+  width: ${({ width }) => `${width}px`};
   height: 24px;
   display: flex;
   flex-direction: row;
@@ -74,11 +74,11 @@ export const ColoredBar = styled.div<{
     const isLeft = position === "left";
     const newPercentage = percentage / 2;
     return `
-    background-color: ${isLeft ? theme.togglePrimary : theme.green};
-    width: ${newPercentage}%;
-    margin-left: ${isLeft ? `${50 - newPercentage}%` : "50%"};
-    border-radius: ${isLeft ? "25px 0 0 25px" : "0 25px 25px 0"};
-    z-index: ${isLeft ? 2 : 1};
-  `;
+      background-color: ${isLeft ? theme.togglePrimary : theme.green};
+      width: ${newPercentage}%;
+      margin-left: ${isLeft ? `${50 - newPercentage}%` : "50%"};
+      border-radius: ${isLeft ? "25px 0 0 25px" : "0 25px 25px 0"};
+      z-index: ${isLeft ? 2 : 1};
+    `;
   }}
 `;
