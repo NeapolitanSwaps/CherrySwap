@@ -2,22 +2,22 @@ import React from "react";
 import { formatInterestRate, formatCurrency } from "../../utils";
 import * as S from "./styles";
 
-interface MarketOverviewProps {
+export interface Props {
   marketStats: MarketHeaderProps;
   providerStats: MarketBodyProps;
 }
 
-export interface MarketHeaderProps {
+interface MarketHeaderProps {
   liquidity: number;
   interestRate: number;
 }
 
-export interface MarketBodyProps {
+interface MarketBodyProps {
   shortPoolBalance: number;
   longPoolBalance: number;
 }
 
-const MarketOverview = (props: MarketOverviewProps) => (
+const MarketOverview = (props: Props) => (
   <S.MarketOverview>
     <MarketHeader {...props.marketStats} />
     <MarketBody {...props.providerStats} />

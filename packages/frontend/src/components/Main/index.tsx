@@ -3,11 +3,13 @@ import styled from "styled-components";
 import Toggle from "../elements/Toggle";
 import Button from "../elements/Button";
 import MarketOverview, {
-  MarketHeaderProps,
-  MarketBodyProps
+  Props as MarketOverviewProps
 } from "../MarketOverview";
 import Deposit from "../Deposit";
 import * as S from "./styles";
+import PositionOverview, {
+  Props as PositionOverviewProps
+} from "../PositionOverview";
 
 const Main = () => {
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(
@@ -23,14 +25,21 @@ const Main = () => {
     setPositionSelectionIndex(index);
   };
 
-  const marketStats: MarketHeaderProps = {
-    liquidity: 77332222,
-    interestRate: 23
+  const marketOverview: MarketOverviewProps = {
+    providerStats: {
+      longPoolBalance: 3200,
+      shortPoolBalance: 3200
+    },
+    marketStats: {
+      liquidity: 77332222,
+      interestRate: 23
+    }
   };
 
-  const providerStats: MarketBodyProps = {
-    longPoolBalance: 3200,
-    shortPoolBalance: 3200
+  const positionOverview: PositionOverviewProps = {
+    interestRate: 3220,
+    position: positionSelectionIndex ? "Long" : "Short",
+    lockPeriod: 1586476800
   };
 
   return (
@@ -45,14 +54,15 @@ const Main = () => {
         <Button state={"primary"} title={"Pending"} />
         <Button state={"secondary"} title={"Pending"} />
       </div> */}
-      <MarketOverview marketStats={marketStats} providerStats={providerStats} />
+      <MarketOverview {...marketOverview} />
+      <PositionOverview {...positionOverview} />
       {/* <Deposit
         onTextInput={input => {
           userInput.current = input;
         }}
         balance={10023}
-      />
-      <button onClick={() => alert(userInput.current)}>test ref</button> */}
+      /> */}
+      {/* <button onClick={() => alert(userInput.current)}>test ref</button> */}
     </S.Main>
   );
 };
