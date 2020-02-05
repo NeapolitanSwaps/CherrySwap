@@ -25,9 +25,13 @@ export const DepositBody = styled.div`
   justify-content: space-between;
 `;
 
-export const DepositBodyInput = styled.input`
+export const DepositBodyInput = styled.input<{ error?: boolean }>`
   width: 75%;
   height: 50px;
   margin: 16px 0;
   border-bottom: 1px solid #000;
+
+  font-size: 1.5rem;
+  color: ${({ error, theme }) => error && theme.primaryPink};
+  -moz-appearance: textfield;
 `;
