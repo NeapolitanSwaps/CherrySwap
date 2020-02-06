@@ -4,12 +4,13 @@ import { Props as ButtonProps } from "./index";
 export const Button = styled.button`
   background-color: ${props => props.theme.togglePrimary};
   color: #fff;
-  width: 300px;
   height: 40px;
+  padding: 0 24px;
   border-radius: 25px;
   text-align: center;
   justify-content: center;
   display: flex;
+  flex-grow: 1;
 
   & span {
     align-self: center;
@@ -21,7 +22,7 @@ export const Button = styled.button`
     opacity: 0.9;
   }
 
-  ${({ toggled, theme, leftMargin, state }: ButtonProps) => {
+  ${({ toggled, theme, state }: ButtonProps) => {
     if (state) {
       return `
       background-color: ${
@@ -30,18 +31,7 @@ export const Button = styled.button`
       color: ${state === "primary" ? theme.white : theme.togglePrimary}
     `;
     }
-    const leftStyle = leftMargin && `margin-left: ${leftMargin}px`;
-    const zStyle = `z-index: ${toggled ? 2 : 1}`;
-    return toggled
-      ? `
-        ${leftStyle};
-        ${zStyle};
-      `
-      : `
-        background-color: ${theme.toggleSecondary};
-        ${leftStyle};
-        ${zStyle};
-      `;
+    return !toggled && `background-color: ${theme.toggleSecondary}`;
   }}}
 `;
 

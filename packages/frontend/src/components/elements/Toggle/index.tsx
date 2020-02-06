@@ -21,7 +21,6 @@ const Toggle = (props: Props) => {
         title={titles[1]}
         onClick={() => onClick(1)}
         toggled={1 === currentIndex}
-        leftMargin={-40}
       />
     </S.Toggle>
   );
