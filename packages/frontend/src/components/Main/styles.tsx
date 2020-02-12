@@ -1,12 +1,15 @@
 import styled from "styled-components";
 
 export const Main = styled.div`
-  background-color: ${props => props.theme.primaryPink};
+  background-color: ${props => props.theme.backgroundPink};
   display: flex;
   flex-direction: column;
-  padding: 30px;
-  width: 75vw;
-  height: 70vh;
-  margin: 5vh auto;
+  max-width: 45rem;
+  width: 100%;
+  /* height: 70vh; */
+  margin: 2vh auto;
   align-items: center;
+  padding: 10px;
+  border-radius: 25px;
+  box-sizing: border-box;
 `;

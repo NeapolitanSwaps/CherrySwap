@@ -1,12 +1,13 @@
 import styled, { keyframes } from "styled-components";
 
-//
-
 export const MarketOverview = styled.div`
   background-color: ${props => props.theme.white};
-  margin-top: 50px;
+  margin-top: 16px;
   border-radius: 10px;
   padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid ${props => props.theme.backgroundAccent};
 `;
 
 export const MarketHeader = styled.div`
@@ -33,8 +34,8 @@ export const MarketBodyBalanceTitle = styled.span<{ short?: boolean }>`
 `;
 
 export const ProgressBar = styled.div`
-  background-color: ${props => props.theme.toggleSecondary};
   border-radius: 25px;
+  background-color: ${props => props.theme.backgroundPink};
   display: flex;
   height: 24px;
   align-items: center;
@@ -74,7 +75,7 @@ export const ColoredBar = styled.div<{
     const isLeft = position === "left";
     const newPercentage = percentage / 2;
     return `
-      background-color: ${isLeft ? theme.togglePrimary : theme.green};
+      background: ${!isLeft ? theme.redGradient : theme.greenGradient};
       width: ${newPercentage}%;
       margin-left: ${isLeft ? `${50 - newPercentage}%` : "50%"};
       border-radius: ${isLeft ? "25px 0 0 25px" : "0 25px 25px 0"};

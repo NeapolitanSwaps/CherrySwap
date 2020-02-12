@@ -2,9 +2,12 @@ import styled from "styled-components";
 
 export const Deposit = styled.div`
   background-color: ${props => props.theme.white};
-  margin-top: 50px;
+  margin-top: 16px;
   border-radius: 10px;
   padding: 0 16px;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid ${props => props.theme.backgroundAccent};
 `;
 
 export const DepositHeader = styled.div`
@@ -12,7 +15,6 @@ export const DepositHeader = styled.div`
   flex-direction: row;
   justify-content: space-between;
   padding: 16px 0;
-  border-bottom: ${props => `1px solid ${props.theme.greyAlpha}`};
 `;
 
 export const DepositHeaderTitle = styled.span``;
@@ -28,9 +30,8 @@ export const DepositBody = styled.div`
 export const DepositBodyInput = styled.input<{ error?: boolean }>`
   width: 75%;
   height: 50px;
-  margin: 16px 0;
-  border-bottom: 1px solid #000;
-
+  margin: 0 0 16px;
+  border-bottom: ${props => `1px solid ${props.theme.greyAlpha}`};
   font-size: 1.5rem;
   color: ${({ error, theme }) => error && theme.primaryPink};
   -moz-appearance: textfield;

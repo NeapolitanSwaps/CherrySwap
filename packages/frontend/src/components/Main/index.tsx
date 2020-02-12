@@ -18,7 +18,7 @@ const Main = () => {
 
   const userInput = useRef<string>("");
 
-  const positionTitles = ["Option A", "Option B"];
+  const positionTitles = ["Short", "Long"];
 
   const toggleState = (index: number) => {
     if (positionSelectionIndex === index) return;
@@ -55,14 +55,13 @@ const Main = () => {
         <Button state={"secondary"} title={"Pending"} />
       </div> */}
       <MarketOverview {...marketOverview} />
-      <PositionOverview {...positionOverview} />
-      {/* <Deposit
+      <Deposit
         onTextInput={input => {
           userInput.current = input;
         }}
         balance={10023}
-      /> */}
-      {/* <button onClick={() => alert(userInput.current)}>test ref</button> */}
+      />
+      <PositionOverview {...positionOverview} />
     </S.Main>
   );
 };

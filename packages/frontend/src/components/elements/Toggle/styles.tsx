@@ -5,7 +5,6 @@ export const Toggle = styled.div`
   flex-direction: row;
   background-color: ${props => props.theme.toggleSecondary};
   border-radius: 25px;
-  width: 50%;
-  min-width: 300px;
+  width: 100%;
   justify-content: center;
 `;
