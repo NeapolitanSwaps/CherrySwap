@@ -177,16 +177,16 @@ contract CherrySwap is Initializable, CherryPool {
         //if the trader is long then they will pay fixed, receive float.
         if (_swap.bet == Bet.Long) {
             return
-                _swap.amount +
-                getFloatingValue(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount) -
-                cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer, _swap.startingTime, _swap.endingTime);
+                _swap.amount + // swap nominal
+                getFloatingValue(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount) - // floating leg, paid to long side
+                cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer, _swap.startingTime, _swap.endingTime); // fixed leg(paid by long side
         }
-        //if the trader is short then they will recive fixed, pay float.
+        //if the trader is short then they will receive fixed, pay float.
         if (_swap.bet == Bet.Short) {
             return
-                _swap.amount +
-                cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer, _swap.startingTime, _swap.endingTime) -
-                getFloatingValue(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount);
+                _swap.amount + // swap nominal
+                cherryMath.futureValue(_swap.amount, _swap.fixedRateOffer, _swap.startingTime, _swap.endingTime) - // fixed leg, paid to short side
+                getFloatingValue(_swap.startingcTokenExchangeRate, getcTokenExchangeRate(), _swap.amount); // floating leg, paid by the short side
         }
     }
 
