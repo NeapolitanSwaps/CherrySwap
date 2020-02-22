@@ -46,7 +46,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
     event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
     event PoolShare(uint256 amount);
     event MintCherry(address indexed liquidityProvider, uint256 amountDai,uint256 amountcDai, uint256 amountCherryDai);
-    event RedeemCherry(address indexed liquidityProvider, uint256 redeemAmount, uint256 redeemToken);
+    event RedeemCherry(address indexed liquidityProvider, uint256 redeemedDaiAmount, uint256 redeemedCherryDaiDaiAmount);
     event Transfer(address indexed to, uint256 value);
     event CurrentExchangeRate(uint256 rate);
 
@@ -123,14 +123,14 @@ contract CherryPool is Initializable, TokenErrorReporter {
         
 
         CherryMath.MathError _err;
-        uint256 _rate;
-        (_err, _rate) = exchangeRate();
+        uint256 _cherryRate;
+        (_err, _cherryRate) = exchangeRate();
         if (_err != CherryMath.MathError.NO_ERROR) {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(_err));
         }
 
         // mint CherryDai to liquidity provider
-        uint256 cherryDaiToMint = _amount.mul(1e18).div(_rate);
+        uint256 cherryDaiToMint = _amount.mul(1e18).div(_cherryRate);
         cherryDai.mint(msg.sender, cherryDaiToMint);
 
         // internal accounting to store pool balances
@@ -183,39 +183,24 @@ contract CherryPool is Initializable, TokenErrorReporter {
             "CherryPool::redeem request is more than current token balance"
         );
 
-        RedeemLocalVars memory vars;
-
         // get exchange rate from Cherrydai to Dai+fee
-        (vars.mathErr, vars.exchangeRateMantissa) = exchangeRate();
+        (_err, _cherryRate) = exchangeRate();
 
-        if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
-            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(vars.mathErr));
+        if (_err != CherryMath.MathError.NO_ERROR) {
+            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(_err));
         }
 
-        vars.redeemTokens = _amount;
-
-        //TODO: This equation also looks wrong.
-        //It should be (vars.redeemTokens*1e18) * 1/vars.exchangeRateMantissa
-
-        // Calculate the amount of Dai to get(redeemAmount) from redeeming CherryDai(redeemTokens)
-        (vars.mathErr, vars.redeemAmount) = cherryMath.mulScalarTruncate(vars.exchangeRateMantissa, vars.redeemTokens);
-        if (vars.mathErr != CherryMath.MathError.NO_ERROR) {
-            return
-                failOpaque(
-                    Error.MATH_ERROR,
-                    FailureInfo.REDEEM_EXCHANGE_TOKENS_CALCULATION_FAILED,
-                    uint256(vars.mathErr)
-                );
-        }
+        uint256 daiRedeemed = _amount.mul(_cherryRate).div(1e18);
 
         /* Fail gracefully if pool has insufficient cash */
-        if (getCashPrior() < vars.redeemAmount) {
+        if (getCashPrior() < daiRedeemed) {
             return fail(Error.TOKEN_INSUFFICIENT_CASH, FailureInfo.REDEEM_TRANSFER_OUT_NOT_POSSIBLE);
         }
 
-        payout(msg.sender, vars.redeemAmount, vars.redeemTokens);
+        // pay the message.sender the daiRedeemed amount and burn their _amount of CherryDai
+        payout(msg.sender, daiRedeemed, _amount);
 
-        emit RedeemCherry(msg.sender, vars.redeemAmount, vars.redeemTokens);
+        emit RedeemCherry(msg.sender, daiRedeemed, _amount);
 
         return uint256(Error.NO_ERROR);
 
@@ -230,14 +215,15 @@ contract CherryPool is Initializable, TokenErrorReporter {
         return poolBalance - (shortPoolReserved + longPoolReserved);
     }
 
-    function payout(address _redeemer, uint256 _redeemAmount, uint256 _redeemTokens) internal returns (Error) {
-        cherryDai.burnFrom(_redeemer, _redeemTokens);
+    function payout(address _redeemer, uint256 _redeemedDaiAmount, uint256 _redeemedCherryDaiTokens) internal returns (Error) {
+        // Remove the CherryDai from the supply
+        cherryDai.burnFrom(_redeemer, _redeemedCherryDaiTokens);
 
-        // redeem an amount of underlying
-        require(cToken.redeemUnderlying(_redeemAmount) == 0, "CherryPool::payout - something went wrong");
+        // redeem an amount of underlying by sending cDai to compound in exchange for Dai.
+        require(cToken.redeemUnderlying(_redeemedDaiAmount) == 0, "CherryPool::payout - something went wrong");
 
-        // transfer Dai to redeemer
-        token.transfer(_redeemer, _redeemAmount);
+        // transfer Dai to redeemer.
+        token.transfer(_redeemer, _redeemedDaiAmount);
     }
 
     /**
