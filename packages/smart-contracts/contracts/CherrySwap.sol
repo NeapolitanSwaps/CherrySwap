@@ -6,19 +6,24 @@ import "./CherryPool.sol";
 
 /**
  * @title CherrySwap Contract
- * @dev Swapping operations in smart contracts
+ * @dev Create, manage and store all interest rate swaps within the Cherryswap platform. 
+ * Offers one side of a swap with the other taken by a liquidity pool. The offered rate is
+ * a function of the pool demand (utilization) and the current floating rates.
  */
 contract CherrySwap is Initializable, CherryPool {
-    uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
     //25% APR is the max the pool will pay. This is 25%, compounding per block,
     // scaled by 10^18. calculate by: (0.25 * 1e18) / (4 * 60 * 24 * 365)
     uint256 constant MAX_INTEREST_PAID_PER_BLOCK = 118911719939;
 
+    // Swap curve hyper parameters
     uint256 constant ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 constant BETA = 0;
 
+    // Other constants
     uint256 constant RAGE_QUITE_PENALTY = 20; //scaled by 100 so 20 = 0.2
+    uint256 constant ONE_MONTH_SECONDS = 60 * 60 * 24 * 30;
 
+    // Swap Data structures
     enum Bet { Short, Long }
     struct Swap {
         address owner;
@@ -59,7 +64,7 @@ contract CherrySwap is Initializable, CherryPool {
     function createLongPosition(uint256 _amount) public isLongUtilized {
         // Find the upper bound of how much could be paid as a function of the max interest rate the pool will pay
         // This defines how much needs to be "reserved" for long positions.
-        uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
+        uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
 
         uint256 reserveAmount = maxFutureValue - _amount;
 
@@ -84,7 +89,7 @@ contract CherrySwap is Initializable, CherryPool {
                 msg.sender, // owner
                 numSwaps(), // identifer
                 now, // start time
-                now + oneMonthDuration, // end time
+                now + ONE_MONTH_SECONDS, // end time
                 fixedRateOffer, // rate paid
                 _amount, // amount of dai committed to the swap
                 cTokensMinted, // number of cDai tokens added
@@ -100,7 +105,7 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
     function createShortPosition(uint256 _amount) public isShortUtilized {
-        uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
+        uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
 
         uint256 reserveAmount = futureValue - _amount;
 
@@ -124,7 +129,7 @@ contract CherrySwap is Initializable, CherryPool {
                 msg.sender,
                 numSwaps(),
                 now,
-                now + oneMonthDuration,
+                now + ONE_MONTH_SECONDS,
                 fixedRateOffer,
                 _amount,
                 cTokensMinted,
