@@ -119,6 +119,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         // Store the pools increased amount in cTokens.
         //TODO: add a check here to ensure the number of cTokens minted is what is expected from the exchange rate
+        //TODO: or refactor this such that the cTokensMinted is taken directly as the balance change of the 
+        // pool in cTokens.
         uint256 cTokensMinted = (_amount * 1e10) / getcTokenExchangeRate();
         
 

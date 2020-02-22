@@ -57,9 +57,11 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
      */
     function createLongPosition(uint256 _amount) public isLongUtilized {
-        uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
+        // Find the upper bound of how much could be paid as a function of the max interest rate the pool will pay
+        // This defines how much needs to be "reserved" for long positions.
+        uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
 
-        uint256 reserveAmount = futureValue - _amount;
+        uint256 reserveAmount = maxFutureValue - _amount;
 
         // should first check if pool have enough liquidity to cover swap position
         _reserveLongPool(reserveAmount);
@@ -79,16 +81,16 @@ contract CherrySwap is Initializable, CherryPool {
 
         swaps.push(
             Swap(
-                msg.sender,
-                numSwaps(),
-                now,
-                now + oneMonthDuration,
-                fixedRateOffer,
-                _amount,
-                cTokensMinted,
-                reserveAmount,
-                getcTokenExchangeRate(),
-                Bet.Long
+                msg.sender, // owner
+                numSwaps(), // identifer
+                now, // start time
+                now + oneMonthDuration, // end time
+                fixedRateOffer, // rate paid
+                _amount, // amount of dai committed to the swap
+                cTokensMinted, // number of cDai tokens added
+                reserveAmount, // dai reserved from the pool's long side offering
+                getcTokenExchangeRate(), // starting cDai exchange rate. used to compute change in floating side
+                Bet.Long // bet direction (long)
             )
         );
     }
@@ -140,14 +142,21 @@ contract CherrySwap is Initializable, CherryPool {
      * swap and the current time.
      */
     function closePosition(uint256 _swapId) public returns (uint256) {
+        //TODO: add check for caller address. is this needed?
+        //TODO: add check for maturity of position. should only be able to close position after maturity.
+
         Swap memory swap = swaps[_swapId];
+        // based on the changing interst rate over time, find the number of Dai tokens to pay to the trader.
         uint256 tokensToSend = tokensToPayTrader(swap);
-        uint256 cTokensToWithDraw = (tokensToSend * 1e28) / getcTokenExchangeRate();
-        cToken.redeemUnderlying(cTokensToWithDraw);
-        // TODO: add a require here to check that the contract balance change is the what is expected after the redeem.
+        // Need to calculate the number of cTokens that will be withdrawn from the withdrawl
+        uint256 cTokensToWithdraw = (tokensToSend * 1e18) / getcTokenExchangeRate();
+        // Tokens need to be withdrawn from Compound. 
+        //TODO: add a require here to check the number of Dai recived is correct.
+        cToken.redeem(cTokensToWithdraw);
+        
         token.transfer(swap.owner, tokensToSend);
 
-        int256 poolcTokenProfitChange = int256(swap.cTokenAmount) - int256(cTokensToWithDraw);
+        int256 poolcTokenProfitChange = int256(swap.cTokenAmount) - int256(cTokensToWithdraw);
         _addcTokenPoolProfit(poolcTokenProfitChange);
 
         if (swap.bet == Bet.Long) {
