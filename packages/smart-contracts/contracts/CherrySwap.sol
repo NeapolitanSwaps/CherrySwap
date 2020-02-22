@@ -6,21 +6,20 @@ import "./CherryPool.sol";
 
 /**
  * @title CherrySwap Contract
- * @dev This contract handle all swaping operations
+ * @dev Swapping operations in smart contracts
  */
 contract CherrySwap is Initializable, CherryPool {
-    enum Bet { Short, Long }
-
     uint256 constant oneMonthDuration = 60 * 60 * 24 * 30;
     //25% APR is the max the pool will pay. This is 25%, compounding per block,
     // scaled by 10^18. calculate by: (0.25 * 1e18) / (4 * 60 * 24 * 365)
-    uint256 constant maxInterestRatePaidPerBlock = 118911719939;
+    uint256 constant MAX_INTEREST_PAID_PER_BLOCK = 118911719939;
 
     uint256 constant ALPHA = 150; //scaled by 100 so 150 = 1.5
     uint256 constant BETA = 0;
 
     uint256 constant RAGE_QUITE_PENALTY = 20; //scaled by 100 so 20 = 0.2
 
+    enum Bet { Short, Long }
     struct Swap {
         address owner;
         uint256 swapId;
@@ -52,10 +51,13 @@ contract CherrySwap is Initializable, CherryPool {
 
     /**
      * @dev function called by trader to enter into long swap position.
-     * @notice requires long pool utlization < 100% and enough liquidity in the long pool to cover trader
+     * In a long position the trader will pay a fixed rate and receive a floating rate.
+     * Because the amount is unbounded for that paid to the long side (they receive a floating rate) an upper
+     * bound is placed on the maximum amount that they can recive.
+     * @notice requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
      */
     function createLongPosition(uint256 _amount) public isLongUtilized {
-        uint256 futureValue = cherryMath.futureValue(_amount, maxInterestRatePaidPerBlock, 0, oneMonthDuration);
+        uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
 
         uint256 reserveAmount = futureValue - _amount;
 
@@ -96,7 +98,7 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      */
     function createShortPosition(uint256 _amount) public isShortUtilized {
-        uint256 futureValue = cherryMath.futureValue(_amount, maxInterestRatePaidPerBlock, 0, oneMonthDuration);
+        uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, oneMonthDuration);
 
         uint256 reserveAmount = futureValue - _amount;
 
