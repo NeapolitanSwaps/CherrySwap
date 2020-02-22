@@ -186,6 +186,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         );
 
         // get exchange rate from Cherrydai to Dai+fee
+        CherryMath.MathError _err;
+        uint256 _cherryRate;
         (_err, _cherryRate) = exchangeRate();
 
         if (_err != CherryMath.MathError.NO_ERROR) {
@@ -234,12 +236,12 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return 0 if successful otherwise an error code
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
-        int256 rate;
+        uint256 rate;
         if(cherryDai.totalSupply() == 0) {
             rate = 1;
         }
         else {
-            rate = (int256(poolcTokenProfit + poolcBalance) * etcTokenExchangeRate()) / int256(cherryDai.totalSupply());
+            rate = (uint256(int256(poolcBalance) + poolcTokenProfit) * getcTokenExchangeRate()) / cherryDai.totalSupply();
         }
         emit CurrentExchangeRate(uint256(rate));
 
