@@ -170,11 +170,11 @@ contract CherrySwap is Initializable, CherryPool {
 
     /**
     * @dev calculate how much needs to be paid to the trader at end of swap
-    * @notice long offer swap where the lequidity pool is short: reciving a fixed rate and paying a floating rate
-    * @notice short offer swap the lequidity pool is long: reciving floating rate, paying fixed rate
+    * @notice long offer swap where the liquidity pool is short: receiving a fixed rate and paying a floating rate
+    * @notice short offer swap the liquidity pool is long: receiving floating rate, paying fixed rate
     */
     function tokensToPayTrader(Swap memory _swap) internal returns (uint256) {
-        //if the trader is long then they will pay fixed, recive float.
+        //if the trader is long then they will pay fixed, receive float.
         if (_swap.bet == Bet.Long) {
             return
                 _swap.amount +
