@@ -14,7 +14,7 @@ contract(
   "Cherry Dai",
   ([contractOwner, participant1, participant2, participant3, participant4, participant5, random]) => {
     const name = "Cherry Dai";
-    const symbol = "CHD";
+    const symbol = "CherryDAI";
     const decimals = 18;
 
     let cherryDai;

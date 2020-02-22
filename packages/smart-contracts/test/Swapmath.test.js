@@ -1,5 +1,5 @@
 // Import all required modules from openzeppelin-test-helpers
-/*const {
+const {
     BN,
     constants,
     expectEvent,
@@ -13,7 +13,7 @@ const {
 const BigNumber = require('bignumber.js');
 
 // Contracts
-const Swapmath = artifacts.require("Swapmath");
+const Swapmath = artifacts.require("CherryMath");
 
 //constants
 const secondsPerYear = 60 * 60 * 24 * 365
@@ -112,4 +112,4 @@ contract("SwapMath 🔬", ([contractOwner, random]) => {
             assert(ratioShort.isGreaterThanOrEqualTo("0.999999999999999") && ratioShort.isLessThanOrEqualTo("1.000000000000001"), `Funds split incorrectly short side`);
         })
     })
-})*/
+})
