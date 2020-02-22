@@ -20,8 +20,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
     address public owner;
 
     uint256 public poolBalance; // total pool balance in DAI
-    uint256 public poolcBalance; // total pool providers cdai balance cDai. This value only represents the
-    //
+    uint256 public poolcBalance; // total pool providers cdai balance cDai. 
     uint256 public longPoolBalance; // long pool balance in DAI
     uint256 public shortPoolBalance; // short pool balance in DAI
     uint256 public longPoolReserved; // amount of DAI reserved in the long pool
@@ -46,7 +45,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
     event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
     event PoolShare(uint256 amount);
-    event MintCherry(address indexed liquidityProvider, uint256 amount);
+    event MintCherry(address indexed liquidityProvider, uint256 amountDai,uint256 amountcDai, uint256 amountCherryDai);
     event RedeemCherry(address indexed liquidityProvider, uint256 redeemAmount, uint256 redeemToken);
     event Transfer(address indexed to, uint256 value);
     event CurrentExchangeRate(uint256 rate);
@@ -119,8 +118,9 @@ contract CherryPool is Initializable, TokenErrorReporter {
         assert(cToken.mint(_amount) == 0);
 
         // Store the pools increased amount in cTokens.
+        //TODO: add a check here to ensure the number of cTokens minted is what is expected from the exchange rate
         uint256 cTokensMinted = (_amount * 1e10) / getcTokenExchangeRate();
-        poolcBalance += cTokensMinted;
+        
 
         CherryMath.MathError _err;
         uint256 _rate;
@@ -129,20 +129,17 @@ contract CherryPool is Initializable, TokenErrorReporter {
             return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(_err));
         }
 
-        //TODO:add additional variable here to store the mint amount with a comment
-        //TODO: I think this equation is also wrong.
-        // current thinking is mint = (amount * 1e28)/_rate
-
-        // mint CherryDai to liqudity provider
-        cherryDai.mint(msg.sender, _amount.mul(_rate));
+        // mint CherryDai to liquidity provider
+        uint256 cherryDaiToMint = _amount.mul(1e18).div(_rate);
+        cherryDai.mint(msg.sender, cherryDaiToMint);
 
         // internal accounting to store pool balances
         poolBalance = poolBalance.add(_amount);
+        poolcBalance = poolcBalance.add(cTokensMinted);
         longPoolBalance = longPoolBalance.add(_amount.div(2));
         shortPoolBalance = shortPoolBalance.add(_amount.div(2));
 
-        emit DepositLiquidity(msg.sender, _amount);
-        emit MintCherry(msg.sender, _amount);
+        emit MintCherry(msg.sender, _amount, cTokensMinted, cherryDaiToMint);
     }
 
     /**
@@ -249,14 +246,12 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return 0 if successful otherwise an error code
      */
     function exchangeRate() public returns (CherryMath.MathError, uint256) {
-        // TODO: I suspect this function is wrong.
-        // Current thinking is r = ((poolcDai+profitcDai)*1e46)/(cDaitoDairate*cherryDaiSupply)
         int256 rate;
         if(cherryDai.totalSupply() == 0) {
             rate = 1;
         }
         else {
-            rate = int256(getcTokenExchangeRate() / 1e10) + (poolcTokenProfit * 1e18) / int256(cherryDai.totalSupply());
+            rate = (int256(poolcTokenProfit + poolcBalance) * etcTokenExchangeRate()) / int256(cherryDai.totalSupply());
         }
         emit CurrentExchangeRate(uint256(rate));
 
