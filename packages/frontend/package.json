@@ -1,6 +1,6 @@
 {
-  "name": "my-app",
-  "version": "0.1.0",
+  "name": "@cherryswap/frontend",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
@@ -13,7 +13,7 @@
     "@types/styled-components": "^4.4.2",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-scripts": "3.3.1",
+    "react-scripts": "3.4.0",
     "styled-components": "^5.0.0",
     "typescript": "~3.7.2"
   },
