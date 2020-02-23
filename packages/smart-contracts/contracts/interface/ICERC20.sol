@@ -1,5 +1,6 @@
 pragma solidity ^0.5.12;
 
+
 interface ICERC20 {
     event Transfer(address indexed from, address indexed to, uint256 value);
 
