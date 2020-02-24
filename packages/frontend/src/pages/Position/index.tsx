@@ -1,8 +1,8 @@
 import React from "react";
-import Header from "../../components/Header";
+import OpenPosition from "../../components/OpenPosition";
 
 const Position = () => {
-  return <></>;
+  return <OpenPosition />;
 };
 
 export default Position;
