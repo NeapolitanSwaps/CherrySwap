@@ -46,6 +46,9 @@ contract(
       token.mint(trader1, supplyToMint);
       token.mint(trader2, supplyToMint);
       token.mint(trader3, supplyToMint);
+
+      // Seed the compound market with tokens
+      token.mint(cDai.address, supplyToMint.mul(100));
     });
 
     context("Deployment", async function() {
@@ -86,11 +89,11 @@ contract(
         let traderBalanceBefore = await token.balanceOf(provider1);
         assert.equal(traderBalanceBefore, supplyToMint);
 
-        let compoundDaiBalanceBefore = await token.balancerOf(cToken.address)
+        let compoundDaiBalanceBefore = await token.balancerOf(cToken.address);
         assert.equal(compoundDaiBalanceBefore, supplyToMint);
 
         // Mint tokens(deposit dai)
-        await cherryswap.mint(_amountToDeposit, { from: provider1 });
+        const mintFunctionReturn = await cherryswap.mint(_amountToDeposit, { from: provider1 });
 
         //Known assertions
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
@@ -125,15 +128,9 @@ contract(
         let compoundDaiBalanceBalanceAfter = await token.balancerOf(cToken.address);
         let expectedCompoundDaiBalanceBalanceAfter = "";
         assert.equal(compoundDaiBalanceBalanceAfter, expectedCompoundDaiBalanceBalanceAfter);
-        
+
+        // event mintFunctionReturn
       });
-      //TODO: check the Dai is deposited into compound
-
-      //TODO: check the contract cDai balance has increased
-
-      //TODO: look at the cherryDai balance and compare to what was expected based off calculation.
-
-      //TODO: listen for event and check values are correct.
     });
 
     context("Redemption of CherryDai - no profit(CherryPool contract)", async () => {
