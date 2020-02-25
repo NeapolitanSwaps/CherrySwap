@@ -34,13 +34,15 @@ contract CTokenMock is ERC20 {
         uint256 _getCash,
         uint256 _totalReserves,
         uint256 _exchangeRateCurrent,
-        uint256 _totalSupply
+        uint256 _totalSupply,
+        address mintRecipient
     ) public {
         supplyRatePerBlock = _supplyRatePerBlock;
         getCash = _getCash;
         totalReserves = _totalReserves;
         exchangeRateCurrent = _exchangeRateCurrent;
         totalSuppl = _totalSupply;
+        _mint(mintRecipient, totalSupply);
     }
 
     /**
