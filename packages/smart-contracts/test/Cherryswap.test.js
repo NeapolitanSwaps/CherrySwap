@@ -21,13 +21,33 @@ contract(
     const supplyToMint = ether("500");
     const poolSeedDai = ether("100000");
 
+    // The seeded values are the real values taken from compound on 24th Feb, 2020.
+    const seedCompoundValues = {
+      supplyRatePerBlock: 70966375099,
+      getCash: 534377765362123926612,
+      totalReserves: 223837001939965599401,
+      exchangeRateCurrent: 207647402721868971577224657,
+      totalSupply: 740604290907233
+    };
+
     let token, cToken, cherrymath, cherryDai, cherryswap;
 
     before(async function() {
+      // Create mock token (Dai)
       token = await TokenContract.new({ from: contractOwner });
-      cToken = await CTokenContract.new({ from: contractOwner });
+      
+      // Create mock cToken (cDai)
+      cToken = await CTokenContract.new(token.address, { from: contractOwner });
+      
+      //Seed cDai with starting values
+      
+      // Create cherry math logic lib
       cherrymath = await CherryMathContract.new({ from: contractOwner });
+      
+      // Deploy instance of cherrySwap contract
       cherryswap = await CherryswapContract.new({ from: contractOwner });
+      
+      // Create instance of cherryDai token
       cherryDai = await CherryDai.new({ from: contractOwner });
 
       await cherryswap.initialize(token.address, cToken.address, cherrymath.address, {
