@@ -23,25 +23,11 @@ contract(
     let token, cToken, cherrymath, cherryDai, cherryswap;
 
     before(async function() {
-      token = await TokenContract.new({
-        from: contractOwner
-      });
-
-      cToken = await CTokenContract.new({
-        from: contractOwner
-      });
-
-      cherrymath = await CherryMathContract.new({
-        from: contractOwner
-      });
-
-      cherryswap = await CherryswapContract.new({
-        from: contractOwner
-      });
-
-      cherryDai = await CherryDai.new({
-        from: contractOwner
-      });
+      token = await TokenContract.new({ from: contractOwner });
+      cToken = await CTokenContract.new({ from: contractOwner });
+      cherrymath = await CherryMathContract.new({ from: contractOwner });
+      cherryswap = await CherryswapContract.new({ from: contractOwner });
+      cherryDai = await CherryDai.new({ from: contractOwner });
 
       await cherryswap.initialize(token.address, cToken.address, cherrymath.address, {
         from: contractOwner
