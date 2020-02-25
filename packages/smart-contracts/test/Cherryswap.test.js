@@ -98,7 +98,7 @@ contract(
     context("Deposit Liquidity (CherryPool contract)", async () => {
       let _amountToDeposit = ether("100");
 
-      it.only("Deposit liquidity into the pool(mint)👇", async () => {
+      it("Deposit liquidity into the pool(mint)👇", async () => {
         await token.approve(cherryswap.address, _amountToDeposit, {
           from: provider1
         });
