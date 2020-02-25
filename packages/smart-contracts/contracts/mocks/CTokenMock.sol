@@ -14,13 +14,10 @@ pragma solidity ^0.5.12;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
 contract CTokenMock is ERC20 {
-    /**
-     * @dev msg.sender account which shall supply the asset, and own the minted cTokens.
-     * @param mintAmount : The amount of the asset to be supplied, in units of the underlying asset.
-     * @return uint 256: 0 on success, otherwise an Error codes
-    */
+    // collateral asset = DAI
+    IERC20 public token;
 
-    IERC20 public token; // collateral asset = DAI
+    // Internal counters
     uint256 public supplyRatePerBlock = 0;
     uint256 public getCash = 0;
     uint256 public totalReserves = 0;
@@ -29,9 +26,28 @@ contract CTokenMock is ERC20 {
 
     constructor(address tokenAddress) {
         token = IERC20(tokenAddress);
-        _mint(address(this))
     }
 
+    // Feed in initial values to seed the compound market.
+    function seed(
+        uint256 _supplyRatePerBlock,
+        uint256 _getCash,
+        uint256 _totalReserves,
+        uint256 _exchangeRateCurrent,
+        uint256 _totalSupply
+    ) public {
+        supplyRatePerBlock = _supplyRatePerBlock;
+        getCash = _getCash;
+        totalReserves = _totalReserves;
+        exchangeRateCurrent = _exchangeRateCurrent;
+        totalSuppl = _totalSupply;
+    }
+
+    /**
+    * @dev msg.sender account which shall supply the asset, and own the minted cTokens.
+    * @param mintAmount : The amount of the asset to be supplied, in units of the underlying asset.
+    * @return uint 256: 0 on success, otherwise an Error codes
+    */
     function mint(uint256 mintAmount) public returns (uint256) {
         _mint(msg.sender, mintAmount);
         return 0;
@@ -54,7 +70,6 @@ contract CTokenMock is ERC20 {
     function setTotalReserves(uint256 _setTotalReserves) public pure returns (uint256) {
         totalReserves;
     }
-
 
     function redeemUnderlying(uint256 redeemAmount) public returns (uint256) {
         return 0;
