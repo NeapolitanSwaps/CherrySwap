@@ -73,7 +73,11 @@ contract(
       });
     });
 
-    context("Deposit Liquidity (Contract:CherryPool)", async () => {
+    /*************************
+     *    CHERRYPOOL TESTS   *
+     *************************/
+
+    context("Deposit Liquidity (CherryPool contract)", async () => {
       let _amountToDeposit = ether("100");
 
       it("Deposit liquidity into the pool(mint)👇", async () => {
@@ -98,40 +102,17 @@ contract(
       //TODO: listen for event and check values are correct.
     });
 
-    context("Correctly calculates pool utilization as positions are taken out(Integration test)", async () => {
+    context("Redemption of CherryDai - no profit(CherryPool contract)", async () => {
       it("Long pool utilization", async () => {});
       it("Short pool utilization", async () => {});
     });
 
-    context("Redemption of CherryDai - no profit(CherryPool test)", async () => {
-      it("Long pool utilization", async () => {});
-      it("Short pool utilization", async () => {});
-    });
-
-    context("Redemption of CherryDai - generated profit(integration test)", async () => {
-      it("Pays expected profit paid", async () => {
-                                                    //profit should be interest + "fees"
-                                                  });
-      it("Short pool utilization", async () => {});
-    });
-
-    context("Redemption blocked when pools utilized(integration test)", async () => {
-      it("Long Pool", async () => {
-        //profit should be interest + "fees"
-      });
-      it("Short Pool", async () => {});
-    });
-
-    
-
-
-
-    context("Swap pricing calculation Math (CherrySwap Contract)", async () => {
+    context("Swap pricing calculation Math (CherrySwap contract)", async () => {
       it("Correctly calculates the fixed rate offer given to swaps", async () => {});
       it("Correctly calculates the floating value", async () => {});
     });
 
-    context("Create Position (CherrySwap Contract)", async () => {
+    context("Create Position (CherrySwap contract)", async () => {
       let _longPositionSize = ether("30");
 
       it("create long position 🤥", async () => {
@@ -157,13 +138,32 @@ contract(
         );
       });
     });
-    context("Closing positions and associated payouts (CherrySwap Contract)", async () => {
+    context("Closing positions and associated payouts (CherrySwap contract)", async () => {
       it("Correctly sends the trader dai from a long position", async () => {});
       it("Correctly sends the trader dai from a short position", async () => {});
     });
-    context("Rage quite and associated payouts (CherrySwap Contract)", async () => {
+    context("Rage quite and associated payouts (CherrySwap contract)", async () => {
       it("Trader can rage quite and get correct pay out", async () => {});
       it("Pool balance changes correctly after exit", async () => {});
+    });
+
+    context("Correctly calculates pool utilization as positions are taken out(integration test)", async () => {
+      it("Long pool utilization", async () => {});
+      it("Short pool utilization", async () => {});
+    });
+
+    context("Redemption of CherryDai - generated profit(integration test)", async () => {
+      it("Pays expected profit paid", async () => {
+        //profit should be interest + "fees"
+      });
+      it("Short pool utilization", async () => {});
+    });
+
+    context("Redemption blocked when pools utilized(integration test)", async () => {
+      it("Long Pool", async () => {
+        //profit should be interest + "fees"
+      });
+      it("Short Pool", async () => {});
     });
     ``;
   }
