@@ -8,7 +8,6 @@ pragma solidity ^0.5.12;
 * relationship between Dai deposited and cDai minted. Rather, this contract assumes
 * the simplest linear relationship between variables to keep things as simple as possible.
 * The values returned represent the expected state changes for each function for each token.
-
 */
 
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
