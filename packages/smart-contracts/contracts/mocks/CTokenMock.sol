@@ -11,9 +11,11 @@ pragma solidity ^0.5.12;
 
 */
 
+import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
-contract CTokenMock is ERC20 {
+
+contract CTokenMock is Initializable, ERC20 {
     // collateral asset = DAI
     IERC20 public token;
 
@@ -23,7 +25,7 @@ contract CTokenMock is ERC20 {
     uint256 public totalReserves = 0;
     uint256 public exchangeRateCurrent = 0;
 
-    constructor(address tokenAddress) public {
+    function initialize(address tokenAddress) public initializer {
         token = IERC20(tokenAddress);
     }
 

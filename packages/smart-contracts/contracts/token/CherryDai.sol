@@ -5,6 +5,7 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Deta
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol";
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol";
 
+
 contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable {
     function initialize(address _cherrySwap) public initializer {
         ERC20Detailed.initialize("Cherry Dai", "CherryDAI", 8);
@@ -16,5 +17,4 @@ contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable
             MinterRole.renounceMinter();
         }
     }
-
 }
