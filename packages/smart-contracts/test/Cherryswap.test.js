@@ -70,14 +70,62 @@ contract(
         await token.approve(cherryswap.address, _amountToDeposit, {
           from: provider1
         });
+
+        let poolcTokenBalanceBefore = await cToken.balanceOf(cherryswap.address);
+        assert.equal(poolcTokenBalanceBefore, 0);
+
+        let poolTokenBalanceBefore = await cToken.balanceOf(cherryswap.address);
+        assert.equal(poolTokenBalanceBefore, 0);
+
+        let longPoolReservedBefore = await cherryswap.longPoolReserved();
+        assert.equal(longPoolReservedBefore, 0);
+
+        let shortPoolReservedBefore = await cherryswap.shortPoolReserved();
+        assert.equal(shortPoolReservedBefore, 0);
+
+        let traderBalanceBefore = await token.balanceOf(provider1);
+        assert.equal(traderBalanceBefore, supplyToMint);
+
+        let compoundDaiBalanceBefore = await token.balancerOf(cToken.address)
+        assert.equal(compoundDaiBalanceBefore, supplyToMint);
+
+        // Mint tokens(deposit dai)
         await cherryswap.mint(_amountToDeposit, { from: provider1 });
 
+        //Known assertions
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
+        assert.equal((await cherryswap.longPoolBalance()).toString(), 0, "Long pool is not empty");
         assert.equal(
           (await cherryswap.longPoolBalance()).toString(),
           (await cherryswap.shortPoolBalance()).toString(),
           "Long and Short pool are not equal"
         );
+
+        //Relative state changes
+        let poolcTokenBalanceAfter = await cToken.balanceOf(cherryswap.address);
+        let expectedcTokenBalanceAfter = "";
+        assert.equal(poolcTokenBalanceBefore - poolcTokenBalanceAfter, expectedcTokenBalanceAfter);
+
+        let poolTokenBalanceAfter = await cToken.balanceOf(cherryswap.address);
+        let expectedPoolTokenBalanceAfter = "";
+        assert.equal(poolTokenBalanceAfter, poolTokenBalanceAfter);
+
+        let longPoolReservedAfter = await cherryswap.longPoolReserved();
+        let expectedLongPoolReservedAfter = "";
+        assert.equal(longPoolReservedAfter, 0);
+
+        let shortPoolReservedAfter = await cherryswap.shortPoolReserved();
+        let expectedShortPoolReservedAfter = "";
+        assert.equal(shortPoolReservedAfter, 0);
+
+        let traderBalanceAfter = await token.balanceOf(provider1);
+        let expectedSTraderBalanceAfter = "";
+        assert.equal(traderBalanceAfter, supplyToMint);
+
+        let compoundDaiBalanceBalanceAfter = await token.balancerOf(cToken.address);
+        let expectedCompoundDaiBalanceBalanceAfter = "";
+        assert.equal(compoundDaiBalanceBalanceAfter, expectedCompoundDaiBalanceBalanceAfter);
+        
       });
       //TODO: check the Dai is deposited into compound
 
