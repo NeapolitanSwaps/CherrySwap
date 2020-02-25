@@ -65,17 +65,21 @@ contract(
     context("Deployment", async function() {
       it("check deployment", async function() {
         let minter = await cherryDai.isMinter.call(cherryswap.address);
-        let poolBalance = await cherryswap.poolBalance.call();
         assert.equal(minter, true);
+
+        let poolBalance = await cherryswap.poolBalance.call();
+
         assert.equal(poolBalance, 0);
       });
     });
 
-    context("Deposit Liquidity", async () => {
+    context("Deposit Liquidity (Contract:CherryPool)", async () => {
       let _amountToDeposit = ether("100");
 
-      it("Deposit liquidity into the pool", async () => {
-        await token.approve(cherryswap.address, _amountToDeposit, { from: provider1 });
+      it("Deposit liquidity into the pool👇", async () => {
+        await token.approve(cherryswap.address, _amountToDeposit, {
+          from: provider1
+        });
         await cherryswap.mint(_amountToDeposit, { from: provider1 });
 
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
@@ -85,12 +89,19 @@ contract(
           "Long and Short pool are not equal"
         );
       });
+      //TODO: check the Dai is deposited into compound
+
+      //TODO: check the contract cDai balance has increased
+
+      //TODO: look at the cherryDai balance and compare to what was expected based off calculation.
+
+      //TODO: listen for event and check values are correct.
     });
 
-    context("Create Position", async () => {
+    context("Create Position (Contract:CherrySwap)", async () => {
       let _longPositionSize = ether("30");
 
-      it("create long position", async () => {
+      it("create long position 🤥", async () => {
         let cherrswapCtokenBalanceBefore = await cToken.balanceOf(cherryswap.address);
         let longPoolReservedBefore = await cherryswap.longPoolReserved();
 
@@ -112,6 +123,10 @@ contract(
           "Wrong reserved amount for long position"
         );
       });
+    });
+    context("Swap pricing calculation Math (Contract:CherrySwap)", async () => {
+      it("Correctly calculates the fixed rate offer given to swaps", async () => { });
+      it("Correctly calculates the floating value", async () => {});
     });
   }
 );
