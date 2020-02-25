@@ -3,6 +3,11 @@ pragma solidity ^0.5.12;
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
 contract CTokenMock is ERC20 {
+    /**
+     * @dev msg.sender account which shall supply the asset, and own the minted cTokens.
+     * @param mintAmount : The amount of the asset to be supplied, in units of the underlying asset.
+     * @return uint 256: 0 on success, otherwise an Error codes
+    */
     function mint(uint256 mintAmount) public returns (uint256) {
         _mint(msg.sender, mintAmount);
         return 0;

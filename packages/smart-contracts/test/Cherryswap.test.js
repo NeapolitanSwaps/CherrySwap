@@ -75,6 +75,7 @@ contract(
           from: provider1
         });
 
+        // Capture state variables before mint to compare to after
         let poolcTokenBalanceBefore = await cToken.balanceOf(cherryswap.address);
         assert.equal(poolcTokenBalanceBefore, 0);
 
@@ -88,12 +89,10 @@ contract(
         assert.equal(shortPoolReservedBefore, 0);
 
         let traderBalanceBefore = await token.balanceOf(provider1);
-        console.log("traderBalanceBefore", traderBalanceBefore.toString());
-        console.log("supplyToMint", supplyToMint.toString());
         assert.equal(traderBalanceBefore.toString(), supplyToMint.toString());
 
         let compoundDaiBalanceBefore = await token.balanceOf(cToken.address);
-        assert.equal(compoundDaiBalanceBefore.toString(), ether("100000").toString());
+        assert.equal(compoundDaiBalanceBefore.toString(), poolSeedDai);
 
         // Mint tokens(deposit dai)
         const mintFunctionReturn = await cherryswap.mint(_amountToDeposit, { from: provider1 });
