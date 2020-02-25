@@ -58,19 +58,22 @@ contract CherrySwap is Initializable, CherryPool {
      * @dev function called by trader to enter into long swap position.
      * In a long position the trader will pay a fixed rate and receive a floating rate.
      * Because the amount is unbounded for that paid to the long side (they receive a floating rate) an upper
-     * bound is placed on the maximum amount that they can recive.
+     * bound is placed on the maximum amount that they can receive.
      * @notice requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
+     * @param _amount the number of Dai that the buyer will pay for their long position
      */
     function createLongPosition(uint256 _amount) public isLongUtilized {
         // Find the upper bound of how much could be paid as a function of the max interest rate the pool will pay
         // This defines how much needs to be "reserved" for long positions.
         uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
 
+        // The amount reserved is is the profit that the pool could need to pay in worst case.
         uint256 reserveAmount = maxFutureValue - _amount;
 
-        // should first check if pool have enough liquidity to cover swap position
+        // Reserve liquidity. checks the amount spesified is a valid reservation are done in function.
         _reserveLongPool(reserveAmount);
 
+        // This transfer will fail if the caller has not approved.
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create long position transfer from failed"
@@ -213,6 +216,7 @@ contract CherrySwap is Initializable, CherryPool {
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
     */
     function getFixedRateOffer(Bet bet) public returns (uint256) {
+        //TODO: replace this maths with safe math with mul/div etc.
         if (bet == Bet.Long) {
             return (cToken.supplyRatePerBlock() * (1e18 - calcLongPoolUtil(longPoolReserved) / ALPHA - BETA)) / 1e18;
         }
