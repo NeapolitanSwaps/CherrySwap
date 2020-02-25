@@ -107,6 +107,10 @@ contract(
       it("Short pool utilization", async () => {});
     });
 
+    /*************************
+     *    CHERRYSWAP TESTS   *
+     *************************/
+
     context("Swap pricing calculation Math (CherrySwap contract)", async () => {
       it("Correctly calculates the fixed rate offer given to swaps", async () => {});
       it("Correctly calculates the floating value", async () => {});
@@ -147,6 +151,10 @@ contract(
       it("Pool balance changes correctly after exit", async () => {});
     });
 
+    /*************************
+     *   INTEGRATION TESTS   *
+     *************************/
+
     context("Correctly calculates pool utilization as positions are taken out(integration test)", async () => {
       it("Long pool utilization", async () => {});
       it("Short pool utilization", async () => {});
@@ -165,6 +173,5 @@ contract(
       });
       it("Short Pool", async () => {});
     });
-    ``;
   }
 );
