@@ -22,9 +22,8 @@ contract CTokenMock is ERC20 {
     uint256 public getCash = 0;
     uint256 public totalReserves = 0;
     uint256 public exchangeRateCurrent = 0;
-    uint256 public totalSupply = 0;
 
-    constructor(address tokenAddress) {
+    constructor(address tokenAddress) public {
         token = IERC20(tokenAddress);
     }
 
@@ -41,8 +40,7 @@ contract CTokenMock is ERC20 {
         getCash = _getCash;
         totalReserves = _totalReserves;
         exchangeRateCurrent = _exchangeRateCurrent;
-        totalSuppl = _totalSupply;
-        _mint(mintRecipient, totalSupply);
+        _mint(mintRecipient, _totalSupply);
     }
 
     /**
@@ -61,23 +59,23 @@ contract CTokenMock is ERC20 {
         return 0;
     }
 
-    function supplyRatePerBlock(uint256 _supplyRatePerBlock) public pure returns (uint256) {
-        supplyRatePerBlock = _supplyRatePerBlock;
-    }
-
-    function setGetCash(uint256 _getCash) public pure returns (uint256) {
-        getCash = _getCash;
-    }
-
-    function setTotalReserves(uint256 _setTotalReserves) public pure returns (uint256) {
-        totalReserves;
-    }
-
     function redeemUnderlying(uint256 redeemAmount) public returns (uint256) {
         return 0;
     }
 
-    function setExchangeRateCurrent(uint256 _exchangeRateCurrent) public returns (uint256) {
+    function setSupplyRatePerBlock(uint256 _supplyRatePerBlock) public {
+        supplyRatePerBlock = _supplyRatePerBlock;
+    }
+
+    function setGetCash(uint256 _getCash) public {
+        getCash = _getCash;
+    }
+
+    function setTotalReserves(uint256 _setTotalReserves) public {
+        totalReserves = _setTotalReserves;
+    }
+
+    function setExchangeRateCurrent(uint256 _exchangeRateCurrent) public {
         exchangeRateCurrent = _exchangeRateCurrent;
     }
 }
