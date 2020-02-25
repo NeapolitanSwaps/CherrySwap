@@ -20,13 +20,18 @@ contract CTokenMock is Initializable, ERC20 {
     IERC20 public token;
 
     // Internal counters
-    uint256 public supplyRatePerBlock = 0;
-    uint256 public getCash = 0;
-    uint256 public totalReserves = 0;
-    uint256 public exchangeRateCurrent = 0;
+    uint256 public supplyRatePerBlock;
+    uint256 public getCash;
+    uint256 public totalReserves;
+    uint256 public exchangeRateCurrent;
 
     function initialize(address tokenAddress) public initializer {
         token = IERC20(tokenAddress);
+
+        supplyRatePerBlock = 0;
+        getCash = 0;
+        totalReserves = 0;
+        exchangeRateCurrent = 0;
     }
 
     // Feed in initial values to seed the compound market.
