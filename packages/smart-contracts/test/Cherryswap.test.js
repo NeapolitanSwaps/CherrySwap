@@ -98,6 +98,11 @@ contract(
       //TODO: listen for event and check values are correct.
     });
 
+    context("Swap pricing calculation Math (Contract:CherrySwap)", async () => {
+      it("Correctly calculates the fixed rate offer given to swaps", async () => {});
+      it("Correctly calculates the floating value", async () => {});
+    });
+
     context("Create Position (Contract:CherrySwap)", async () => {
       let _longPositionSize = ether("30");
 
@@ -124,9 +129,13 @@ contract(
         );
       });
     });
-    context("Swap pricing calculation Math (Contract:CherrySwap)", async () => {
-      it("Correctly calculates the fixed rate offer given to swaps", async () => { });
-      it("Correctly calculates the floating value", async () => {});
+    context("Closing positions and associated payouts (Contract:CherrySwap)", async () => {
+      it("Correctly sends the trader dai from a long position", async () => {});
+      it("Correctly sends the trader dai from a short position", async () => {});
     });
+    context("Rage quite and associated payouts (Contract:CherrySwap)", async () => {
+      it("Trader can rage quite and get correct pay out", async () => {});
+      it("Pool balance changes correctly after exit", async () => {});
+    });``
   }
 );
