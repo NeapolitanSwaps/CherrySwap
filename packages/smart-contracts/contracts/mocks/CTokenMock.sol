@@ -21,7 +21,11 @@ contract CTokenMock is ERC20 {
     */
 
     IERC20 public token; // collateral asset = DAI
-    
+    uint256 public supplyRatePerBlock = 70966375099;
+    uint256 public getCash = 534377765362123926612;
+    uint256 public totalReserves = 223837001939965599401;
+    uint256 public totalSupply = 740604290907233;
+    uint256 public exchangeRateCurrent = 207647402721868971577224657;
 
     constructor(address tokenAddress) {
         owner = msg.sender;
@@ -39,27 +43,27 @@ contract CTokenMock is ERC20 {
         return 0;
     }
 
-    function supplyRatePerBlock() public pure returns (uint256) {
-        return 70966375099;
+    function supplyRatePerBlock(uint256 _supplyRatePerBlock) public pure returns (uint256) {
+        supplyRatePerBlock =_supplyRatePerBlock;
     }
 
-    function getCash() public pure returns (uint256) {
-        return 534377765362123926612;
+    function setGetCash(uint256 _getCash) public pure returns (uint256) {
+        getCash = _getCash;
     }
 
-    function totalReserves() public pure returns (uint256) {
-        return 223837001939965599401;
+    function setTotalReserves(uint256 _setTotalReserves) public pure returns (uint256) {
+        setTotalReserves = _setTotalReserves;
     }
 
-    function totalSupply() public view returns (uint256) {
-        return 740604290907233;
+    function setTotalSupply(uint256 _totalSupply) public view returns (uint256) {
+        totalSupply = _totalSupply;
     }
 
     function redeemUnderlying(uint256 redeemAmount) public returns (uint256) {
         return 0;
     }
 
-    function exchangeRateCurrent() public view returns (uint256) {
+    function setExchangeRateCurrent() public view returns (uint256) {
         return 207647402721868971577224657;
     }
 }
