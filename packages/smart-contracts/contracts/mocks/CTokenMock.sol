@@ -19,7 +19,14 @@ contract CTokenMock is ERC20 {
      * @param mintAmount : The amount of the asset to be supplied, in units of the underlying asset.
      * @return uint 256: 0 on success, otherwise an Error codes
     */
-    constructor(address tokenAddress) public returns (uint256){}
+
+    IERC20 public token; // collateral asset = DAI
+    
+
+    constructor(address tokenAddress) {
+        owner = msg.sender;
+        token = IERC20(_token);
+    }
 
     function mint(uint256 mintAmount) public returns (uint256) {
         _mint(msg.sender, mintAmount);
