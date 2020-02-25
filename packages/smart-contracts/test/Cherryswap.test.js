@@ -108,6 +108,22 @@ contract(
       it("Short pool utilization", async () => {});
     });
 
+    context("Redemption of CherryDai - generated profit(integration test)", async () => {
+      it("Pays expected profit paid", async () => {
+                                                    //profit should be interest + "fees"
+                                                  });
+      it("Short pool utilization", async () => {});
+    });
+
+    context("Redemption blocked when pools utilized(integration test)", async () => {
+      it("Long Pool", async () => {
+        //profit should be interest + "fees"
+      });
+      it("Short Pool", async () => {});
+    });
+
+    
+
 
 
     context("Swap pricing calculation Math (CherrySwap Contract)", async () => {
@@ -148,6 +164,7 @@ contract(
     context("Rage quite and associated payouts (CherrySwap Contract)", async () => {
       it("Trader can rage quite and get correct pay out", async () => {});
       it("Pool balance changes correctly after exit", async () => {});
-    });``
+    });
+    ``;
   }
 );
