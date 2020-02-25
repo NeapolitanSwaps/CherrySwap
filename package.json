@@ -18,7 +18,8 @@
         "contracts:migrate:mainnet": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:mainnet",
         "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint:solhint",
         "contracts:prettier": "lerna run --scope=@cherryswap/smart-contracts --stream lint:prettier",
-        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
+        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
+        "contracts:run-ganache": "lerna run --scope=@cherryswap/smart-contracts --stream ganache"
     },
     "dependencies": {
         "homedir": "^0.6.0",
