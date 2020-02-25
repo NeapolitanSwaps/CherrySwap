@@ -102,7 +102,7 @@ contract(
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
         assert.equal(
           (await cherryswap.longPoolBalance()).toString(),
-          _amountToDeposit.div("2"),
+          new BigNumber(_amountToDeposit).dividedBy("2"),
           "Long pool is not empty"
         );
         assert.equal(
@@ -132,7 +132,7 @@ contract(
         let expectedSTraderBalanceAfter = "";
         // assert.equal(traderBalanceAfter, supplyToMint);
 
-        let compoundDaiBalanceBalanceAfter = await token.balancerOf(cToken.address);
+        let compoundDaiBalanceBalanceAfter = await token.balanceOf(cToken.address);
         let expectedCompoundDaiBalanceBalanceAfter = "";
         // assert.equal(compoundDaiBalanceBalanceAfter, expectedCompoundDaiBalanceBalanceAfter);
 
