@@ -98,6 +98,13 @@ contract(
       //TODO: listen for event and check values are correct.
     });
 
+    context("Correctly calculates pool utilization as positions are taken out(Integration test)", async () => {
+      it("Long pool utilization", async () => {});
+      it("Short pool utilization", async () => {});
+    });
+
+    
+
     context("Swap pricing calculation Math (Contract:CherrySwap)", async () => {
       it("Correctly calculates the fixed rate offer given to swaps", async () => {});
       it("Correctly calculates the floating value", async () => {});
