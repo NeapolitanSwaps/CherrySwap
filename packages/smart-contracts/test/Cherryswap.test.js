@@ -70,7 +70,7 @@ contract(
     context("Deposit Liquidity (CherryPool contract)", async () => {
       let _amountToDeposit = ether("100");
 
-      it("Deposit liquidity into the pool(mint)👇", async () => {
+      it.only("Deposit liquidity into the pool(mint)👇", async () => {
         await token.approve(cherryswap.address, _amountToDeposit, {
           from: provider1
         });
@@ -100,7 +100,11 @@ contract(
 
         //Known assertions
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
-        assert.equal((await cherryswap.longPoolBalance()).toString(), 0, "Long pool is not empty");
+        assert.equal(
+          (await cherryswap.longPoolBalance()).toString(),
+          _amountToDeposit.div("2"),
+          "Long pool is not empty"
+        );
         assert.equal(
           (await cherryswap.longPoolBalance()).toString(),
           (await cherryswap.shortPoolBalance()).toString(),
