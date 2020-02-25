@@ -33,19 +33,19 @@ contract CTokenMock is ERC20 {
     }
 
     function supplyRatePerBlock() public pure returns (uint256) {
-        return 28051049764;
+        return 70966375099;
     }
 
     function getCash() public pure returns (uint256) {
-        return 6288595451279132189507771;
+        return 534377765362123926612;
     }
 
     function totalReserves() public pure returns (uint256) {
-        return 154054611553241099050750;
+        return 223837001939965599401;
     }
 
     function totalSupply() public view returns (uint256) {
-        return 98015033016839753;
+        return 740604290907233;
     }
 
     function redeemUnderlying(uint256 redeemAmount) public returns (uint256) {
@@ -53,6 +53,6 @@ contract CTokenMock is ERC20 {
     }
 
     function exchangeRateCurrent() public view returns (uint256) {
-        return 201256187943304079210508672;
+        return 207647402721868971577224657;
     }
 }
