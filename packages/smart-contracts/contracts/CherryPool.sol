@@ -59,8 +59,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
 
-        //cherryDai = new CherryDai();
-        //cherryDai.initialize(address(this));
+        // cherryDai = new CherryDai();
+        // cherryDai.initialize(address(this));
 
         cherryMath = CherryMath(_cherryMath);
 
