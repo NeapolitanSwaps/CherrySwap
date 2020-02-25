@@ -1,5 +1,16 @@
 pragma solidity ^0.5.12;
 
+/**
+* @title CToken Mock - simulating a compound marketplace.
+* @dev This contract implements the required interfaces to mock compound markets
+* while not providing all interfaces there. This mock is extremely simple and ignores
+* many of the subtleties with the real compound contracts. For example the non-linear
+* relationship between Dai deposited and cDai minted. Rather, this contract assumes
+* the simplest linear relationship between variables to keep things as simple as possible.
+* The values returned represent the expected state changes for each function for each token.
+* The seeded values are the real values taken from compound on 24th Feb, 2020.
+*/
+
 import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol";
 
 contract CTokenMock is ERC20 {
@@ -8,6 +19,8 @@ contract CTokenMock is ERC20 {
      * @param mintAmount : The amount of the asset to be supplied, in units of the underlying asset.
      * @return uint 256: 0 on success, otherwise an Error codes
     */
+    constructor(address tokenAddress) public returns (uint256){}
+
     function mint(uint256 mintAmount) public returns (uint256) {
         _mint(msg.sender, mintAmount);
         return 0;
