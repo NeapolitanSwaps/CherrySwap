@@ -122,7 +122,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         uint256 cTokensMinted = (_amount * 1e10) / getcTokenExchangeRate();
 
         // ensure that amount of cToken minted is what expected from exchange rate
-        poolcBalanceAtNow = cToken.balanceOf(address(this));
+        uint256 = poolcBalanceAtNow = cToken.balanceOf(address(this));
         require(poolcBalanceAtNow.sub(poolcBalanceAtLastMint) == cTokensMinted, "Cherrypool::calculated cToken amount mismtach");
         poolcBalanceAtLastMint = poolcBalanceAtNow;
 
