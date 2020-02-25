@@ -71,7 +71,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         longPoolReserved = 0;
         shortPoolReserved = 0;
         poolcTokenProfit = 0;
-        poolcBalanaceAtLatMint = 0;
+        poolcBalanceAtLastMint = 0;
     }
 
     /**
