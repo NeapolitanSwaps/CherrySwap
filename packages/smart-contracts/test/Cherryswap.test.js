@@ -76,7 +76,7 @@ contract(
     context("Deposit Liquidity (Contract:CherryPool)", async () => {
       let _amountToDeposit = ether("100");
 
-      it("Deposit liquidity into the pool👇", async () => {
+      it("Deposit liquidity into the pool(mint)👇", async () => {
         await token.approve(cherryswap.address, _amountToDeposit, {
           from: provider1
         });
@@ -103,14 +103,19 @@ contract(
       it("Short pool utilization", async () => {});
     });
 
-    
+    context("Redemption of CherryDai - no profit(CherryPool test)", async () => {
+      it("Long pool utilization", async () => {});
+      it("Short pool utilization", async () => {});
+    });
 
-    context("Swap pricing calculation Math (Contract:CherrySwap)", async () => {
+
+
+    context("Swap pricing calculation Math (CherrySwap Contract)", async () => {
       it("Correctly calculates the fixed rate offer given to swaps", async () => {});
       it("Correctly calculates the floating value", async () => {});
     });
 
-    context("Create Position (Contract:CherrySwap)", async () => {
+    context("Create Position (CherrySwap Contract)", async () => {
       let _longPositionSize = ether("30");
 
       it("create long position 🤥", async () => {
@@ -136,11 +141,11 @@ contract(
         );
       });
     });
-    context("Closing positions and associated payouts (Contract:CherrySwap)", async () => {
+    context("Closing positions and associated payouts (CherrySwap Contract)", async () => {
       it("Correctly sends the trader dai from a long position", async () => {});
       it("Correctly sends the trader dai from a short position", async () => {});
     });
-    context("Rage quite and associated payouts (Contract:CherrySwap)", async () => {
+    context("Rage quite and associated payouts (CherrySwap Contract)", async () => {
       it("Trader can rage quite and get correct pay out", async () => {});
       it("Pool balance changes correctly after exit", async () => {});
     });``
