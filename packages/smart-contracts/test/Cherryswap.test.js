@@ -17,7 +17,7 @@ require("chai")
 
 contract(
   "Cherryswap contracts",
-  ([contractOwner, provider1, provider2, provider3, trader1, trader2, trader3, random]) => {
+  ([contractOwner, provider1, provider2, provider3, trader1, trader2, trader3, largeCTokenHolder, random]) => {
     const supplyToMint = ether("500");
     const poolSeedDai = ether("100000");
 
@@ -35,18 +35,26 @@ contract(
     before(async function() {
       // Create mock token (Dai)
       token = await TokenContract.new({ from: contractOwner });
-      
+
       // Create mock cToken (cDai)
       cToken = await CTokenContract.new(token.address, { from: contractOwner });
-      
+
       //Seed cDai with starting values
-      
+      await cToken.seed(
+        seedCompoundValues.supplyRatePerBlock,
+        seedCompoundValues.getCash,
+        seedCompoundValues.totalReserves,
+        seedCompoundValues.exchangeRateCurrent,
+        seedCompoundValues.totalSupply,
+        seedCompoundValues.largeCTokenHolder
+      );
+
       // Create cherry math logic lib
       cherrymath = await CherryMathContract.new({ from: contractOwner });
-      
+
       // Deploy instance of cherrySwap contract
       cherryswap = await CherryswapContract.new({ from: contractOwner });
-      
+
       // Create instance of cherryDai token
       cherryDai = await CherryDai.new({ from: contractOwner });
 
