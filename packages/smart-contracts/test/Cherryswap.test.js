@@ -23,11 +23,11 @@ contract(
 
     // The seeded values are the real values taken from compound on 24th Feb, 2020.
     const seedCompoundValues = {
-      supplyRatePerBlock: 70966375099,
-      getCash: 534377765362123926612,
-      totalReserves: 223837001939965599401,
-      exchangeRateCurrent: 207647402721868971577224657,
-      totalSupply: 740604290907233
+      supplyRatePerBlock: "70966375099",
+      getCash: "534377765362123926612",
+      totalReserves: "223837001939965599401",
+      exchangeRateCurrent: "207647402721868971577224657",
+      totalSupply: "740604290907233"
     };
 
     let token, cToken, cherrymath, cherryDai, cherryswap;
@@ -46,7 +46,7 @@ contract(
         seedCompoundValues.totalReserves,
         seedCompoundValues.exchangeRateCurrent,
         seedCompoundValues.totalSupply,
-        seedCompoundValues.largeCTokenHolder
+        largeCTokenHolder
       );
 
       // Create cherry math logic lib
