@@ -1,5 +1,5 @@
-const EVMRevert = 'revert';
+const EVMRevert = "revert";
 
 module.exports = {
-  EVMRevert,
+  EVMRevert
 };

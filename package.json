@@ -2,6 +2,8 @@
     "name": "cherryswap-monorepo",
     "private": true,
     "scripts": {
+        "prettier": "npm run prettier_vanilla -- --write",
+        "prettier_vanilla": "prettier --bracket-spacing 'packages/smart-contracts/**/*.js' 'packages/smart-contracts/**/*.sol'",
         "bootstrap": "lerna bootstrap --hoist",
         "postinstall": "yarn run bootstrap",
         "frontend:start": "lerna run --scope=@cherryswap/front-end --stream start",
@@ -16,14 +18,17 @@
         "contracts:migrate:mainnet": "lerna run --scope=@cherryswap/smart-contracts --stream migrate:mainnet",
         "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint:solhint",
         "contracts:prettier": "lerna run --scope=@cherryswap/smart-contracts --stream lint:prettier",
-        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test"
+        "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
+        "contracts:run-ganache": "lerna run --scope=@cherryswap/smart-contracts --stream ganache"
     },
     "dependencies": {
         "homedir": "^0.6.0",
         "lerna": "^3.18.3",
         "truffle": "^5.0.37",
         "truffle-hdwallet-provider": "^1.0.17",
-        "truffle-hdwallet-provider-privkey": "^0.3.0"
+        "truffle-hdwallet-provider-privkey": "^0.3.0",
+        "prettier": "^1.18.2",
+        "prettier-plugin-solidity": "^1.0.0-alpha.34"
     },
     "devDependencies": {
         "@openzeppelin/test-helpers": "^0.5.4",
@@ -33,7 +38,7 @@
     },
     "husky": {
         "hooks": {
-          "pre-push": "yarn run contracts:prettier"
+            "pre-push": "yarn run contracts:prettier"
         }
     }
 }
