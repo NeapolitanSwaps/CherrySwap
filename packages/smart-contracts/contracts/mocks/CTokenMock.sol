@@ -55,7 +55,9 @@ contract CTokenMock is Initializable, ERC20 {
     * @return uint 256: 0 on success, otherwise an Error codes
     */
     function mint(uint256 mintAmount) public returns (uint256) {
-        _mint(msg.sender, mintAmount);
+        uint256 mintTokens = uint256(divScalarByExpTruncate(mintAmount, exchangeRateCurrent));
+
+        _mint(msg.sender, mintTokens);
         return 0;
     }
 
@@ -83,5 +85,54 @@ contract CTokenMock is Initializable, ERC20 {
 
     function setExchangeRateCurrent(uint256 _exchangeRateCurrent) public {
         exchangeRateCurrent = _exchangeRateCurrent;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ////////////            cToken exponential functions    ///////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    function divScalarByExpTruncate(uint scalar, uint divisor) internal pure returns (uint) {
+        uint fraction = divScalarByExp(scalar, divisor);
+
+        return truncate(fraction);
+    }
+
+    function divScalarByExp(uint scalar, uint divisor) internal pure returns (uint) {
+        uint numerator = mulUInt(1e18, scalar);
+
+        return getExp(numerator, divisor);
+    }
+
+    function getExp(uint num, uint denom) internal pure returns (uint) {
+        uint scaledNumerator = mulUInt(num, 1e18);
+        uint rational = divUInt(scaledNumerator, denom);
+
+        return rational;
+    }
+
+    function truncate(uint exp) internal pure returns (uint) {
+        return exp / 1e18;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ////////////            cToken careful math             ///////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+
+    function mulUInt(uint a, uint b) internal pure returns (uint) {
+        if (a == 0) {
+            return (0);
+        }
+
+        uint c = a * b;
+
+        if (c / a != b) {
+            return (0);
+        } else {
+            return (c);
+        }
+    }
+
+    function divUInt(uint a, uint b) internal pure returns (uint) {
+        return a / b;
     }
 }
