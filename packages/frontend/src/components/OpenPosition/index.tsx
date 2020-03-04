@@ -1,65 +1,107 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, Fragment } from "react";
 import * as S from "./styles";
 import Button from "../elements/Button";
+import {
+  formatTimestamp,
+  formatCurrency,
+  formatInterestRate,
+  formatCDAI,
+  determineProfitLoss,
+  formatTimestampToDate
+} from "../../utils";
 
-interface Props {}
+export interface Props {
+  header: HeaderProps;
+  body: BodyProps;
+}
 
-const OpenPosition = (props: Props) => (
-  <S.OpenPosition>
-    <Header />
-    <Body />
-    <Footer />
-  </S.OpenPosition>
-);
+export interface HeaderProps {
+  position: string;
+  transactionId: string;
+}
 
-const Header = () => (
+export interface BodyProps {
+  position: string;
+  positionYield: number;
+  lockedBalance: number;
+  interestRateFixed: number;
+  interestRateCurrent: number;
+  startDate: number;
+  endDate: number;
+}
+
+const OpenPosition = (props: Props) => {
+  const { header, body } = props;
+  return (
+    <S.OpenPosition>
+      <Header {...header} />
+      <S.Wrapper>
+        <Body {...body} />
+        <Footer />
+      </S.Wrapper>
+    </S.OpenPosition>
+  );
+};
+
+const Header = ({ position }: { position: string }) => (
   <S.Header>
     <S.HeaderTitle>
-      <b>Short Position</b>
+      <b>{`${position} Position`}</b>
     </S.HeaderTitle>
-    <S.HeaderTitle>Hello</S.HeaderTitle>
+    <S.HeaderTitle>View Transaction</S.HeaderTitle>
   </S.Header>
 );
 
-const Body = () => (
-  <S.Body>
-    <S.ItemContainer>
-      <S.ItemWrapper top>
-        <Item title={"Locked"} value={"400.00"} />
-        <Item title={"Position"} value={"Short"} />
-      </S.ItemWrapper>
-      <S.ItemWrapper>
-        <Item title={"Start Date"} value={"01/02/03"} />
-        <Item title={"End Date"} value={"02/02/04"} />
-      </S.ItemWrapper>
-    </S.ItemContainer>
-    <S.ItemContainer>
-      <S.ItemWrapper top right>
-        <Item title={"Fixed interest rate"} value={"9%"} />
-        <Item title={"Current interest rate"} value={"12%"} />
-      </S.ItemWrapper>
-      <S.ItemWrapper right>
-        <Item title={"Current returns"} value={"+ 2 DAI"} />
-      </S.ItemWrapper>
-    </S.ItemContainer>
-  </S.Body>
-);
+const Body = (props: BodyProps) => {
+  const { position, positionYield, lockedBalance } = props;
+  const { interestRateFixed, interestRateCurrent } = props;
+  const { startDate, endDate } = props;
+  const formattedYield = formatCDAI(positionYield);
+  const formattedRateFixed = formatInterestRate(interestRateFixed);
+  const formattedRateCurrent = formatInterestRate(interestRateCurrent);
+  const formattedLockedBalance = formatCDAI(lockedBalance);
+  const isPositionInProfit = determineProfitLoss(lockedBalance, 0);
+  const yieldSymbol = isPositionInProfit ? "+" : "-";
+  const formattedStartDate = formatTimestampToDate(startDate);
+  const formattedEndDate = formatTimestampToDate(endDate);
+  // flip colors based on `isPositionInProfit`
+  return (
+    <S.Body>
+      <S.ItemContainer>
+        <S.ItemWrapper top>
+          <Item title={"Locked"} value={formattedLockedBalance} />
+          <Item title={"Position"} value={position} />
+        </S.ItemWrapper>
+        <S.ItemWrapper>
+          <Item title={"Start Date"} value={formattedStartDate} />
+          <Item title={"End Date"} value={formattedEndDate} />
+        </S.ItemWrapper>
+      </S.ItemContainer>
+      <S.ItemContainer>
+        <S.ItemWrapper top right>
+          <Item title={"Fixed interest rate"} value={formattedRateFixed} />
+          <Item title={"Current interest rate"} value={formattedRateCurrent} />
+        </S.ItemWrapper>
+        <S.ItemWrapper right>
+          <Item title={"Current returns"} value={`${yieldSymbol} ${formattedYield}`} />
+        </S.ItemWrapper>
+      </S.ItemContainer>
+    </S.Body>
+  );
+};
 
 const Footer = () => (
   <S.Footer>
     <S.ButtonWrapper>
       <Button title={"Withdraw Now"} />
-      <Button title={"View Stats"} />
     </S.ButtonWrapper>
   </S.Footer>
 );
 
 const Item = ({ title, value }: { title: string; value: string }) => (
   <S.Item>
-    <span>{title}</span>
-    <span>
-      <b>{value}</b>
-    </span>
+    <S.ItemTitle>{title}</S.ItemTitle>
+    <S.ItemValue>{value}</S.ItemValue>
   </S.Item>
 );
 
