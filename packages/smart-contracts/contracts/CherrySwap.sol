@@ -6,12 +6,12 @@ import "./CherryPool.sol";
 
 /**
  * @title CherrySwap Contract
- * @dev Create, manage and store all interest rate swaps within the Cherryswap platform. 
+ * @dev Create, manage and store all interest rate swaps within the Cherryswap platform.
  * Offers one side of a swap with the other taken by a liquidity pool. The offered rate is
  * a function of the pool demand (utilization) and the current floating rates.
  */
 contract CherrySwap is Initializable, CherryPool {
-    //25% APR is the max the pool will pay. This is 25%, compounding per block,
+    // 25% APR is the max the pool will pay. This is 25%, compounding per block,
     // scaled by 10^18. calculate by: (0.25 * 1e18) / (4 * 60 * 24 * 365)
     uint256 constant MAX_INTEREST_PAID_PER_BLOCK = 118911719939;
 
@@ -25,6 +25,7 @@ contract CherrySwap is Initializable, CherryPool {
 
     // Swap Data structures
     enum Bet { Short, Long }
+
     struct Swap {
         address owner;
         uint256 swapId;
@@ -39,6 +40,39 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     Swap[] public swaps;
+
+    event CreateLongPosition(
+        address indexed trader,
+        uint256 indexed swapId,
+        uint256 startingTime,
+        uint256 endingTime,
+        uint256 daiAmount,
+        uint256 cDaiAmount,
+        uint256 fixedRate,
+        uint256 amountReserved,
+        uint256 startingcDaiExchRate
+    );
+
+    event CreateShortPosition(
+        address indexed trader,
+        uint256 indexed swapId,
+        uint256 startingTime,
+        uint256 endingTime,
+        uint256 daiAmount,
+        uint256 cDaiAmount,
+        uint256 fixedRate,
+        uint256 amountReserved,
+        uint256 startingcDaiExchRate
+    );
+
+    event ClosePosition(
+        uint256 indexed swapId,
+        address indexed trader,
+        uint256 cDaiRedeemed,
+        uint256 daiTransfered
+    );
+
+    event FixedRateOffer(uint256 rate);
 
     /**
      * @dev Initialize contract states
@@ -67,7 +101,7 @@ contract CherrySwap is Initializable, CherryPool {
         // This defines how much needs to be "reserved" for long positions.
         uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
 
-        // The amount reserved is is the profit that the pool could need to pay in worst case.
+        // The amount reserved is the profit that the pool could need to pay in worst case.
         uint256 reserveAmount = maxFutureValue - _amount;
 
         // Reserve liquidity. checks the amount spesified is a valid reservation are done in function.
@@ -86,6 +120,7 @@ contract CherrySwap is Initializable, CherryPool {
         uint256 cherrySwapBalanceAfter = cToken.balanceOf(address(this));
         uint256 cTokensMinted = cherrySwapBalanceAfter - cherrySwapBalanceBefore;
         uint256 fixedRateOffer = getFixedRateOffer(Bet.Long);
+        uint256 cDaiExchangeRate = getcTokenExchangeRate();
 
         swaps.push(
             Swap(
@@ -97,15 +132,28 @@ contract CherrySwap is Initializable, CherryPool {
                 _amount, // amount of dai committed to the swap
                 cTokensMinted, // number of cDai tokens added
                 reserveAmount, // dai reserved from the pool's long side offering
-                getcTokenExchangeRate(), // starting cDai exchange rate. used to compute change in floating side
+                cDaiExchangeRate, // starting cDai exchange rate. used to compute change in floating side
                 Bet.Long // bet direction (long)
             )
+        );
+
+        emit CreateLongPosition(
+            msg.sender,
+            numSwaps(),
+            now,
+            now + ONE_MONTH_SECONDS,
+            _amount,
+            cTokensMinted,
+            fixedRateOffer,
+            reserveAmount,
+            cDaiExchangeRate
         );
     }
 
     /**
      * @dev function called by trader to enter into short swap position.
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
+     * @param _amount the number of Dai that the buyer will pay for their short position
      */
     function createShortPosition(uint256 _amount) public isShortUtilized {
         uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
@@ -115,17 +163,20 @@ contract CherrySwap is Initializable, CherryPool {
         // should first check if pool have enough liquidity to cover swap position
         _reserveShortPool(reserveAmount);
 
+        // This transfer will fail if the caller has not approved.
         require(
             token.transferFrom(msg.sender, address(this), _amount),
             "CherrySwap::create short position transfer from failed"
         );
 
+        uint256 cherrySwapBalanceBefore = cToken.balanceOf(address(this));
+
         require(cToken.mint(_amount) == 0, "CherrySwap::create short position compound deposit failed");
 
-        uint256 cherrySwapBalanceBefore = cToken.balanceOf(address(this));
         uint256 cherrySwapBalanceAfter = cToken.balanceOf(address(this));
         uint256 cTokensMinted = cherrySwapBalanceAfter - cherrySwapBalanceBefore;
         uint256 fixedRateOffer = getFixedRateOffer(Bet.Short);
+        uint256 cDaiExchangeRate = getcTokenExchangeRate();
 
         swaps.push(
             Swap(
@@ -137,9 +188,21 @@ contract CherrySwap is Initializable, CherryPool {
                 _amount,
                 cTokensMinted,
                 reserveAmount,
-                getcTokenExchangeRate(),
+                cDaiExchangeRate,
                 Bet.Short
             )
+        );
+
+        emit CreateShortPosition(
+            msg.sender,
+            numSwaps(),
+            now,
+            now + ONE_MONTH_SECONDS,
+            _amount,
+            cTokensMinted,
+            fixedRateOffer,
+            reserveAmount,
+            cDaiExchangeRate
         );
     }
 
@@ -148,6 +211,7 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice if the time is after the end of the swap then they will receive the swap rate for
      * the duration of the swap and then the floating market rate between the end of the
      * swap and the current time.
+     * @param _swapId swap number
      */
     function closePosition(uint256 _swapId) public returns (uint256) {
         //TODO: add check for caller address. is this needed?
@@ -158,7 +222,7 @@ contract CherrySwap is Initializable, CherryPool {
         uint256 tokensToSend = tokensToPayTrader(swap);
         // Need to calculate the number of cTokens that will be withdrawn from the withdrawl
         uint256 cTokensToWithdraw = (tokensToSend * 1e18) / getcTokenExchangeRate();
-        // Tokens need to be withdrawn from Compound. 
+        // Tokens need to be withdrawn from Compound.
         //TODO: add a require here to check the number of Dai recived is correct.
         cToken.redeem(cTokensToWithdraw);
         
@@ -174,6 +238,8 @@ contract CherrySwap is Initializable, CherryPool {
         if (swap.bet == Bet.Short) {
             _freeShortPool(swap.reserveAmount);
         }
+
+        emit ClosePosition(_swapId, swap.owner, cTokensToWithdraw, tokensToSend);
     }
 
     /**
@@ -212,21 +278,27 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    @dev calculate the offered fixed rate for swaps taken against the liquidity pool
+    * @dev calculate the offered fixed rate for swaps taken against the liquidity pool
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
+    * @param bet position bet (long or short)
+    * @return _fixedRateOffer offered fixed rate
     */
-    function getFixedRateOffer(Bet bet) public returns (uint256) {
+    function getFixedRateOffer(Bet bet) public returns (uint256 _fixedRateOffer) {
         if (bet == Bet.Long) {
-            return (cToken.supplyRatePerBlock().mul(
+            _fixedRateOffer = (cToken.supplyRatePerBlock().mul(
                 uint256(1e18).sub(calcLongPoolUtil(longPoolReserved)).div(ALPHA.sub(BETA))
             )).div(1e18);
         }
 
         if (bet == Bet.Long) {
-            return (cToken.supplyRatePerBlock().mul(
+            _fixedRateOffer = (cToken.supplyRatePerBlock().mul(
                 uint256(1e18).add(calcShortPoolUtil(shortPoolReserved)).div(ALPHA.add(BETA))
             )).div(1e18);
         }
+
+        emit FixedRateOffer(_fixedRateOffer);
+
+        return _fixedRateOffer;
     }
 
     /**
@@ -234,7 +306,11 @@ contract CherrySwap is Initializable, CherryPool {
     * @notice this acts to scale the amount by the change in exchange rate seen by the cToken.
     * If the starting cToken exchange rate is stored and the end rate is known then this function returns
     * the value that _amount has grown by.
-     */
+    * @param _startingExchangeRate starting cToken exchange rate
+    * @param _endingExchangeRate ending cToken exchange rate
+    * @param _amount token amount
+    * @return swap position valuation
+    */
     function getFloatingValue(uint256 _startingExchangeRate, uint256 _endingExchangeRate, uint256 _amount)
         public
         view

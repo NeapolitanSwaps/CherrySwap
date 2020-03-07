@@ -44,11 +44,14 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
-    event PoolShare(uint256 amount);
     event MintCherry(address indexed liquidityProvider, uint256 amountDai,uint256 amountcDai, uint256 amountCherryDai);
-    event RedeemCherry(address indexed liquidityProvider, uint256 redeemedDaiAmount, uint256 redeemedCherryDaiDaiAmount);
-    event Transfer(address indexed to, uint256 value);
+    event RedeemCherry(address indexed liquidityProvider, uint256 redeemedCherryDaiDaiAmount);
+    event TransferDai(address indexed to, uint256 value);
     event CurrentExchangeRate(uint256 rate);
+    event PoolShare(uint256 amount);
+    event FreeLongPool(uint256 amount);
+    event FreeShortPool(uint256 amount);
+    event SetCherryDai(address cherryDai);
 
     /**
      * @dev Initialize contract states
@@ -58,10 +61,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
-
-        // cherryDai = new CherryDai();
-        // cherryDai.initialize(address(this));
-
         cherryMath = CherryMath(_cherryMath);
 
         poolBalance = 0;
@@ -136,6 +135,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         longPoolBalance = longPoolBalance.add(_amount.div(2));
         shortPoolBalance = shortPoolBalance.add(_amount.div(2));
 
+        emit DepositLiquidity(msg.sender, _amount);
+
         emit MintCherry(msg.sender, _amount, cTokensMinted, cherryDaiToMint);
     }
 
@@ -199,7 +200,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
         // pay the message.sender the daiRedeemed amount and burn their _amount of CherryDai
         payout(msg.sender, daiRedeemed, _amount);
 
-        emit RedeemCherry(msg.sender, daiRedeemed, _amount);
+        emit RedeemCherry(msg.sender, _amount);
 
         return uint256(Error.NO_ERROR);
 
@@ -208,13 +209,18 @@ contract CherryPool is Initializable, TokenErrorReporter {
     /**
      * @dev Get available pool balance (total pool balance - total reserved balance)
      * @return available pool balance
-     * @return 0 if successful otherwise an error code
      */
     function getCashPrior() internal returns (uint256) {
         return poolBalance - (shortPoolReserved + longPoolReserved);
     }
 
-    function payout(address _redeemer, uint256 _redeemedDaiAmount, uint256 _redeemedCherryDaiTokens) internal returns (Error) {
+    /**
+     * @dev Transfer the underlying asset
+     * @param _redeemer redeemer address
+     * @param _redeemedDaiAmount amount of DAI to transfer
+     * @param _redeemedCherryDaiTokens amount of CherryDAI to burn
+     */
+    function payout(address _redeemer, uint256 _redeemedDaiAmount, uint256 _redeemedCherryDaiTokens) internal {
         // Remove the CherryDai from the supply
         cherryDai.burnFrom(_redeemer, _redeemedCherryDaiTokens);
 
@@ -223,6 +229,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         // transfer Dai to redeemer.
         token.transfer(_redeemer, _redeemedDaiAmount);
+
+        emit TransferDai(_redeemer, _redeemedDaiAmount);
     }
 
     /**
@@ -252,6 +260,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         require(msg.sender == owner, "Cherrypool::not authorized to call function");
 
         cherryDai = CherryDai(_token);
+
+        emit SetCherryDai(_token);
     }
 
     function _reserveLongPool(uint256 _amount) internal canReserveLong(_amount) {
@@ -269,11 +279,15 @@ contract CherryPool is Initializable, TokenErrorReporter {
     function _freeLongPool(uint256 _amount) internal {
         require(_amount > 0, "Cherrypool::invalid amount to free");
         longPoolReserved.sub(_amount);
+
+        emit FreeLongPool(_amount);
     }
 
     function _freeShortPool(uint256 _amount) internal {
         require(_amount > 0, "Cherrypool::invalid amount to free");
         shortPoolReserved.sub(_amount);
+
+        emit FreeShortPool(_amount);
     }
 
     function _addcTokenPoolProfit(int256 _profit) internal {
