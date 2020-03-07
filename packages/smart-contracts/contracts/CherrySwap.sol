@@ -199,7 +199,7 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    * @dev at any point a trader in a swap can rage quite. 
+    * @dev at any point a trader in a swap can rage quite.
     * @notice This will eject them from the position, free up liquidity and they walk away with some dai
     * however there is a heavy penalty in doing this!
      */
