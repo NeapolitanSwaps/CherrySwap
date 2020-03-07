@@ -25,7 +25,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
     uint256 public shortPoolBalance; // short pool balance in DAI
     uint256 public longPoolReserved; // amount of DAI reserved in the long pool
     uint256 public shortPoolReserved; // amount of DAI reserved in the short pool
-    uint256 public poolcBalanceAtLastMint;  // cToken pool balance after each mint
     int256 public poolcTokenProfit; //the total net profit the pool has made in ctokens (or lost) during it life
 
     IERC20 public token; // collateral asset = DAI
@@ -70,7 +69,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
         longPoolReserved = 0;
         shortPoolReserved = 0;
         poolcTokenProfit = 0;
-        poolcBalanceAtLastMint = 0;
     }
 
     /**
@@ -117,13 +115,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         // asset to be supplied, in units of the underlying asset. this is the dai amount.
         assert(cToken.mint(_amount) == 0);
 
-        // Store the pools increased amount in cTokens.
-        uint256 cTokensMinted = (_amount * 1e10) / getcTokenExchangeRate();
-
-        // ensure that amount of cToken minted is what expected from exchange rate
-        uint256 poolcBalanceAtNow = cToken.balanceOf(address(this));
-        require(poolcBalanceAtNow.sub(poolcBalanceAtLastMint) == cTokensMinted, "Cherrypool::calculated cToken amount mismtach");
-        poolcBalanceAtLastMint = poolcBalanceAtNow;
+        // Get the pools amount in cTokens.
+        uint256 cTokensMinted = cToken.balanceOf(address(this));
 
         CherryMath.MathError _err;
         uint256 _cherryRate;
@@ -138,7 +131,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
         // internal accounting to store pool balances
         poolBalance = poolBalance.add(_amount);
-        poolcBalance = poolcBalance.add(cTokensMinted);
+        poolcBalance = cTokensMinted;
         longPoolBalance = longPoolBalance.add(_amount.div(2));
         shortPoolBalance = shortPoolBalance.add(_amount.div(2));
 

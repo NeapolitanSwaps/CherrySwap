@@ -284,15 +284,16 @@ contract CherrySwap is Initializable, CherryPool {
     * @return _fixedRateOffer offered fixed rate
     */
     function getFixedRateOffer(Bet bet) public returns (uint256) {
-        //TODO: replace this maths with safe math with mul/div etc.
-        uint256 _fixedRateOffer;
-
         if (bet == Bet.Long) {
-            _fixedRateOffer = (cToken.supplyRatePerBlock() * (1e18 - calcLongPoolUtil(longPoolReserved) / ALPHA - BETA)) / 1e18;
+            return (cToken.supplyRatePerBlock().mul(
+                uint256(1e18).sub(calcLongPoolUtil(longPoolReserved)).div(ALPHA.sub(BETA))
+            )).div(1e18);
         }
 
         if (bet == Bet.Long) {
-            _fixedRateOffer = (cToken.supplyRatePerBlock() * (1e18 + calcShortPoolUtil(shortPoolReserved) / ALPHA + BETA)) / 1e18;
+            return (cToken.supplyRatePerBlock().mul(
+                uint256(1e18).add(calcShortPoolUtil(shortPoolReserved)).div(ALPHA.add(BETA))
+            )).div(1e18);
         }
 
         emit FixedRateOffer(_fixedRateOffer);
