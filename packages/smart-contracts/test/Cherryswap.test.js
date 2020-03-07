@@ -1,6 +1,7 @@
 const { BN, constants, expectEvent, expectRevert, ether } = require("@openzeppelin/test-helpers");
 const BigNumber = require("bignumber.js");
 const EVMRevert = require("./helpers/EVMRevert").EVMRevert;
+const truffleAssert = require("truffle-assertions");
 
 //mock contracts
 const TokenContract = artifacts.require("TokenMock");
@@ -122,8 +123,21 @@ contract(
         let compoundDaiBalanceBefore = await token.balanceOf(cToken.address);
         assert.equal(compoundDaiBalanceBefore.toString(), poolSeedDai);
 
+        let liquidityProviderCherryDaiBalanceBefore = await cherryDai.balanceOf(provider1);
+        assert.equal(liquidityProviderCherryDaiBalanceBefore, 0);
+
         // Mint tokens(deposit dai)
-        const mintFunctionReturn = await cherryswap.mint(_amountToDeposit, { from: provider1 });
+        let tx = await cherryswap.mint(_amountToDeposit, { from: provider1 });
+        
+        let cherryDaiExchangeRate = 0;
+        truffleAssert.eventEmitted(tx, "CurrentExchangeRate", ev => {
+          console.log(ev);
+          //cherryDaiExchangeRate = ev;
+          return ev;
+        });
+
+        //let liquidityProviderCherryDaiBalanceAfter = await cherryDai.balanceOf(provider1);
+        //let expectedLiquidityProviderCHerryDaiBalanceAfter = (_amountToDeposit.mul(new BN(10**18))).div(cherryDaiExchangeRate);
 
         //Known assertions
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
@@ -159,8 +173,8 @@ contract(
         let expectedSTraderBalanceAfter = "";
         // assert.equal(traderBalanceAfter, supplyToMint);
 
-        let compoundDaiBalanceBalanceAfter = await token.balanceOf(cToken.address);
-        let expectedCompoundDaiBalanceBalanceAfter = "";
+        let compoundDaiBalanceAfter = await token.balanceOf(cToken.address);
+        let expectedCompoundDaiBalanceAfter = "";
         // assert.equal(compoundDaiBalanceBalanceAfter, expectedCompoundDaiBalanceBalanceAfter);
 
         // event mintFunctionReturn
