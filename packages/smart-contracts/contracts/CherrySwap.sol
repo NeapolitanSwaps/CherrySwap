@@ -1,8 +1,8 @@
 pragma solidity ^0.5.12;
 
-// Contracts
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "./CherryPool.sol";
+
 
 /**
  * @title CherrySwap Contract
