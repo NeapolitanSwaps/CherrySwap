@@ -96,7 +96,7 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
      * @param _amount the number of Dai that the buyer will pay for their long position
      */
-    function createLongPosition(uint256 _amount) public isLongUtilized {
+    function createLongPosition(uint256 _amount) external isLongUtilized {
         // Find the upper bound of how much could be paid as a function of the max interest rate the pool will pay
         // This defines how much needs to be "reserved" for long positions.
         uint256 maxFutureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
@@ -155,7 +155,7 @@ contract CherrySwap is Initializable, CherryPool {
      * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      * @param _amount the number of Dai that the buyer will pay for their short position
      */
-    function createShortPosition(uint256 _amount) public isShortUtilized {
+    function createShortPosition(uint256 _amount) external isShortUtilized {
         uint256 futureValue = cherryMath.futureValue(_amount, MAX_INTEREST_PAID_PER_BLOCK, 0, ONE_MONTH_SECONDS);
 
         uint256 reserveAmount = futureValue - _amount;
@@ -213,7 +213,7 @@ contract CherrySwap is Initializable, CherryPool {
      * swap and the current time.
      * @param _swapId swap number
      */
-    function closePosition(uint256 _swapId) public returns (uint256) {
+    function closePosition(uint256 _swapId) external returns (uint256) {
         //TODO: add check for caller address. is this needed?
         //TODO: add check for maturity of position. should only be able to close position after maturity.
 
@@ -269,7 +269,7 @@ contract CherrySwap is Initializable, CherryPool {
     * @notice This will eject them from the position, free up liquidity and they walk away with some dai
     * however there is a heavy penalty in doing this!
      */
-    function rageQuitSwap(uint256 _swapId) public returns (uint256) {
+    function rageQuitSwap(uint256 _swapId) external returns (uint256) {
         return 0;
     }
 

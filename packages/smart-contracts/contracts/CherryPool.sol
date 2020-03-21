@@ -92,7 +92,7 @@ contract CherryPool is Initializable {
      * @param _amount amount of deposited DAI
      * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
      */
-    function mint(uint256 _amount) public returns (uint256) {
+    function mint(uint256 _amount) external returns (uint256) {
         require(_amount > 0, "Cherrypool::amount provided must be higher");
 
         // collect liquidity from provider
@@ -160,7 +160,7 @@ contract CherryPool is Initializable {
      * @param _amount amount of CherryDai to redeem
      * @return 0 if successful otherwise an error code
      */
-    function redeem(uint256 _amount) public isLongUtilized() isShortUtilized() {
+    function redeem(uint256 _amount) external isLongUtilized() isShortUtilized() {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
             "CherryPool::redeem request is more than current token balance"
