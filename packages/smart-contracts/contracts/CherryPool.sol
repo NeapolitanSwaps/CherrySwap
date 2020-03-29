@@ -90,7 +90,7 @@ contract CherryPool is Initializable {
     /**
      * @dev adds liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     * @return cherryDaiToMint amount of minted CherryDai
      */
     function mint(uint256 _amount) external returns (uint256) {
         require(_amount > 0, "Cherrypool::amount provided must be higher");
@@ -124,6 +124,8 @@ contract CherryPool is Initializable {
         emit DepositLiquidity(msg.sender, _amount);
 
         emit MintCherry(msg.sender, _amount, cTokensMinted, cherryDaiToMint);
+
+        return cherryDaiToMint;
     }
 
     /**
@@ -158,9 +160,9 @@ contract CherryPool is Initializable {
      * @notice the amount returned is the number of cherrytokens multiplied by the current exchange rate
      * The sender should approve the _amount to this contract address
      * @param _amount amount of CherryDai to redeem
-     * @return 0 if successful otherwise an error code
+     * @return daiRedeemed amount of DAI redeemed
      */
-    function redeem(uint256 _amount) external isLongUtilized() isShortUtilized() {
+    function redeem(uint256 _amount) external isLongUtilized() isShortUtilized() returns (uint256) {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
             "CherryPool::redeem request is more than current token balance"
@@ -178,6 +180,8 @@ contract CherryPool is Initializable {
         payout(msg.sender, daiRedeemed, _amount);
 
         emit RedeemCherry(msg.sender, _amount);
+
+        return daiRedeemed
     }
 
     /**
@@ -210,7 +214,7 @@ contract CherryPool is Initializable {
     /**
      * @dev the rate of CherryDai redeemable for Dai.
      * @notice Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
-     * @return 0 if successful otherwise an error code
+     * @return rate Exchange rate
      */
     function exchangeRate() public returns (uint256) {
         uint256 rate;
