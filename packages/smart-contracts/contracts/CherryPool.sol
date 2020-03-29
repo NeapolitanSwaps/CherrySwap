@@ -181,7 +181,7 @@ contract CherryPool is Initializable {
 
         emit RedeemCherry(msg.sender, _amount);
 
-        return daiRedeemed
+        return daiRedeemed;
     }
 
     /**
