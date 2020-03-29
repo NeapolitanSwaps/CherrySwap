@@ -6,9 +6,7 @@
     "CherryMath": "CherryMath",
     "CherryPool": "CherryPool",
     "CherrySwap": "CherrySwap",
-    "ComptrollerErrorReporter": "ComptrollerErrorReporter",
     "Migrations": "Migrations",
-    "TokenErrorReporter": "TokenErrorReporter",
     "TokenMock": "TokenMock"
   },
   "dependencies": {

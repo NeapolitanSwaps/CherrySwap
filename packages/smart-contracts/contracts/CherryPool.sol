@@ -8,13 +8,13 @@ import "./interface/ICERC20.sol";
 import "@openzeppelin/upgrades/contracts/Initializable.sol";
 import "./token/CherryDai.sol";
 import "./CherryMath.sol";
-import "./ErrorReporter.sol";
+
 
 /**
  * @title CherryPool Contract
  * @dev This contract handle Cherry Pool functionalities
  */
-contract CherryPool is Initializable, TokenErrorReporter {
+contract CherryPool is Initializable {
     using SafeMath for uint256;
 
     address public owner;
@@ -32,16 +32,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
 
     CherryDai public cherryDai; // CherryDai token
     CherryMath cherryMath; // Math library
-
-    struct RedeemLocalVars {
-        Error err;
-        CherryMath.MathError mathErr;
-        uint256 exchangeRateMantissa;
-        uint256 redeemTokens;
-        uint256 redeemAmount;
-        uint256 totalSupplyNew;
-        uint256 accountTokensNew;
-    }
 
     event DepositLiquidity(address indexed liquidityProvider, uint256 amount);
     event MintCherry(address indexed liquidityProvider, uint256 amountDai,uint256 amountcDai, uint256 amountCherryDai);
@@ -100,9 +90,9 @@ contract CherryPool is Initializable, TokenErrorReporter {
     /**
      * @dev adds liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
-     * @return uint 0=success, otherwise a failure (see ErrorReporter.sol for details)
+     * @return cherryDaiToMint amount of minted CherryDai
      */
-    function mint(uint256 _amount) public returns (uint256) {
+    function mint(uint256 _amount) external returns (uint256) {
         require(_amount > 0, "Cherrypool::amount provided must be higher");
 
         // collect liquidity from provider
@@ -118,12 +108,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         // Get the pools amount in cTokens.
         uint256 cTokensMinted = cToken.balanceOf(address(this));
 
-        CherryMath.MathError _err;
         uint256 _cherryRate;
-        (_err, _cherryRate) = exchangeRate();
-        if (_err != CherryMath.MathError.NO_ERROR) {
-            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(_err));
-        }
+        _cherryRate = exchangeRate();
 
         // mint CherryDai to liquidity provider
         uint256 cherryDaiToMint = _amount.mul(1e18).div(_cherryRate);
@@ -138,6 +124,8 @@ contract CherryPool is Initializable, TokenErrorReporter {
         emit DepositLiquidity(msg.sender, _amount);
 
         emit MintCherry(msg.sender, _amount, cTokensMinted, cherryDaiToMint);
+
+        return cherryDaiToMint;
     }
 
     /**
@@ -145,7 +133,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
      */
-
     function calcLongPoolUtil(uint256 _longPoolReserved) public view returns (uint256) {
         return (_longPoolReserved * 1e18) / longPoolBalance;
     }
@@ -173,37 +160,28 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @notice the amount returned is the number of cherrytokens multiplied by the current exchange rate
      * The sender should approve the _amount to this contract address
      * @param _amount amount of CherryDai to redeem
-     * @return 0 if successful otherwise an error code
+     * @return daiRedeemed amount of DAI redeemed
      */
-    function redeem(uint256 _amount) public isLongUtilized() isShortUtilized() returns (uint256) {
+    function redeem(uint256 _amount) external isLongUtilized() isShortUtilized() returns (uint256) {
         require(
             _amount <= cherryDai.balanceOf(msg.sender),
             "CherryPool::redeem request is more than current token balance"
         );
 
         // get exchange rate from Cherrydai to Dai+fee
-        CherryMath.MathError _err;
         uint256 _cherryRate;
-        (_err, _cherryRate) = exchangeRate();
-
-        if (_err != CherryMath.MathError.NO_ERROR) {
-            return failOpaque(Error.MATH_ERROR, FailureInfo.REDEEM_EXCHANGE_RATE_READ_FAILED, uint256(_err));
-        }
+        _cherryRate = exchangeRate();
 
         uint256 daiRedeemed = _amount.mul(_cherryRate).div(1e18);
 
-        /* Fail gracefully if pool has insufficient cash */
-        if (getCashPrior() < daiRedeemed) {
-            return fail(Error.TOKEN_INSUFFICIENT_CASH, FailureInfo.REDEEM_TRANSFER_OUT_NOT_POSSIBLE);
-        }
+        require(getCashPrior() < daiRedeemed, "Redeem:insufficient cash");
 
         // pay the message.sender the daiRedeemed amount and burn their _amount of CherryDai
         payout(msg.sender, daiRedeemed, _amount);
 
         emit RedeemCherry(msg.sender, _amount);
 
-        return uint256(Error.NO_ERROR);
-
+        return daiRedeemed;
     }
 
     /**
@@ -211,7 +189,7 @@ contract CherryPool is Initializable, TokenErrorReporter {
      * @return available pool balance
      */
     function getCashPrior() internal returns (uint256) {
-        return poolBalance - (shortPoolReserved + longPoolReserved);
+        return poolBalance.sub((shortPoolReserved.add(longPoolReserved)));
     }
 
     /**
@@ -236,19 +214,20 @@ contract CherryPool is Initializable, TokenErrorReporter {
     /**
      * @dev the rate of CherryDai redeemable for Dai.
      * @notice Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
-     * @return 0 if successful otherwise an error code
+     * @return rate Exchange rate
      */
-    function exchangeRate() public returns (CherryMath.MathError, uint256) {
+    function exchangeRate() public returns (uint256) {
         uint256 rate;
         if(cherryDai.totalSupply() == 0) {
             rate = 1;
         }
         else {
-            rate = (uint256(int256(poolcBalance) + poolcTokenProfit) * getcTokenExchangeRate()) / cherryDai.totalSupply();
+            rate = (uint256(int256(poolcBalance) + poolcTokenProfit).mul(getcTokenExchangeRate())).div(cherryDai.totalSupply());
         }
+
         emit CurrentExchangeRate(uint256(rate));
 
-        return (CherryMath.MathError.NO_ERROR, uint256(rate));
+        return uint256(rate);
     }
 
     /**
@@ -295,12 +274,6 @@ contract CherryPool is Initializable, TokenErrorReporter {
     }
 
     function getcTokenExchangeRate() public returns (uint256) {
-        /*return
-            (cToken.getCash() +
-                cToken.totalBorrowsCurrent() -
-                cToken.totalReserves()) /
-            cToken.totalSupply();*/
-
         return cToken.exchangeRateCurrent();
     }
 
