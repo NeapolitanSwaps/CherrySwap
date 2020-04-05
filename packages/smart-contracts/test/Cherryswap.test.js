@@ -9,7 +9,7 @@ const CTokenContract = artifacts.require("CTokenMock");
 
 const CherryMathContract = artifacts.require("CherryMath");
 const CherryDai = artifacts.require("CherryDai");
-const CherryswapContract = artifacts.require("CherrySwap");
+const CherrySwapContract = artifacts.require("CherrySwap");
 
 require("chai")
   .use(require("chai-as-promised"))
@@ -54,7 +54,7 @@ contract(
       cherrymath = await CherryMathContract.new({ from: contractOwner });
 
       // Deploy instance of cherrySwap contract
-      cherryswap = await CherryswapContract.new({ from: contractOwner });
+      cherryswap = await CherrySwapContract.new({ from: contractOwner });
 
       // Create instance of cherryDai token
       cherryDai = await CherryDai.new({ from: contractOwner });
@@ -84,11 +84,22 @@ contract(
     context("Deployment", async function() {
       it("check deployment", async function() {
         let minter = await cherryDai.isMinter.call(cherryswap.address);
-        assert.equal(minter, true);
-
         let poolBalance = await cherryswap.poolBalance.call();
+        let poolcBalance = await cherryswap.poolcBalance.call();
+        let longPoolBalance = await cherryswap.longPoolBalance.call();
+        let shortPoolBalance = await cherryswap.shortPoolBalance.call();
+        let longPoolReserved = await cherryswap.longPoolReserved.call();
+        let shortPoolReserved = await cherryswap.shortPoolReserved.call();
+        let poolcTokenProfit = await cherryswap.poolcTokenProfit.call();
 
+        assert.equal(minter, true);
         assert.equal(poolBalance, 0);
+        assert.equal(poolcBalance, 0);
+        assert.equal(longPoolBalance, 0);
+        assert.equal(shortPoolBalance, 0);
+        assert.equal(longPoolReserved, 0);
+        assert.equal(shortPoolReserved, 0);
+        assert.equal(poolcTokenProfit, 0);
       });
     });
 

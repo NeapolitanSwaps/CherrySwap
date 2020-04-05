@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@openzeppelin/cli": "^2.6.0",
-    "@openzeppelin/contracts-ethereum-package": "^2.4.0",
+    "@openzeppelin/contracts-ethereum-package": "^2.5.0",
     "@openzeppelin/upgrades": "^2.6.0",
     "truffle": "^5.0.37"
   },
