@@ -52,13 +52,6 @@ contract CherryPool is Initializable {
         token = IERC20(_token);
         cToken = ICERC20(_cToken);
         cherryMath = CherryMath(_cherryMath);
-
-        poolBalance = 0;
-        longPoolBalance = 0;
-        shortPoolBalance = 0;
-        longPoolReserved = 0;
-        shortPoolReserved = 0;
-        poolcTokenProfit = 0;
     }
 
     /**
