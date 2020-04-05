@@ -22,7 +22,7 @@ contract CTokenMock is Initializable, ERC20 {
     uint256 public supplyRatePerBlock;
     uint256 public getCash;
     uint256 public totalReserves;
-    uint256 public exchangeRateCurrent;
+    uint256 public exchangeRateStored;
 
     function initialize(address tokenAddress) public initializer {
         token = IERC20(tokenAddress);
@@ -30,7 +30,7 @@ contract CTokenMock is Initializable, ERC20 {
         supplyRatePerBlock = 0;
         getCash = 0;
         totalReserves = 0;
-        exchangeRateCurrent = 0;
+        exchangeRateStored = 0;
     }
 
     // Feed in initial values to seed the compound market.
@@ -38,14 +38,14 @@ contract CTokenMock is Initializable, ERC20 {
         uint256 _supplyRatePerBlock,
         uint256 _getCash,
         uint256 _totalReserves,
-        uint256 _exchangeRateCurrent,
+        uint256 _exchangeRateStored,
         uint256 _totalSupply,
         address mintRecipient
     ) public {
         supplyRatePerBlock = _supplyRatePerBlock;
         getCash = _getCash;
         totalReserves = _totalReserves;
-        exchangeRateCurrent = _exchangeRateCurrent;
+        exchangeRateStored = _exchangeRateStored;
         _mint(mintRecipient, _totalSupply);
     }
 
@@ -55,7 +55,13 @@ contract CTokenMock is Initializable, ERC20 {
     * @return uint 256: 0 on success, otherwise an Error codes
     */
     function mint(uint256 mintAmount) public returns (uint256) {
-        _mint(msg.sender, mintAmount);
+        // get amount of cToken to mint
+        // mintTokens = mintAmount / exchangeRate
+        uint256 numerator = mintAmount.mul(1e18);
+        uint256 scaledNumerator = numerator.mul(1e18);
+        uint256 rational = scaledNumerator.div(exchangeRateStored);
+
+        _mint(msg.sender, rational.div(1e18));
         return 0;
     }
 
@@ -81,7 +87,7 @@ contract CTokenMock is Initializable, ERC20 {
         totalReserves = _setTotalReserves;
     }
 
-    function setExchangeRateCurrent(uint256 _exchangeRateCurrent) public {
-        exchangeRateCurrent = _exchangeRateCurrent;
+    function setexchangeRateStored(uint256 _exchangeRateStored) public {
+        exchangeRateStored = _exchangeRateStored;
     }
 }
