@@ -7,8 +7,13 @@ import "@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burn
 
 
 contract CherryDai is Initializable, ERC20Detailed, ERC20Mintable, ERC20Burnable {
-    function initialize(address _cherrySwap) public initializer {
-        ERC20Detailed.initialize("Cherry Dai", "CherryDAI", 8);
+    function initialize(
+        address _cherrySwap,
+        string memory _name,
+        string memory _symbol,
+        uint8 _decimals
+    ) public initializer {
+        ERC20Detailed.initialize(_name, _symbol, _decimals);
 
         ERC20Mintable.initialize(msg.sender);
 
