@@ -32,7 +32,14 @@ async function deployDev(options) {
     )
   );
   let cherryDai = await create(
-    Object.assign({ contractAlias: "CherryDai", methodName: "initialize", methodArgs: [cherrySwap.address] }, options)
+    Object.assign(
+      { 
+        contractAlias: "CherryDai",
+        methodName: "initialize", 
+        methodArgs: [cherrySwap.address, "Cherry Dai", "CherryDAI" , 8] 
+      }, 
+      options
+    )
   );
 
   let cherrySwapInstance = await CherrySwap.at(cherrySwap.address);
@@ -63,7 +70,14 @@ async function deploy(options) {
   );
 
   let cherryDai = await create(
-    Object.assign({ contractAlias: "CherryDai", methodName: "initialize", methodArgs: [cherrySwap.address] }, options)
+    Object.assign(
+      { 
+        contractAlias: "CherryDai",
+        methodName: "initialize", 
+        methodArgs: [cherrySwap.address, "Cherry Dai", "CherryDAI" , 8] 
+      }, 
+      options
+    )
   );
 
   let cherrySwapInstance = await CherrySwap.at(cherrySwap.address);

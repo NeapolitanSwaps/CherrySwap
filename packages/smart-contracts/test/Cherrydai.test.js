@@ -12,7 +12,7 @@ require("chai")
 
 contract(
   "Cherry Dai",
-  ([contractOwner, participant1, participant2, participant3, participant4, participant5, random]) => {
+  ([contractOwner, participant1, participant2, cherrySwapContract]) => {
     const name = "Cherry Dai";
     const symbol = "CherryDAI";
     const decimals = 8;
@@ -24,7 +24,7 @@ contract(
         from: contractOwner
       });
 
-      await cherryDai.initialize(contractOwner);
+      await cherryDai.initialize(cherrySwapContract, name, symbol, decimals);
     });
 
     context("Deployment", async () => {
@@ -32,11 +32,13 @@ contract(
         let tokenName = await cherryDai.name.call();
         let tokenSymbol = await cherryDai.symbol.call();
         let tokenDecimals = await cherryDai.decimals.call();
-        let minter = await cherryDai.isMinter.call(contractOwner);
+        let isDeployerMinter = await cherryDai.isMinter.call(contractOwner);
+        let isContractMinter = await cherryDai.isMinter.call(cherrySwapContract);
         assert.equal(tokenName, name);
         assert.equal(tokenSymbol, symbol);
         assert.equal(tokenDecimals, decimals);
-        assert.equal(minter, true);
+        assert.equal(isDeployerMinter, false);
+        assert.equal(isContractMinter, true);
       });
     });
 
@@ -48,7 +50,7 @@ contract(
       });
 
       it("mint supply", async () => {
-        await cherryDai.mint(participant1, supplyToMint);
+        await cherryDai.mint(participant1, supplyToMint, {from: cherrySwapContract});
         let participant1Balance = await cherryDai.balanceOf(participant1);
         assert.equal(supplyToMint, participant1Balance.toNumber());
       });
