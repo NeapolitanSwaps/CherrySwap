@@ -27,7 +27,7 @@ contract(
       supplyRatePerBlock: "70966375099",
       getCash: "534377765362123926612",
       totalReserves: "223837001939965599401",
-      exchangeRateCurrent: "207647402721868971577224657",
+      exchangeRateStored: "207647402721868971577224657",
       totalSupply: "740604290907233"
     };
 
@@ -45,7 +45,7 @@ contract(
         seedCompoundValues.supplyRatePerBlock,
         seedCompoundValues.getCash,
         seedCompoundValues.totalReserves,
-        seedCompoundValues.exchangeRateCurrent,
+        seedCompoundValues.exchangeRateStored,
         seedCompoundValues.totalSupply,
         largeCTokenHolder
       );
@@ -139,20 +139,22 @@ contract(
         let liquidityProviderCherryDaiBalanceBefore = await cherryDai.balanceOf(provider1);
         assert.equal(liquidityProviderCherryDaiBalanceBefore, 0);
 
+        let cTokenExchangeRate = new BigNumber(await cherryswap.getcTokenExchangeRate());
+        console.log(cTokenExchangeRate.toString());
+
         // Mint tokens(deposit dai)
         let tx = await cherryswap.mint(_amountToDeposit, { from: provider1 });
         
         let cherryDaiExchangeRate = 0;
         truffleAssert.eventEmitted(tx, "CurrentExchangeRate", ev => {
-          console.log(ev);
-          //cherryDaiExchangeRate = ev;
+          console.log(ev.rate);
+          cherryDaiExchangeRate = ev.rate;
           return ev;
         });
 
         //let liquidityProviderCherryDaiBalanceAfter = await cherryDai.balanceOf(provider1);
         //let expectedLiquidityProviderCHerryDaiBalanceAfter = (_amountToDeposit.mul(new BN(10**18))).div(cherryDaiExchangeRate);
 
-        //Known assertions
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
         assert.equal(
           (await cherryswap.longPoolBalance()).toString(),
@@ -167,6 +169,8 @@ contract(
 
         //Relative state changes
         let poolcTokenBalanceAfter = await cToken.balanceOf(cherryswap.address);
+        console.log((new BigNumber(poolcTokenBalanceAfter).dividedBy(1e8)).toString());
+        console.log((new BigNumber(_amountToDeposit)).toString())//.multipliedBy(new BigNumber(cTokenExchangeRate)).toString());
         let expectedcTokenBalanceAfter = "";
         // assert.equal(poolcTokenBalanceBefore - poolcTokenBalanceAfter, expectedcTokenBalanceAfter);
 
@@ -202,7 +206,7 @@ contract(
     /*************************
      *    CHERRYSWAP TESTS   *
      *************************/
-
+/*
     context("Swap pricing calculation Math (CherrySwap contract)", async () => {
       it("Correctly calculates the fixed rate offer given to swaps", async () => {});
       it("Correctly calculates the floating value", async () => {});
@@ -242,7 +246,7 @@ contract(
       it("Trader can rage quite and get correct pay out", async () => {});
       it("Pool balance changes correctly after exit", async () => {});
     });
-
+*/
     /*************************
      *   INTEGRATION TESTS   *
      *************************/
