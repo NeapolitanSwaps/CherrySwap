@@ -266,8 +266,8 @@ contract CherryPool is Initializable {
         poolcTokenProfit += _profit;
     }
 
-    function getcTokenExchangeRate() public returns (uint256) {
-        return cToken.exchangeRateCurrent();
+    function getcTokenExchangeRate() public view returns (uint256) {
+        return cToken.exchangeRateStored();
     }
 
 }
