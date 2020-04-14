@@ -9,10 +9,8 @@ const Position = lazy(() => import("./Position"));
 
 const AppWrapper = styled.div`
   display: flex;
-  flex-flow: column;
-  height: 100vh;
-  max-width: 45rem;
-  margin: 2vh auto;
+  flex-direction: column;
+  align-items: center;
 `;
 
 const App = () => {

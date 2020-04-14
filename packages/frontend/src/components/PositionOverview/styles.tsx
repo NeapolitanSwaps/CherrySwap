@@ -2,15 +2,14 @@ import styled from "styled-components";
 
 export const PositionOverview = styled.div`
   background-color: #fff;
-  margin-top: 16px;
+  margin-top: 1rem;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 16px;
+  padding: 1rem;
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 18px;
   width: 100%;
-  border: 1px solid ${props => props.theme.backgroundAccent};
 `;
 
 export const ItemTitle = styled.span``;

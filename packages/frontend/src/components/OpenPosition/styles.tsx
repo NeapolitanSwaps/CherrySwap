@@ -4,16 +4,15 @@ export const OpenPosition = styled.div`
   background-color: ${props => props.theme.backgroundPink};
   display: flex;
   flex-direction: column;
-  padding: 10px;
+  padding: 0.75rem;
   border-radius: 25px;
   box-sizing: border-box;
 `;
 
 export const Wrapper = styled.div`
   background-color: #fff;
-  border: 1px solid ${props => props.theme.backgroundAccent};
-  border-radius: 10px;
-  padding: 16px;
+  border-radius: 18px;
+  padding: 1rem;
   margin: 8px 0 0 0;
   box-sizing: border-box;
 `;
@@ -23,10 +22,16 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   height: 40px;
-  padding: 0 16px;
+  padding: 0 1rem;
 `;
 
-export const HeaderTitle = styled.span``;
+export const HeaderTitle = styled.span`
+  background: #bbb;
+  padding: 0.5rem 1rem;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  color: #fff;
+`;
 
 export const Body = styled.div`
   display: flex;
@@ -71,8 +76,8 @@ export const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
   border-top: ${({ theme }) => `1px solid ${theme.greyAlpha}}`};
-  margin: 16px 0 0 0;
-  padding: 16px 0 0 0;
+  margin: 1rem 0 0 0;
+  padding: 1rem 0 0 0;
 `;
 
 export const ButtonWrapper = styled.div`

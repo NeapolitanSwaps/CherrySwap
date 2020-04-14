@@ -1,6 +1,7 @@
 import React from "react";
 import OpenPosition from "../../components/OpenPosition";
 import { Props as PositionOverviewProps } from "../../components/OpenPosition";
+import * as S from "./styles";
 
 const Position = () => {
   const item: PositionOverviewProps = {
@@ -19,11 +20,17 @@ const Position = () => {
     }
   };
   return (
-    <>
+    <S.Position>
+      <OpenPosition {...item} />
+      <br /> {/* temporary for now */}
+      <OpenPosition {...item} />
+      <br /> {/* temporary for now */}
+      <OpenPosition {...item} />
+      <br /> {/* temporary for now */}
       <OpenPosition {...item} />
       <br /> {/* temporary for now */}
       {/* <OpenPosition {...item} /> */}
-    </>
+    </S.Position>
   );
 };
 

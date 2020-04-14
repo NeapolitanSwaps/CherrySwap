@@ -30,9 +30,7 @@ const MarketHeader = (props: MarketHeaderProps) => {
   return (
     <S.MarketHeader>
       <S.MarketHeaderTitle>Market Overview</S.MarketHeaderTitle>
-      <S.MarketHeaderTitle>
-        Liquidity: {formatCurrency(liquidity, "DAI")}
-      </S.MarketHeaderTitle>
+      <S.MarketHeaderTitle>Liquidity: {formatCurrency(liquidity, "DAI")}</S.MarketHeaderTitle>
       <S.MarketHeaderTitle>
         Current IR (Compound):
         <span> {formatInterestRate(interestRate)}</span>
@@ -56,18 +54,10 @@ const MarketBody = (props: MarketBodyProps) => {
         <span>Short</span>
         <span>Long</span>
       </S.MarketBody>
-      <ProgressBar
-        shortPercentage={shortPercentage}
-        longPercentage={longPercentage}
-        width={width}
-      />
+      <ProgressBar shortPercentage={shortPercentage} longPercentage={longPercentage} width={width} />
       <S.MarketBody>
-        <S.MarketBodyBalanceTitle short>
-          {formatCurrency(shortPoolBalance, "DAI")}
-        </S.MarketBodyBalanceTitle>
-        <S.MarketBodyBalanceTitle>
-          {formatCurrency(longPoolBalance, "DAI")}
-        </S.MarketBodyBalanceTitle>
+        <S.MarketBodyBalanceTitle short>{formatCurrency(shortPoolBalance, "DAI")}</S.MarketBodyBalanceTitle>
+        <S.MarketBodyBalanceTitle>{formatCurrency(longPoolBalance, "DAI")}</S.MarketBodyBalanceTitle>
       </S.MarketBody>
     </div>
   );
@@ -83,12 +73,8 @@ const ProgressBar = ({
   width: number;
 }) => (
   <S.ProgressBar>
-    <S.ProgressBarPercentage>
-      {shortPercentage.toFixed(0)}%
-    </S.ProgressBarPercentage>
-    <S.ProgressBarPercentage>
-      {longPercentage.toFixed(0)}%
-    </S.ProgressBarPercentage>
+    <S.ProgressBarPercentage>{shortPercentage.toFixed(0)}%</S.ProgressBarPercentage>
+    <S.ProgressBarPercentage>{longPercentage.toFixed(0)}%</S.ProgressBarPercentage>
     <S.Bar width={width}>
       <S.ColoredBar percentage={shortPercentage} position={"left"} />
     </S.Bar>

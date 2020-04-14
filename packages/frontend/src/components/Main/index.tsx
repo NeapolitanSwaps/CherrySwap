@@ -2,19 +2,13 @@ import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import Toggle from "../elements/Toggle";
 import Button from "../elements/Button";
-import MarketOverview, {
-  Props as MarketOverviewProps
-} from "../MarketOverview";
+import MarketOverview, { Props as MarketOverviewProps } from "../MarketOverview";
 import Deposit from "../Deposit";
 import * as S from "./styles";
-import PositionOverview, {
-  Props as PositionOverviewProps
-} from "../PositionOverview";
+import PositionOverview, { Props as PositionOverviewProps } from "../PositionOverview";
 
 const Main = () => {
-  const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(
-    0
-  );
+  const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
 
   const userInput = useRef<string>("");
 
@@ -28,7 +22,7 @@ const Main = () => {
   const marketOverview: MarketOverviewProps = {
     providerStats: {
       longPoolBalance: 3200,
-      shortPoolBalance: 3200
+      shortPoolBalance: 1800
     },
     marketStats: {
       liquidity: 77332222,
@@ -44,11 +38,7 @@ const Main = () => {
 
   return (
     <S.Main>
-      <Toggle
-        onClick={toggleState}
-        currentIndex={positionSelectionIndex}
-        titles={positionTitles}
-      />
+      <Toggle onClick={toggleState} currentIndex={positionSelectionIndex} titles={positionTitles} />
       {/* <br />
       <div>
         <Button state={"primary"} title={"Pending"} />

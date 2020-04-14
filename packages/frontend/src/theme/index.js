@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  ThemeProvider as StyledComponentsThemeProvider,
-  createGlobalStyle,
-  css
-} from "styled-components";
+import { ThemeProvider as StyledComponentsThemeProvider, createGlobalStyle, css } from "styled-components";
 
 const MEDIA_WIDTHS = {
   upToSmall: 600,
@@ -11,24 +7,17 @@ const MEDIA_WIDTHS = {
   upToLarge: 1280
 };
 
-const mediaWidthTemplates = Object.keys(MEDIA_WIDTHS).reduce(
-  (accumulator, size) => {
-    accumulator[size] = (...args) => css`
-      @media (max-width: ${MEDIA_WIDTHS[size]}px) {
-        ${css(...args)}
-      }
-    `;
-    return accumulator;
-  },
-  {}
-);
+const mediaWidthTemplates = Object.keys(MEDIA_WIDTHS).reduce((accumulator, size) => {
+  accumulator[size] = (...args) => css`
+    @media (max-width: ${MEDIA_WIDTHS[size]}px) {
+      ${css(...args)}
+    }
+  `;
+  return accumulator;
+}, {});
 
 export default function ThemeProvider({ children }) {
-  return (
-    <StyledComponentsThemeProvider theme={theme(false)}>
-      {children}
-    </StyledComponentsThemeProvider>
-  );
+  return <StyledComponentsThemeProvider theme={theme(false)}>{children}</StyledComponentsThemeProvider>;
 }
 
 const theme = darkMode => ({
@@ -37,13 +26,16 @@ const theme = darkMode => ({
   cherry: "#db1935",
 
   backgroundColor: "#fff",
-  backgroundPink: "#FCEBEB",
+  backgroundPink: "#FCEBEB77",
   backgroundAccent: "#EFB9B9",
 
+  textMedium: "#623c46",
   textDark: "#461220",
 
   redGradient: "linear-gradient(to right, #00E93C, #00E9CC, #009471)",
   greenGradient: "linear-gradient(to right, #DB1935, #B735B4, #7F16DB)",
+
+  // I need to rename these ...
 
   // Main theme colors:
   primaryPink: "#FFEBE2",
@@ -51,8 +43,9 @@ const theme = darkMode => ({
   toggleSecondary: "#EFB9B9",
   green: "#41C61C",
 
-  greyAlpha: "rgba(70, 18, 32, 0.2)",
+  greyAlpha: "rgba(70, 18, 32, 0.10)",
   darkCherry: "#461220",
+  lighterCherry: "#B23A48",
 
   // Media queries
   mediaWidth: mediaWidthTemplates,
@@ -93,7 +86,7 @@ export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 16px;
     font-variant: none;
-    color: ${({ theme }) => theme.textDark};
+    color: ${({ theme }) => theme.textMedium};
     background-color: ${({ theme }) => theme.backgroundColor};
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

@@ -48,7 +48,7 @@ const Header = ({ position }: { position: string }) => (
     <S.HeaderTitle>
       <b>{`${position} Position`}</b>
     </S.HeaderTitle>
-    <S.HeaderTitle>View Transaction</S.HeaderTitle>
+    View Transaction
   </S.Header>
 );
 
@@ -93,7 +93,7 @@ const Body = (props: BodyProps) => {
 const Footer = () => (
   <S.Footer>
     <S.ButtonWrapper>
-      <Button title={"Withdraw Now"} />
+      <Button title={"Withdraw"} />
     </S.ButtonWrapper>
   </S.Footer>
 );
