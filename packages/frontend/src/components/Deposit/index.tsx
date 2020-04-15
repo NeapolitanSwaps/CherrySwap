@@ -1,6 +1,7 @@
 import React from "react";
 import * as S from "./styles";
 import { formatCurrency } from "../../utils";
+import cdaiIcon from "../../assets/cdai.png";
 
 interface DepositProps {
   onTextInput: (input: string) => void;
@@ -55,7 +56,7 @@ const DepositBody = (props: any) => {
 const CurrencySelector = (props: any) => {
   return (
     <div>
-      <img src="" alt="image" />
+      <img src={cdaiIcon} alt="image" style={{ width: 32, aspectRatio: "1" }} />
       <span>cDAI</span>
     </div>
   );
