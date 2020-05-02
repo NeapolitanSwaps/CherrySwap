@@ -4,11 +4,10 @@ Cherry Swap is an autonomous, open-source platform for interest rate swaps on Co
 
 ![](./additionalResources/ScreenImage2.png)
 
-This monorepo contains the following packages:
+## ETHBERLINZWEI Winners
 
-- **[front-end](packages/front-end)**: Cherryswap interface
-- **[smart-contracts](packages/smart-contracts)**: Cherryswap V2 contracts
-- **[shared](packages/shared)**: Scripts package
+- [TheBlock write up](https://www.theblockcrypto.com/genesis/38113/ethberlin-interest-rate-hackathon-projects)
+- [Interest Rate Swaps Coming to DeFi with Cherry Swap](https://cryptobriefing.com/interest-rate-swaps-coming-defi-cherry-swap/)
 
 ## Table of Contents
 
@@ -31,7 +30,7 @@ This monorepo contains the following packages:
 
 ---
 
-## Links
+## Resources
 
 [Cherryswap V2 Paper:Double bonding curve liquidity pool as an automatic swap market maker](https://www.notion.so/neapolitan/Double-bonding-curve-liquidity-pool-as-an-automatic-swap-market-maker-e6f2eb5001244ed89832789e07e1ca71)
 
@@ -74,6 +73,12 @@ The contract addresses deployed on `Mainnet` Mainnet:
 ## Technical Description
 
 ## Local Development
+
+This monorepo contains the following packages:
+
+- **[front-end](packages/front-end)**: Cherryswap interface
+- **[smart-contracts](packages/smart-contracts)**: Cherryswap V2 contracts
+- **[shared](packages/shared)**: Scripts package
 
 Node.js LTS or greater required.
 
