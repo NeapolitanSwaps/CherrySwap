@@ -1,6 +1,6 @@
 # MinterRole.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/access/roles/MinterRole.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/access/roles/MinterRole.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/access/roles/MinterRole.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/access/roles/MinterRole.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [Context](Context.md)**
 **↘ Derived Contracts: [ERC20Mintable](ERC20Mintable.md)**

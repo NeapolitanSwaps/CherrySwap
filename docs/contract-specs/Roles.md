@@ -1,6 +1,6 @@
 # Roles (Roles.sol)
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/access/Roles.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/access/Roles.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/access/Roles.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/access/Roles.sol)
 
 **Roles**
 

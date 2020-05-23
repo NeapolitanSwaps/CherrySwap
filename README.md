@@ -33,7 +33,7 @@ Cherry Swap is an autonomous, open-source platform for interest rate swaps on Co
 ## Resources
 
 - [Cherryswap V2 Paper:Double bonding curve liquidity pool as an automatic swap market maker](https://www.notion.so/neapolitan/Double-bonding-curve-liquidity-pool-as-an-automatic-swap-market-maker-e6f2eb5001244ed89832789e07e1ca71)
-- [Smart Contract Documentation](packages/docs/contract-specs/CherrySwap.md)
+- [Smart Contract Documentation](docs/contract-specs/CherrySwap.md)
 
 ## Our Team
 

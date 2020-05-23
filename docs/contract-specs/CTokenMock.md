@@ -1,6 +1,6 @@
 # CTokenMock.sol
 
-View Source: [contracts/mocks/CTokenMock.sol](../../smart-contracts/contracts/mocks/CTokenMock.sol)
+View Source: [contracts/mocks/CTokenMock.sol](../../packages/smart-contracts/contracts/mocks/CTokenMock.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [ERC20](ERC20.md)**
 

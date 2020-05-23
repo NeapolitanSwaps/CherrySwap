@@ -1,6 +1,6 @@
 # ICERC20.sol
 
-View Source: [contracts/interface/ICERC20.sol](../../smart-contracts/contracts/interface/ICERC20.sol)
+View Source: [contracts/interface/ICERC20.sol](../../packages/smart-contracts/contracts/interface/ICERC20.sol)
 
 **ICERC20**
 

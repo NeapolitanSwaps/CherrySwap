@@ -1,6 +1,6 @@
 # ISwapMath.sol
 
-View Source: [contracts/interface/ISwapMath.sol](../../smart-contracts/contracts/interface/ISwapMath.sol)
+View Source: [contracts/interface/ISwapMath.sol](../../packages/smart-contracts/contracts/interface/ISwapMath.sol)
 
 **ISwapMath**
 

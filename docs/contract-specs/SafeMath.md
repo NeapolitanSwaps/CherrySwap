@@ -1,6 +1,6 @@
 # SafeMath.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/math/SafeMath.sol)
 
 **SafeMath**
 

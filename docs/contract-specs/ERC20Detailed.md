@@ -1,6 +1,6 @@
 # ERC20Detailed.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Detailed.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [IERC20](IERC20.md)**
 **↘ Derived Contracts: [CherryDai](CherryDai.md)**

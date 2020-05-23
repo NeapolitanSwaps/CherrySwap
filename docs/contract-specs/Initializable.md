@@ -1,7 +1,7 @@
 # Initializable
  * (Initializable.sol)
 
-View Source: [@openzeppelin/upgrades/contracts/Initializable.sol](../../smart-contracts/@openzeppelin/upgrades/contracts/Initializable.sol)
+View Source: [@openzeppelin/upgrades/contracts/Initializable.sol](../../packages/smart-contracts/@openzeppelin/upgrades/contracts/Initializable.sol)
 
 **↘ Derived Contracts: [CherryDai](CherryDai.md), [CherryMath](CherryMath.md), [CherryPool](CherryPool.md), [CherrySwap](CherrySwap.md), [Context](Context.md), [CTokenMock](CTokenMock.md), [ERC20](ERC20.md), [ERC20Burnable](ERC20Burnable.md), [ERC20Detailed](ERC20Detailed.md), [ERC20Mintable](ERC20Mintable.md), [Migrations](Migrations.md), [MinterRole](MinterRole.md)**
 

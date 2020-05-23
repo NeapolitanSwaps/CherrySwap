@@ -1,6 +1,6 @@
 # ERC20Burnable.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Burnable.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [Context](Context.md), [ERC20](ERC20.md)**
 **↘ Derived Contracts: [CherryDai](CherryDai.md)**

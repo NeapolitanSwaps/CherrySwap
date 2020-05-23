@@ -1,6 +1,6 @@
 # IERC20.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/IERC20.sol)
 
 **↘ Derived Contracts: [ERC20](ERC20.md), [ERC20Detailed](ERC20Detailed.md)**
 

@@ -1,6 +1,6 @@
 {
     "pathToRoot": "./",
-    "outputPath": "../docs/contract-specs",
+    "outputPath": "../../docs/contract-specs",
     "noCompilation": true,
     "compiler": "truffle compile",
     "language": "en"

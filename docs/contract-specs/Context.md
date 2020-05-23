@@ -1,6 +1,6 @@
 # Context.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/GSN/Context.sol)
 
 **↗ Extends: [Initializable](Initializable.md)**
 **↘ Derived Contracts: [ERC20](ERC20.md), [ERC20Burnable](ERC20Burnable.md), [MinterRole](MinterRole.md)**

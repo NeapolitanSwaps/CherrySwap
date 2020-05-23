@@ -1,6 +1,6 @@
 # TokenMock.sol
 
-View Source: [contracts/mocks/TokenMock.sol](../../smart-contracts/contracts/mocks/TokenMock.sol)
+View Source: [contracts/mocks/TokenMock.sol](../../packages/smart-contracts/contracts/mocks/TokenMock.sol)
 
 **↗ Extends: [ERC20](ERC20.md)**
 

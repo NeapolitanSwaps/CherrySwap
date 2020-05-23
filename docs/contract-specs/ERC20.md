@@ -1,6 +1,6 @@
 # ERC20.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [Context](Context.md), [IERC20](IERC20.md)**
 **↘ Derived Contracts: [CTokenMock](CTokenMock.md), [ERC20Burnable](ERC20Burnable.md), [ERC20Mintable](ERC20Mintable.md), [TokenMock](TokenMock.md)**

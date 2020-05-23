@@ -1,6 +1,6 @@
 # Migrations.sol
 
-View Source: [contracts/Migrations.sol](../../smart-contracts/contracts/Migrations.sol)
+View Source: [contracts/Migrations.sol](../../packages/smart-contracts/contracts/Migrations.sol)
 
 **↗ Extends: [Initializable](Initializable.md)**
 

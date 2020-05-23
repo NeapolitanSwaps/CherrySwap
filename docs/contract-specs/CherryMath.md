@@ -1,6 +1,6 @@
 # CherryMath.sol
 
-View Source: [contracts/CherryMath.sol](../../smart-contracts/contracts/CherryMath.sol)
+View Source: [contracts/CherryMath.sol](../../packages/smart-contracts/contracts/CherryMath.sol)
 
 **↗ Extends: [Initializable](Initializable.md)**
 

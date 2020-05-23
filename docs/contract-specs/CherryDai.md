@@ -1,6 +1,6 @@
 # CherryDai.sol
 
-View Source: [contracts/token/CherryDai.sol](../../smart-contracts/contracts/token/CherryDai.sol)
+View Source: [contracts/token/CherryDai.sol](../../packages/smart-contracts/contracts/token/CherryDai.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [ERC20Detailed](ERC20Detailed.md), [ERC20Mintable](ERC20Mintable.md), [ERC20Burnable](ERC20Burnable.md)**
 

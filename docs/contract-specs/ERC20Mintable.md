@@ -1,6 +1,6 @@
 # ERC20Mintable.sol
 
-View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol](../../smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol)
+View Source: [@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol](../../packages/smart-contracts/@openzeppelin/contracts-ethereum-package/contracts/token/ERC20/ERC20Mintable.sol)
 
 **↗ Extends: [Initializable](Initializable.md), [ERC20](ERC20.md), [MinterRole](MinterRole.md)**
 **↘ Derived Contracts: [CherryDai](CherryDai.md)**

@@ -1,6 +1,6 @@
 # CherryPool Contract (CherryPool.sol)
 
-View Source: [contracts/CherryPool.sol](../../smart-contracts/contracts/CherryPool.sol)
+View Source: [contracts/CherryPool.sol](../../packages/smart-contracts/contracts/CherryPool.sol)
 
 **↗ Extends: [Initializable](Initializable.md)**
 **↘ Derived Contracts: [CherrySwap](CherrySwap.md)**
