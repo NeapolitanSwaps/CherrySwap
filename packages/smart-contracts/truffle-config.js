@@ -25,7 +25,7 @@ module.exports = {
       gasPrice: 10000000000 // default = 100 gwei = 100000000000
     }
   },
-  plugins: ["solidity-coverage"],
+  plugins: ["solidity-coverage", "truffle-security"],
   compilers: {
     solc: {
       version: "0.5.12",
