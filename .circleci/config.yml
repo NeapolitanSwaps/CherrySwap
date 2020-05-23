@@ -16,28 +16,29 @@ jobs:
     steps: 
       - checkout 
       - restore_cache:
-          name: Restore Yarn Package Cache
-          keys:
-            - yarn-packages-{{ checksum "yarn.lock" }}
+        name: Restore Yarn Package Cache
+        keys:
+          - yarn-packages-{{ checksum "yarn.lock" }}
       - run:
-          name: Install Dependencies
-          command: yarn install
+        name: Install Dependencies
+        command: yarn install
       - save_cache:
-          name: Save Yarn Package Cache
-          key: yarn-packages-{{ checksum "yarn.lock" }}
-          paths:
-            - ./node_modules
+        name: Save Yarn Package Cache
+        key: yarn-packages-{{ checksum "yarn.lock" }}
+        paths:
+          - ./node_modules
       - run:
-          name: test solidity smart contracts
-          command: cd ./packages/smart-contracts/ && yarn run test
+        name: test solidity smart contracts
+        command: cd ./packages/smart-contracts/ && yarn run test
       - run:
-          name: Produce Coverage Report
-          command: yarn run contracts:coverage
-      - coveralls/upload
+        name: Produce Coverage Report
+        command: yarn run contracts:coverage
+      - coveralls/upload:
+        path_to_lcov: ./packages/smart-contracts/coverage/lcov.info
       - store_artifacts:
-          path: /packages/smart-contracts/coverage
+        path: /packages/smart-contracts/coverage
       - store_artifacts:
-          path: /packages/smart-contracts/coverage.json
+        path: /packages/smart-contracts/coverage.json
       - store_artifacts:
-          path: test-results.xml
-          prefix: tests
+        path: test-results.xml
+        prefix: tests
