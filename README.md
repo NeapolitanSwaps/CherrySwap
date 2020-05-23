@@ -1,4 +1,4 @@
-# Cherryswap-monorepo [![CircleCI](https://circleci.com/gh/NeapolitanSwaps/CherrySwap/tree/master.svg?style=svg)](https://circleci.com/gh/NeapolitanSwaps/CherrySwap/tree/master)
+# Cherryswap-monorepo [![CircleCI](https://circleci.com/gh/NeapolitanSwaps/CherrySwap/tree/master.svg?style=svg)](https://circleci.com/gh/NeapolitanSwaps/CherrySwap/tree/master) [![Coverage Status](https://coveralls.io/repos/github/NeapolitanSwaps/CherrySwap/badge.svg?branch=master)](https://coveralls.io/github/NeapolitanSwaps/CherrySwap?branch=master)
 
 Cherry Swap is an autonomous, open-source platform for interest rate swaps on Compound Finance markets.
 
