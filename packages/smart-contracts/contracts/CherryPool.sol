@@ -12,7 +12,7 @@ import "./CherryMath.sol";
 
 /**
  * @title CherryPool Contract
- * @dev This contract handle Cherry Pool functionalities
+ * @notice This contract handle Cherry Pool functionalities
  */
 contract CherryPool is Initializable {
     using SafeMath for uint256;
@@ -44,7 +44,7 @@ contract CherryPool is Initializable {
     event SetCherryDai(address cherryDai);
 
     /**
-     * @dev Initialize contract states
+     * @notice Initialize contract states
      */
     function initialize(address _token, address _cToken, address _cherryMath) public initializer {
         owner = msg.sender;
@@ -55,7 +55,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Modifier to check if long pool is not fully utilized
+     * @notice Modifier to check if long pool is not fully utilized
      */
     modifier isLongUtilized() {
         require(calcLongPoolUtil(longPoolReserved) < 1e18, "Cherrypool::long pool if fully utilized");
@@ -63,7 +63,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Modifier to check if short pool is not fully utilized
+     * @notice Modifier to check if short pool is not fully utilized
      */
     modifier isShortUtilized() {
         require(calcShortPoolUtil(shortPoolReserved) < 1e18, "Cherrypool::short pool is fully utilized");
@@ -81,7 +81,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev adds liquidity to the cherry pool to offer swaps against
+     * @notice adds liquidity to the cherry pool to offer swaps against
      * @param _amount amount of deposited DAI
      * @return cherryDaiToMint amount of minted CherryDai
      */
@@ -122,7 +122,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Get long pool utilization
+     * @notice Get long pool utilization
      * @param _longPoolReserved amount of liquidity reserved in the long pool
      * @return current long pool utilization as a decimal scaled 10*18
      */
@@ -131,7 +131,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Get short pool utilization
+     * @notice Get short pool utilization
      * @param _shortPoolReserved amount of liquidity reserved in the short pool
      * @return current short pool utilization as a decimal scaled 10*18
      */
@@ -140,7 +140,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Get Cherrydai balance for liquidity provider
+     * @notice Get Cherrydai balance for liquidity provider
      * @param _provider liquidity provider address
      * @return CherryDai balance
      */
@@ -149,8 +149,8 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev transfer underlying asset back to liquidity provider assuming pool liquidity is still sufficient.
-     * @notice the amount returned is the number of cherrytokens multiplied by the current exchange rate
+     * @notice transfer underlying asset back to liquidity provider assuming pool liquidity is still sufficient.
+     * @dev the amount returned is the number of cherrytokens multiplied by the current exchange rate
      * The sender should approve the _amount to this contract address
      * @param _amount amount of CherryDai to redeem
      * @return daiRedeemed amount of DAI redeemed
@@ -178,7 +178,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Get available pool balance (total pool balance - total reserved balance)
+     * @notice Get available pool balance (total pool balance - total reserved balance)
      * @return available pool balance
      */
     function getCashPrior() internal returns (uint256) {
@@ -186,7 +186,7 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Transfer the underlying asset
+     * @notice Transfer the underlying asset
      * @param _redeemer redeemer address
      * @param _redeemedDaiAmount amount of DAI to transfer
      * @param _redeemedCherryDaiTokens amount of CherryDAI to burn
@@ -205,8 +205,8 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev the rate of CherryDai redeemable for Dai.
-     * @notice Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
+     * @notice the rate of CherryDai redeemable for Dai.
+     * @dev Each CherryDai is convertible into the underlying asset + the fees accrued through liquidity provision.
      * @return rate Exchange rate
      */
     function exchangeRate() public returns (uint256) {
@@ -224,8 +224,8 @@ contract CherryPool is Initializable {
     }
 
     /**
-     * @dev Set CherryDai token address
-     * @notice can only be called by the owner
+     * @notice Set CherryDai token address
+     * @dev can only be called by the owner
      * @param _token CherryDai token address
      */
     function setToken(address _token) external {

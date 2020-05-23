@@ -6,7 +6,7 @@ import "./CherryPool.sol";
 
 /**
  * @title CherrySwap Contract
- * @dev Create, manage and store all interest rate swaps within the Cherryswap platform.
+ * @notice Create, manage and store all interest rate swaps within the Cherryswap platform.
  * Offers one side of a swap with the other taken by a liquidity pool. The offered rate is
  * a function of the pool demand (utilization) and the current floating rates.
  */
@@ -75,7 +75,7 @@ contract CherrySwap is Initializable, CherryPool {
     event FixedRateOffer(uint256 rate);
 
     /**
-     * @dev Initialize contract states
+     * @notice Initialize contract states
      */
     function initialize(address _token, address _cToken, address _cherryMath) public initializer {
         require(
@@ -89,11 +89,11 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-     * @dev function called by trader to enter into long swap position.
+     * @notice function called by trader to enter into long swap position.
      * In a long position the trader will pay a fixed rate and receive a floating rate.
      * Because the amount is unbounded for that paid to the long side (they receive a floating rate) an upper
      * bound is placed on the maximum amount that they can receive.
-     * @notice requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
+     * @dev requires long pool utilization < 100% and enough liquidity in the long pool to cover trader.
      * @param _amount the number of Dai that the buyer will pay for their long position
      */
     function createLongPosition(uint256 _amount) external isLongUtilized {
@@ -151,8 +151,8 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-     * @dev function called by trader to enter into short swap position.
-     * @notice requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
+     * @notice function called by trader to enter into short swap position.
+     * @dev requires short pool utlization < 100% and enough liquidity in the short pool to cover trader
      * @param _amount the number of Dai that the buyer will pay for their short position
      */
     function createShortPosition(uint256 _amount) external isShortUtilized {
@@ -207,8 +207,8 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-     * @dev traded withdraw from their position.
-     * @notice if the time is after the end of the swap then they will receive the swap rate for
+     * @notice traded withdraw from their position.
+     * @dev if the time is after the end of the swap then they will receive the swap rate for
      * the duration of the swap and then the floating market rate between the end of the
      * swap and the current time.
      * @param _swapId swap number
@@ -243,9 +243,9 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    * @dev calculate how much needs to be paid to the trader at end of swap
-    * @notice long offer swap where the liquidity pool is short: receiving a fixed rate and paying a floating rate
-    * @notice short offer swap the liquidity pool is long: receiving floating rate, paying fixed rate
+    * @notice calculate how much needs to be paid to the trader at end of swap
+    * @dev long offer swap where the liquidity pool is short: receiving a fixed rate and paying a floating rate
+    * @dev short offer swap the liquidity pool is long: receiving floating rate, paying fixed rate
     */
     function tokensToPayTrader(Swap memory _swap) internal returns (uint256) {
         //if the trader is long then they will pay fixed, receive float.
@@ -265,8 +265,8 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    * @dev at any point a trader in a swap can rage quite.
-    * @notice This will eject them from the position, free up liquidity and they walk away with some dai
+    * @notice at any point a trader in a swap can rage quite.
+    * @dev This will eject them from the position, free up liquidity and they walk away with some dai
     * however there is a heavy penalty in doing this!
      */
     function rageQuitSwap(uint256 _swapId) external returns (uint256) {
@@ -278,7 +278,7 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    * @dev calculate the offered fixed rate for swaps taken against the liquidity pool
+    * @notice calculate the offered fixed rate for swaps taken against the liquidity pool
     * in future this will be updated to consider the size of the positon. for now it's kept simple.
     * @param bet position bet (long or short)
     * @return _fixedRateOffer offered fixed rate
@@ -302,8 +302,8 @@ contract CherrySwap is Initializable, CherryPool {
     }
 
     /**
-    * @dev given the starting and end exchange rate of a cToken calculate the final valuation of the position
-    * @notice this acts to scale the amount by the change in exchange rate seen by the cToken.
+    * @notice given the starting and end exchange rate of a cToken calculate the final valuation of the position
+    * @dev this acts to scale the amount by the change in exchange rate seen by the cToken.
     * If the starting cToken exchange rate is stored and the end rate is known then this function returns
     * the value that _amount has grown by.
     * @param _startingExchangeRate starting cToken exchange rate
