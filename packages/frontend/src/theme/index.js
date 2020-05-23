@@ -1,5 +1,5 @@
 import React from "react";
-import { ThemeProvider as StyledComponentsThemeProvider, createGlobalStyle, css } from "styled-components";
+import { createGlobalStyle, css, ThemeProvider as StyledComponentsThemeProvider } from "styled-components";
 
 const MEDIA_WIDTHS = {
   upToSmall: 600,
@@ -21,31 +21,38 @@ export default function ThemeProvider({ children }) {
 }
 
 const theme = darkMode => ({
+  maxWidth: "640px",
+
   white: "#fff",
   black: "#000",
-  cherry: "#db1935",
 
   backgroundColor: "#fff",
   backgroundPink: "#FCEBEB77",
-  backgroundAccent: "#EFB9B9",
 
-  textMedium: "#623c46",
-  textDark: "#461220",
+  textMedium: "#3B1C32",
 
-  redGradient: "linear-gradient(to right, #00E93C, #00E9CC, #009471)",
-  greenGradient: "linear-gradient(to right, #DB1935, #B735B4, #7F16DB)",
+  leftGradient: "linear-gradient(to right, #FFC0CB , #FFC0CB, #EFBCE3)",
+  rightGradient: "linear-gradient(to right, #EFBCE3, #CCE8CC , #CCE8CC)",
 
   // I need to rename these ...
 
   // Main theme colors:
-  primaryPink: "#FFEBE2",
-  togglePrimary: "#db1935",
-  toggleSecondary: "#EFB9B9",
   green: "#41C61C",
 
-  greyAlpha: "rgba(70, 18, 32, 0.10)",
-  darkCherry: "#461220",
-  lighterCherry: "#B23A48",
+  greyAlpha: "rgba(70, 18, 32, 0.05)",
+
+
+  pink_00: "#FFC0CB",
+  pink_10: "#C76D7E",
+  pink_20: "#DE3163",
+
+  red_00: "#db1935",
+  red_10: "#461220",
+
+  grey_00: "#edeef2",
+  grey_10: "#888D9B",
+
+  purple_00: "#3B1C32", // dark
 
   // Media queries
   mediaWidth: mediaWidthTemplates,
@@ -81,7 +88,7 @@ export const GlobalStyle = createGlobalStyle`
     height: 100%;
     overflow: auto;
     -webkit-overflow-scrolling: touch;
-}
+  }
 
   html {
     font-size: 16px;
@@ -104,11 +111,12 @@ export const GlobalStyle = createGlobalStyle`
   select,
   textarea,
   button {
-    font-family: inherit; /* 1 */
-    font-size: 100%; /* 1 */
-    line-height: 1.15; /* 1 */
-    margin: 0; /* 2 */
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15; 
+    margin: 0; 
     border: 0;
+    background: transparent;
   }
 
   ul {

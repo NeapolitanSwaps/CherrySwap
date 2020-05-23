@@ -1,20 +1,18 @@
 import React from "react";
 import logo from "../../assets/svg/logo.svg";
-
 import * as S from "./styles";
-import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
     <S.Header>
       <S.Navigation>
-        <Link to="/">
+        <S.CherryLink to="/">
           <S.Logo src={logo} alt={"logo"} />
-        </Link>
+        </S.CherryLink>
         <div>
-          <Link to="/position" style={{ marginRight: 24, textDecoration: "none", color: "#000" }}>
+          <S.PositionLink to="/position">
             Positions
-          </Link>
+          </S.PositionLink>
           <S.Button onClick={() => alert("hi")}>Connect</S.Button>
         </div>
       </S.Navigation>

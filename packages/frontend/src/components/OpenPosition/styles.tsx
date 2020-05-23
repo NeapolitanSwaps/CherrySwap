@@ -7,6 +7,7 @@ export const OpenPosition = styled.div`
   padding: 0.75rem;
   border-radius: 25px;
   box-sizing: border-box;
+  margin-bottom: 1.5rem;
 `;
 
 export const Wrapper = styled.div`
@@ -26,11 +27,12 @@ export const Header = styled.div`
 `;
 
 export const HeaderTitle = styled.span`
-  background: #bbb;
+  background: ${({ theme }) => theme.grey_00};
+  color: ${({ theme }) => theme.grey_10};
   padding: 0.5rem 1rem;
   box-sizing: border-box;
   border-radius: 1rem;
-  color: #fff;
+  font-weight: bold;
 `;
 
 export const Body = styled.div`

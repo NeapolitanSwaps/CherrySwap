@@ -29,10 +29,9 @@ const MarketHeader = (props: MarketHeaderProps) => {
   const { liquidity, interestRate } = props;
   return (
     <S.MarketHeader>
-      <S.MarketHeaderTitle>Market Overview</S.MarketHeaderTitle>
-      <S.MarketHeaderTitle>Liquidity: {formatCurrency(liquidity, "DAI")}</S.MarketHeaderTitle>
+      <S.MarketHeaderTitle bold={true}>Current Pool</S.MarketHeaderTitle>
       <S.MarketHeaderTitle>
-        Current IR (Compound):
+        Interest Rate:
         <span> {formatInterestRate(interestRate)}</span>
       </S.MarketHeaderTitle>
     </S.MarketHeader>
@@ -50,14 +49,10 @@ const MarketBody = (props: MarketBodyProps) => {
 
   return (
     <div ref={ref}>
-      <S.MarketBody>
-        <span>Short</span>
-        <span>Long</span>
-      </S.MarketBody>
       <ProgressBar shortPercentage={shortPercentage} longPercentage={longPercentage} width={width} />
       <S.MarketBody>
-        <S.MarketBodyBalanceTitle short>{formatCurrency(shortPoolBalance, "DAI")}</S.MarketBodyBalanceTitle>
-        <S.MarketBodyBalanceTitle>{formatCurrency(longPoolBalance, "DAI")}</S.MarketBodyBalanceTitle>
+        <S.MarketBodyBalanceTitle short><b>Short:</b>{` ${formatCurrency(shortPoolBalance, "DAI")}`}</S.MarketBodyBalanceTitle>
+        <S.MarketBodyBalanceTitle><b>Long:</b>{` ${formatCurrency(longPoolBalance, "DAI")}`}</S.MarketBodyBalanceTitle>
       </S.MarketBody>
     </div>
   );

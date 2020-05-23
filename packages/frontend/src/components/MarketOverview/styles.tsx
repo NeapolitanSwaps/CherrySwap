@@ -14,11 +14,12 @@ export const MarketHeader = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 1rem 0;
-  border-bottom: ${props => `1px solid ${props.theme.greyAlpha}`};
 `;
 
-export const MarketHeaderTitle = styled.span`
-  color: #623c46;
+export const MarketHeaderTitle = styled.span < { bold?: boolean }> `
+  color: ${({ theme }) => theme.textMedium};
+  font-weight: ${({ bold }) => bold ? 'bold' : 'normal'};
+  
   & span {
     font-weight: bold;
   }
@@ -31,7 +32,7 @@ export const MarketBody = styled.div`
 `;
 
 export const MarketBodyBalanceTitle = styled.span<{ short?: boolean }>`
-  color: ${({ short, theme }) => (short ? theme.togglePrimary : theme.green)};
+  color: ${({ short, theme }) => (short ? theme.red_00 : theme.green)};
 `;
 
 export const ProgressBar = styled.div`
@@ -42,14 +43,16 @@ export const ProgressBar = styled.div`
   height: 24px;
   align-items: center;
   justify-content: space-between;
+  padding: 0.25rem;
 
   & span {
     margin: 0 8px;
+    /* font-size: 0.75rem; */
   }
 `;
 
 export const ProgressBarPercentage = styled.span`
-  color: ${props => props.theme.darkCherry};
+  color: ${props => props.theme.red_10};
   z-index: 2;
 `;
 
@@ -80,7 +83,7 @@ export const ColoredBar = styled.div<{
     // 00E93C, #00E9CC, #009471)
     return `
       background: ${
-        !isLeft ? "linear-gradient(to right, #B735B4, #00E93C)" : "linear-gradient(to right, #DB1935, #B735B4)"
+      isLeft ? theme.leftGradient : theme.rightGradient
       };
       width: ${newPercentage}%;
       margin-left: ${isLeft ? `${50 - newPercentage}%` : "50%"};

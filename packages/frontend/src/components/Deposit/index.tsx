@@ -55,10 +55,10 @@ const DepositBody = (props: any) => {
 
 const CurrencySelector = (props: any) => {
   return (
-    <div>
+    <S.CurrencySelector>
       <img src={cdaiIcon} alt="cdai" style={{ width: 32, aspectRatio: "1" }} />
       <span>cDAI</span>
-    </div>
+    </S.CurrencySelector>
   );
 };
 

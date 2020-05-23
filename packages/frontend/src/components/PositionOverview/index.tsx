@@ -1,6 +1,6 @@
 import React from "react";
-import * as S from "./styles";
 import { formatInterestRate, formatTimestamp } from "../../utils";
+import * as S from "./styles";
 
 export interface Props {
   interestRate: number;
@@ -14,9 +14,9 @@ const PositionOverview = (props: Props) => {
   const formattedLockPeriod = formatTimestamp(lockPeriod);
   return (
     <S.PositionOverview>
-      <Item heading="Fixed interest rate (estimated)" body={`${formattedInterestRate} APR`} width={65} />
       <Item heading="Position" body={position} />
-      <Item heading="Lock period" body={formattedLockPeriod} />
+      <Item heading="Lock period" body={formattedLockPeriod} width={50} />
+      <Item heading="Fixed interest rate" body={`~ ${formattedInterestRate} APR`} />
     </S.PositionOverview>
   );
 };

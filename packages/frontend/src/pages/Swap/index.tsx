@@ -1,12 +1,12 @@
-import React, { useState, useRef } from "react";
-import Toggle from "../../components/elements/Toggle";
+import React, { useRef, useState } from "react";
 import Deposit from "../../components/Deposit";
+import Toggle from "../../components/elements/Toggle";
 import MarketOverview, { Props as MarketOverviewProps } from "../../components/MarketOverview";
 import PositionOverview, { Props as PositionOverviewProps } from "../../components/PositionOverview";
-
 import * as S from "./styles";
 
-const Index = () => {
+
+const Swap = () => {
 
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
 
@@ -43,13 +43,15 @@ const Index = () => {
       <MarketOverview {...marketOverview} />
       <Deposit
         onTextInput={input => {
+          console.log("INPUT", input);
           userInput.current = input;
         }}
         balance={10023}
       />
       <PositionOverview {...positionOverview} />
+
     </S.Main>
   )
 };
 
-export default Index;
+export default Swap;

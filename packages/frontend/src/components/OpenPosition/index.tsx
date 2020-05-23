@@ -39,7 +39,7 @@ const OpenPosition = (props: Props) => {
 const Header = ({ position }: { position: string }) => (
   <S.Header>
     <S.HeaderTitle>
-      <b>{`${position} Position`}</b>
+      {`${position} Position`}
     </S.HeaderTitle>
     View Transaction
   </S.Header>

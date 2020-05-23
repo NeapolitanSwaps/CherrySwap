@@ -8,6 +8,6 @@ export const Main = styled.div`
   padding: 0.75rem;
   border-radius: 25px;
   box-sizing: border-box;
-  max-width: 768px;
+  max-width: ${({ theme }) => theme.maxWidth};
   width: 100%;
 `;
