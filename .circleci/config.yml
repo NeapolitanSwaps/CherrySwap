@@ -27,7 +27,7 @@ jobs:
           command: cd ./packages/smart-contracts/ && yarn run test
       - run:
           name: Produce Coverage Report
-          command: npm run coverage
+          command: yarn run contracts:coverage
       - coveralls/upload
       - store_artifacts:
           path: /packages/smart-contracts/coverage
