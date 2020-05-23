@@ -1,13 +1,13 @@
 import React, { useState, useRef } from "react";
-import styled from "styled-components";
-import Toggle from "../elements/Toggle";
-import Button from "../elements/Button";
-import MarketOverview, { Props as MarketOverviewProps } from "../MarketOverview";
-import Deposit from "../Deposit";
-import * as S from "./styles";
-import PositionOverview, { Props as PositionOverviewProps } from "../PositionOverview";
+import Toggle from "../../components/elements/Toggle";
+import Deposit from "../../components/Deposit";
+import MarketOverview, { Props as MarketOverviewProps } from "../../components/MarketOverview";
+import PositionOverview, { Props as PositionOverviewProps } from "../../components/PositionOverview";
 
-const Main = () => {
+import * as S from "./styles";
+
+const Index = () => {
+
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
 
   const userInput = useRef<string>("");
@@ -39,11 +39,7 @@ const Main = () => {
   return (
     <S.Main>
       <Toggle onClick={toggleState} currentIndex={positionSelectionIndex} titles={positionTitles} />
-      {/* <br />
-      <div>
-        <Button state={"primary"} title={"Pending"} />
-        <Button state={"secondary"} title={"Pending"} />
-      </div> */}
+
       <MarketOverview {...marketOverview} />
       <Deposit
         onTextInput={input => {
@@ -53,7 +49,7 @@ const Main = () => {
       />
       <PositionOverview {...positionOverview} />
     </S.Main>
-  );
+  )
 };
 
-export default Main;
+export default Index;

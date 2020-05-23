@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const useResize = (myRef: any) => {
   const [width, setWidth] = useState(0);
@@ -12,14 +12,12 @@ export const useResize = (myRef: any) => {
   useEffect(() => {
     setWidth(myRef.current.clientWidth);
     setHeight(myRef.current.clientHeight);
-  }, []);
+  }, [myRef]);
 
   useEffect(() => {
     myRef.current && window.addEventListener("resize", handleResize);
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [myRef.current]);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   return { width, height };
 };

@@ -4,7 +4,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import styled from "styled-components";
 import Header from "../components/Header";
 
-const Swap = lazy(() => import("./Swap"));
+const Index = lazy(() => import("./Index"));
 const Position = lazy(() => import("./Position"));
 
 const AppWrapper = styled.div`
@@ -20,7 +20,7 @@ const App = () => {
         <Header />
         <Suspense fallback={null}>
           <Switch>
-            <Route exact strict path="/" component={() => <Swap />} />
+            <Route exact strict path="/" component={() => <Index />} />
             <Route exact strict path="/position" component={() => <Position />} />
           </Switch>
         </Suspense>

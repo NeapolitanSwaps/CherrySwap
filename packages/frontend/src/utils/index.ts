@@ -1,5 +1,5 @@
 import moment from "moment";
-export const formatInterestRate = (interestRate: number): string => `${interestRate / 100}\%`;
+export const formatInterestRate = (interestRate: number): string => `${interestRate / 100}%`;
 
 export const formatTimestamp = (timestamp: number) => {
   const a = new Date(timestamp * 1000);

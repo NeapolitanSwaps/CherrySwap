@@ -1,14 +1,7 @@
-import React, { useEffect, useState, useRef, Fragment } from "react";
-import * as S from "./styles";
+import React from "react";
+import { determineProfitLoss, formatCDAI, formatInterestRate, formatTimestampToDate } from "../../utils";
 import Button from "../elements/Button";
-import {
-  formatTimestamp,
-  formatCurrency,
-  formatInterestRate,
-  formatCDAI,
-  determineProfitLoss,
-  formatTimestampToDate
-} from "../../utils";
+import * as S from "./styles";
 
 export interface Props {
   header: HeaderProps;

@@ -1,7 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
-import { formatInterestRate, formatCurrency } from "../../utils";
-import * as S from "./styles";
+import React, { useRef } from "react";
 import { useResize } from "../../hooks";
+import { formatCurrency, formatInterestRate } from "../../utils";
+import * as S from "./styles";
 
 export interface Props {
   marketStats: MarketHeaderProps;
@@ -72,16 +72,16 @@ const ProgressBar = ({
   longPercentage: number;
   width: number;
 }) => (
-  <S.ProgressBar>
-    <S.ProgressBarPercentage>{shortPercentage.toFixed(0)}%</S.ProgressBarPercentage>
-    <S.ProgressBarPercentage>{longPercentage.toFixed(0)}%</S.ProgressBarPercentage>
-    <S.Bar width={width}>
-      <S.ColoredBar percentage={shortPercentage} position={"left"} />
-    </S.Bar>
-    <S.Bar width={width}>
-      <S.ColoredBar percentage={longPercentage} position={"right"} />
-    </S.Bar>
-  </S.ProgressBar>
-);
+    <S.ProgressBar>
+      <S.ProgressBarPercentage>{shortPercentage.toFixed(0)}%</S.ProgressBarPercentage>
+      <S.ProgressBarPercentage>{longPercentage.toFixed(0)}%</S.ProgressBarPercentage>
+      <S.Bar width={width}>
+        <S.ColoredBar percentage={shortPercentage} position={"left"} />
+      </S.Bar>
+      <S.Bar width={width}>
+        <S.ColoredBar percentage={longPercentage} position={"right"} />
+      </S.Bar>
+    </S.ProgressBar>
+  );
 
 export default MarketOverview;
