@@ -110,7 +110,7 @@ contract(
      *************************/
 
     context("Deposit Liquidity", async () => {
-      let _amountToDeposit = ether("100");
+      let _amountToDeposit = ether("50");
 
       it("Deposit liquidity into the pool(mint)👇", async () => {
         await token.approve(cherryswap.address, _amountToDeposit, {
@@ -140,21 +140,20 @@ contract(
         assert.equal(liquidityProviderCherryDaiBalanceBefore, 0);
 
         let cTokenExchangeRate = new BigNumber(await cherryswap.getcTokenExchangeRate());
-        console.log(cTokenExchangeRate.toString());
 
         // Mint tokens(deposit dai)
         let tx = await cherryswap.mint(_amountToDeposit, { from: provider1 });
         
         let cherryDaiExchangeRate = 0;
         truffleAssert.eventEmitted(tx, "CurrentExchangeRate", ev => {
-          console.log(ev.rate);
           cherryDaiExchangeRate = ev.rate;
           return ev;
         });
 
-        //let liquidityProviderCherryDaiBalanceAfter = await cherryDai.balanceOf(provider1);
-        //let expectedLiquidityProviderCHerryDaiBalanceAfter = (_amountToDeposit.mul(new BN(10**18))).div(cherryDaiExchangeRate);
-
+        let liquidityProviderCherryDaiBalanceAfter = await cherryDai.balanceOf(provider1);
+        let expectedLiquidityProviderCherryDaiBalanceAfter = new BN(_amountToDeposit).mul(new BN(10).pow(new BN(18))).div(new BN(cherryDaiExchangeRate));
+        assert.equal(liquidityProviderCherryDaiBalanceAfter.toString(), expectedLiquidityProviderCherryDaiBalanceAfter.toString(), "wrong minted CherryDai amount");
+        
         assert.equal((await cherryswap.poolBalance()).toString(), _amountToDeposit, "Wrong pool balance");
         assert.equal(
           (await cherryswap.longPoolBalance()).toString(),
@@ -167,11 +166,9 @@ contract(
           "Long and Short pool are not equal"
         );
 
-        //Relative state changes
         let poolcTokenBalanceAfter = await cToken.balanceOf(cherryswap.address);
-        console.log((new BigNumber(poolcTokenBalanceAfter).dividedBy(1e8)).toString());
-        console.log((new BigNumber(_amountToDeposit)).toString())//.multipliedBy(new BigNumber(cTokenExchangeRate)).toString());
-        let expectedcTokenBalanceAfter = "";
+
+        let expectedcTokenBalanceAfter = new BigNumber(_amountToDeposit).dividedBy(new BigNumber(cTokenExchangeRate));
         // assert.equal(poolcTokenBalanceBefore - poolcTokenBalanceAfter, expectedcTokenBalanceAfter);
 
         let poolTokenBalanceAfter = await cToken.balanceOf(cherryswap.address);

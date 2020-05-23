@@ -1,4 +1,6 @@
-version: 2
+version: 2.1
+orbs:
+  coveralls: coveralls/coveralls@1.0.4
 jobs:
   build:
     working_directory: ~/CherrySwap
@@ -23,14 +25,14 @@ jobs:
       - run:
           name: test solidity smart contracts
           command: cd ./packages/smart-contracts/ && yarn run test
-      #- run:
-      #    name: code-coverage
-      #    command: './node_modules/.bin/nyc report --reporter=text-lcov'
+      - run:
+          name: Produce Coverage Report
+          command: npm run coverage
+      - coveralls/upload
+      - store_artifacts:
+          path: /packages/smart-contracts/coverage
+      - store_artifacts:
+          path: /packages/smart-contracts/coverage.json
       - store_artifacts:
           path: test-results.xml
           prefix: tests
-      - store_artifacts: 
-          path: coverage
-          prefix: coverage
-      - store_test_results:
-          path: test-results.xml

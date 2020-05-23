@@ -9,6 +9,7 @@
         "frontend:start": "lerna run --scope=@cherryswap/front-end --stream start",
         "frontend:build": "lerna run --scope=@cherryswap/front-end --stream build",
         "frontend:test": "lerna run --scope=@cherryswap/front-end --stream test",
+        "contracts:run-ganache": "lerna run --scope=@cherryswap/smart-contracts --stream ganache",
         "contracts:link": "lerna run --scope=@cherryswap/smart-contracts --stream link-dependencies",
         "contracts:push": "lerna run --scope=@cherryswap/smart-contracts --stream push-project",
         "contracts:compile": "lerna run --scope=@cherryswap/smart-contracts --stream compile",
@@ -19,7 +20,7 @@
         "contracts:lint": "lerna run --scope=@cherryswap/smart-contracts --stream lint:solhint",
         "contracts:prettier": "lerna run --scope=@cherryswap/smart-contracts --stream lint:prettier",
         "contracts:test": "lerna run --scope=@cherryswap/smart-contracts --stream test",
-        "contracts:run-ganache": "lerna run --scope=@cherryswap/smart-contracts --stream ganache"
+        "contracts:coverage": "lerna run --scope=@cherryswap/smart-contracts --stream coverage"
     },
     "dependencies": {
         "homedir": "^0.6.0",

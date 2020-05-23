@@ -85,7 +85,7 @@ async function deploy(options) {
 }
 
 module.exports = function(deployer, networkName, accounts) {
-  deployer.then(async () => {
+  /*deployer.then(async () => {
     const { network, txParams } = await ConfigManager.initNetworkConfiguration({
       network: networkName,
       from: accounts[0]
@@ -95,5 +95,5 @@ module.exports = function(deployer, networkName, accounts) {
     } else {
       await deploy({ network, txParams });
     }
-  });
+  });*/
 };

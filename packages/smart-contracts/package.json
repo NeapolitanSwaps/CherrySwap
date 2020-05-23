@@ -18,7 +18,7 @@
     "decimal.js": "^10.2.0",
     "solhint": "^2.3.0",
     "solhint-plugin-prettier": "0.0.3",
-    "solidity-coverage": "^0.6.7",
+    "solidity-coverage": "0.7.5",
     "truffle-assertions": "^0.9.2"
   },
   "scripts": {
@@ -32,7 +32,7 @@
     "lint:solhint": "solhint -f table contracts/**/*.sol",
     "lint:prettier": "prettier --write contracts/**/*.sol",
     "test": "yarn run compile && openzeppelin link @openzeppelin/contracts-ethereum-package@^2.4.0 --timeout 1000 && openzeppelin push --network development && truffle test",
-    "coverage": "npx solidity-coverage",
+    "coverage": "truffle run coverage",
     "deploy": "truffle deploy",
     "migrate:development": "truffle migrate --network development",
     "migrate:rinkeby": "truffle migrate --network rinkeby",
