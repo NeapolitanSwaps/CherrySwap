@@ -1,6 +1,5 @@
 import React from "react";
-import OpenPosition from "../../components/OpenPosition";
-import { Props as PositionOverviewProps } from "../../components/OpenPosition";
+import OpenPosition, { Props as PositionOverviewProps } from "../../components/OpenPosition";
 import * as S from "./styles";
 
 const Position = () => {

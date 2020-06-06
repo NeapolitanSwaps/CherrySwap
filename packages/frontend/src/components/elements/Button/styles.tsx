@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Props as ButtonProps } from "./index";
 
 export const Button = styled.button`
-  background: ${props => props.theme.pink_20};
+  /* background: ${props => props.theme.pink_20}; */
   color: #fff;
   height: 40px;
   padding: 0 24px;
@@ -18,24 +18,23 @@ export const Button = styled.button`
     display: flex;
   }
 
-  &:active {
+  & active {
     /* change opacity to color */
     opacity: 0.9;
   }
   
   :hover {
-    cursor: pointer;
-  }
+  cursor: pointer;
+}
 
-  ${({ toggled, theme, state }: ButtonProps) => {
-    if (state) {
-      return `
-      background: ${state === "primary" ? theme.red_00 : theme.pink_00};
-      color: ${state === "primary" ? theme.white : theme.red_00}
+${
+  ({ toggled, theme, state }: ButtonProps) => {
+    return `
+      background: ${toggled ? `linear-gradient(${theme.orange_00}, ${theme.pink_20})` : 'transparent'}; 
+      color: ${!toggled && theme.grey_10};
     `;
-    }
-    return !toggled && `background: ${theme.pink_00}`;
-  }}}
+  }
+  }}
 `;
 
 export const Title = styled.span``;

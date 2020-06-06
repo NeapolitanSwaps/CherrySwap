@@ -41,6 +41,7 @@ const theme = darkMode => ({
 
   greyAlpha: "rgba(70, 18, 32, 0.05)",
 
+  orange_00: "#FF595E",
 
   pink_00: "#FFC0CB",
   pink_10: "#C76D7E",

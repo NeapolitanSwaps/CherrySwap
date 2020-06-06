@@ -1,18 +1,33 @@
-import React, { useRef, useState } from "react";
+import { useWeb3React } from "@web3-react/core";
+import React, { useEffect, useRef, useState } from "react";
 import Deposit from "../../components/Deposit";
 import Toggle from "../../components/elements/Toggle";
 import MarketOverview, { Props as MarketOverviewProps } from "../../components/MarketOverview";
 import PositionOverview, { Props as PositionOverviewProps } from "../../components/PositionOverview";
 import * as S from "./styles";
 
-
 const Swap = () => {
+  const { account, library } = useWeb3React();
+  const [ethBalance, setEthBalance] = useState<string | undefined>();
 
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
-
   const userInput = useRef<string>("");
-
   const positionTitles = ["Short", "Long"];
+
+  useEffect(() => {
+    const getBalance = async () => {
+      if (library && account) {
+        try {
+          const balance = await library.getBalance(account);
+          setEthBalance(balance)
+        } catch (error) {
+          console.log("Error with account balance")
+          setEthBalance(undefined);
+        }
+      }
+    }
+    getBalance()
+  }, [library, account]);
 
   const toggleState = (index: number) => {
     if (positionSelectionIndex === index) return;
@@ -38,8 +53,8 @@ const Swap = () => {
 
   return (
     <S.Main>
+      {ethBalance && <p>{`balance: ${ethBalance}`}</p>}
       <Toggle onClick={toggleState} currentIndex={positionSelectionIndex} titles={positionTitles} />
-
       <MarketOverview {...marketOverview} />
       <Deposit
         onTextInput={input => {
@@ -49,7 +64,6 @@ const Swap = () => {
         balance={10023}
       />
       <PositionOverview {...positionOverview} />
-
     </S.Main>
   )
 };
