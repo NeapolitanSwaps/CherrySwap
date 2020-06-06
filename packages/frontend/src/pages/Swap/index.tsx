@@ -9,7 +9,7 @@ import * as S from "./styles";
 
 const Swap = () => {
   const { account, library } = useWeb3React();
-  const [ethBalance, setEthBalance] = useState<string | undefined>();
+
   const [interestRate, setInterestRate] = useState<number | undefined>();
 
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
@@ -21,18 +21,6 @@ const Swap = () => {
       const rate = await fetchCDAIInterestRate();
       setInterestRate(rate)
     }
-    const getBalance = async () => {
-      if (library && account) {
-        try {
-          const balance = await library.getBalance(account);
-          setEthBalance(balance)
-        } catch (error) {
-          console.log("Error with account balance")
-          setEthBalance(undefined);
-        }
-      }
-    }
-    getBalance();
     getInterestRate();
   }, [library, account]);
 
@@ -60,7 +48,6 @@ const Swap = () => {
 
   return (
     <S.Main>
-      {ethBalance && <p>{`balance: ${ethBalance}`}</p>}
       <Toggle onClick={toggleState} currentIndex={positionSelectionIndex} titles={positionTitles} />
       <MarketOverview {...marketOverview} />
       <Deposit
