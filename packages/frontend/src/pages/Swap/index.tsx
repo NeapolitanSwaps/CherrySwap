@@ -1,5 +1,6 @@
 import { useWeb3React } from "@web3-react/core";
 import React, { useEffect, useRef, useState } from "react";
+import { fetchCDAIInterestRate } from "../../api";
 import Deposit from "../../components/Deposit";
 import Toggle from "../../components/elements/Toggle";
 import MarketOverview, { Props as MarketOverviewProps } from "../../components/MarketOverview";
@@ -9,12 +10,17 @@ import * as S from "./styles";
 const Swap = () => {
   const { account, library } = useWeb3React();
   const [ethBalance, setEthBalance] = useState<string | undefined>();
+  const [interestRate, setInterestRate] = useState<number | undefined>();
 
   const [positionSelectionIndex, setPositionSelectionIndex] = useState<number>(0);
   const userInput = useRef<string>("");
   const positionTitles = ["Short", "Long"];
 
   useEffect(() => {
+    const getInterestRate = async () => {
+      const rate = await fetchCDAIInterestRate();
+      setInterestRate(rate)
+    }
     const getBalance = async () => {
       if (library && account) {
         try {
@@ -26,7 +32,8 @@ const Swap = () => {
         }
       }
     }
-    getBalance()
+    getBalance();
+    getInterestRate();
   }, [library, account]);
 
   const toggleState = (index: number) => {
@@ -41,7 +48,7 @@ const Swap = () => {
     },
     marketStats: {
       liquidity: 77332222,
-      interestRate: 23
+      interestRate: interestRate ?? 0
     }
   };
 

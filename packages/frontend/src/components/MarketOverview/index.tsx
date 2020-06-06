@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { useResize } from "../../hooks";
-import { formatCurrency, formatInterestRate } from "../../utils";
+import { formatCurrency, formatLongInterestRate } from "../../utils";
 import * as S from "./styles";
 
 export interface Props {
@@ -10,7 +10,7 @@ export interface Props {
 
 interface MarketHeaderProps {
   liquidity: number;
-  interestRate: number;
+  interestRate: number | undefined;
 }
 
 interface MarketBodyProps {
@@ -27,12 +27,13 @@ const MarketOverview = (props: Props) => (
 
 const MarketHeader = (props: MarketHeaderProps) => {
   const { liquidity, interestRate } = props;
+  const formattedInterestRate = interestRate ? formatLongInterestRate(interestRate) : "-%"
   return (
     <S.MarketHeader>
       <S.MarketHeaderTitle bold={true}>Current Pool</S.MarketHeaderTitle>
       <S.MarketHeaderTitle>
         Interest Rate:
-        <span> {formatInterestRate(interestRate)}</span>
+        <span> {formattedInterestRate}</span>
       </S.MarketHeaderTitle>
     </S.MarketHeader>
   );
