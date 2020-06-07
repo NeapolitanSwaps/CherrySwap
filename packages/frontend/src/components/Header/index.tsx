@@ -2,15 +2,19 @@ import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/svg/logo.svg";
-import { injected } from "../../connectors";
+import { useModalContext } from "../../context/ModalContext";
 import { shortenAddress } from "../../utils";
 import * as S from "./styles";
 
 const Header = () => {
   const { activate, account, library } = useWeb3React();
   const [ethBalance, setEthBalance] = useState<string | undefined>();
+  const [_, setModalVisibility] = useModalContext();
 
-  const handleAccountPress = () => activate(injected);
+  const handleAccountPress = () => {
+    setModalVisibility(true);
+    // activate(injected)
+  };
 
   useEffect(() => {
     const getBalance = async () => {
