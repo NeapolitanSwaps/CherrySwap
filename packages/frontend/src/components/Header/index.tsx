@@ -2,9 +2,11 @@ import { useWeb3React } from "@web3-react/core";
 import { ethers } from "ethers";
 import React, { useEffect, useState } from "react";
 import logo from "../../assets/svg/logo.svg";
-import { useModalContext } from "../../context/ModalContext";
+import { ModalType, useModalContext } from "../../context/ModalContext";
 import { shortenAddress } from "../../utils";
 import * as S from "./styles";
+
+const { ConnectWallet } = ModalType;
 
 const Header = () => {
   const { activate, account, library } = useWeb3React();
@@ -12,8 +14,7 @@ const Header = () => {
   const [_, setModalVisibility] = useModalContext();
 
   const handleAccountPress = () => {
-    setModalVisibility(true);
-    // activate(injected)
+    setModalVisibility(ConnectWallet);
   };
 
   useEffect(() => {

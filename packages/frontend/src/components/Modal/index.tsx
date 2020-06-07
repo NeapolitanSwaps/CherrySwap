@@ -1,24 +1,34 @@
 import React from "react";
-import { useModalContext } from "../../context/ModalContext";
+import { ModalType, useModalContext } from "../../context/ModalContext";
+import ModalConnect from "../ModalConnect";
 import * as S from "./styles";
 
 const Modal: React.FC = (props) => {
 
-  const [isModalVisibile, setModalVisibility] = useModalContext();
+  const [modalType, setModalType] = useModalContext();
 
-  const handleClosePress = () => setModalVisibility(false);
+  const handleClosePress = () => setModalType(undefined);
 
-  if (!isModalVisibile) return null;
+  if (!modalType) return null;
+
+  const child = () => {
+    switch (modalType) {
+      case ModalType.ConnectWallet:
+        return <ModalConnect />
+      default:
+        return null;
+    }
+  }
 
   return (
     <S.Modal>
       <S.Container>
         <S.Header>
-          <p>Hello world</p>
+          {modalType && <p>{modalType}</p>}
           <button onClick={handleClosePress}>close</button>
         </S.Header>
         <S.Body>
-          <p>content</p>
+          {child()}
         </S.Body>
       </S.Container>
     </S.Modal>

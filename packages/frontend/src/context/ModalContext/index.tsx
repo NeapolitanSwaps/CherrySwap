@@ -1,11 +1,20 @@
 import React, { Dispatch, useContext, useState } from "react";
 
-type ContextType = [boolean, Dispatch<boolean>];
+// Will need improvements when complexity increases
 
-export const ModalContext = React.createContext<ContextType>([false, () => { }]);
+export enum ModalType {
+  ConnectWallet = "connectWallet",
+  Help = "help"
+}
+
+type ModalProps = ModalType | undefined;
+
+type ContextType = [ModalProps, Dispatch<ModalProps>];
+
+export const ModalContext = React.createContext<ContextType>([undefined, () => { }]);
 
 export default function ModalProvider({ children }: any) {
-  const [state, setState] = useState<boolean>(false);
+  const [state, setState] = useState<ModalProps>(undefined);
 
   return (
     <ModalContext.Provider value={[state, setState]} >
