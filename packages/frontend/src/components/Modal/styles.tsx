@@ -33,6 +33,10 @@ export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   
+  p {
+    font-weight: bold;
+  }
+  
   button {
     cursor: pointer;
   }
@@ -43,5 +47,19 @@ export const Body = styled.div`
   padding: 0.5rem 1rem;
   display: flex;
   flex: 1;
-  background: red;
 `;
+
+export const CloseIcon = styled.div`
+  height: 1.75rem;
+  width: 1.75rem;
+  
+  &:hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
+  
+  img {
+    width: 100%;
+    height: 100%;
+  }
+`

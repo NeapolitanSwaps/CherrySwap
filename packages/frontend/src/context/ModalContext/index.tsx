@@ -4,7 +4,7 @@ import React, { Dispatch, useContext, useState } from "react";
 
 export enum ModalType {
   ConnectWallet = "connectWallet",
-  Help = "help"
+  Help = "help",
 }
 
 type ModalProps = ModalType | undefined;
